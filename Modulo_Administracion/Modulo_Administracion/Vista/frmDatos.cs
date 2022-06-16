@@ -21,8 +21,7 @@ namespace Modulo_Administracion
         public List<proveedor_datos> lista_aux_proveedor = new List<proveedor_datos>();
         public List<cliente_datos> lista_aux_cliente = new List<cliente_datos>();
 
-        Logica_Cliente_Datos logica_cliente_datos = new Logica_Cliente_Datos();
-        Logica_Proveedor_Datos logica_proveedor_datos = new Logica_Proveedor_Datos();
+       
 
         int tipo; //1 es proveedor , 2 es cliente
 
@@ -75,7 +74,7 @@ namespace Modulo_Administracion
                     }
                 }
 
-                Logica_Funciones_Generales.CargarComboBox("ttipo_dato", cbTipoDato, "txt_desc", "1=1", "cod_tipo_dato", "cod_tipo_dato");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_dato", cbTipoDato, "txt_desc", "1=1", "cod_tipo_dato", "cod_tipo_dato");
 
                 cbTipoDato.SelectedValue = 1;
 

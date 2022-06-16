@@ -12,8 +12,8 @@ namespace Modulo_Administracion
 
         marca marca = null;
         familia familia = null;
-        Logica_Marca logica_marca = new Logica_Marca();
-        Logica_Familia logica_familia = new Logica_Familia();
+        
+        
         int Accion;
 
         decimal algoritmo1;
@@ -51,12 +51,12 @@ namespace Modulo_Administracion
 
                 if (marca == null)
                 {
-                    Logica_Funciones_Generales.CargarComboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
+                    Logica_Funciones_Generales.cargar_comboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
                 }
                 else
                 {
-                    Logica_Funciones_Generales.CargarComboBox("proveedor", cbProveedor, "razon_social", "id_proveedor = " + marca.id_proveedor + "and sn_activo = -1", "razon_social", "id_proveedor");
-                    Logica_Funciones_Generales.CargarComboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + marca.id_proveedor + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
+                    Logica_Funciones_Generales.cargar_comboBox("proveedor", cbProveedor, "razon_social", "id_proveedor = " + marca.id_proveedor + "and sn_activo = -1", "razon_social", "id_proveedor");
+                    Logica_Funciones_Generales.cargar_comboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + marca.id_proveedor + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
                 }
 
             }
@@ -179,14 +179,14 @@ namespace Modulo_Administracion
                             if (marca == null)
                             {
                                 //esto sirve para ordenar las columnas con click del usuario
-                                //SortableBindingList<familia> order = new SortableBindingList<familia>(logica_familia.buscar_familias());
-                                dgvFamilia.DataSource = logica_familia.buscar_familias_activas();
+                                //SortableBindingList<familia> order = new SortableBindingList<familia>(Logica_Familia.buscar_familias());
+                                dgvFamilia.DataSource = Logica_Familia.buscar_familias_activas();
                             }
                             else
                             {
                                 //esto sirve para ordenar las columnas con click del usuario
-                                //SortableBindingList<familia> order = new SortableBindingList<familia>(logica_familia.buscar_familias_por_marca(marca.id_tabla_marca));
-                                dgvFamilia.DataSource = logica_familia.buscar_familias_activas_por_marca(marca.id_tabla_marca);
+                                //SortableBindingList<familia> order = new SortableBindingList<familia>(Logica_Familia.buscar_familias_por_marca(marca.id_tabla_marca));
+                                dgvFamilia.DataSource = Logica_Familia.buscar_familias_activas(marca.id_tabla_marca);
                             }
 
                             //seteo columnas
@@ -352,7 +352,7 @@ namespace Modulo_Administracion
                 if (e.RowIndex >= 0)
                 {
 
-                    familia = logica_familia.buscar_familia_por_id_tabla_familia(Convert.ToInt32(dgvFamilia.Rows[e.RowIndex].Cells[0].Value));
+                    familia = Logica_Familia.buscar_familia(Convert.ToInt32(dgvFamilia.Rows[e.RowIndex].Cells[0].Value));
                     txtCodigo.Text = familia.id_tabla_familia.ToString();
                     txtFamilia.Text = familia.txt_desc_familia;
                     cbProveedor.SelectedValue = familia.marca.id_proveedor;
@@ -411,7 +411,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_familia.alta_familia(familia) == false)
+                    if (Logica_Familia.alta_familia(familia) == false)
                     {
                         MessageBox.Show("Error al grabar la familia", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -428,7 +428,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_familia.modificar_eliminar_familia(familia, Convert.ToDecimal(lblCoeficiente_con_beneficio.Text), 1) == false)
+                    if (Logica_Familia.modificar_familia(familia, Convert.ToDecimal(lblCoeficiente_con_beneficio.Text)) == false)
                     {
                         MessageBox.Show("Error al modificar la familia " + txtFamilia.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -491,7 +491,7 @@ namespace Modulo_Administracion
                 {
                     id_tabla_familia = Convert.ToInt32(txtCodigo.Text);
                 }
-                if (logica_familia.buscar_familia_por_txt_desc_activo(txtFamilia.Text, id_tabla_familia) != null)
+                if (Logica_Familia.buscar_familias_activas_con_txtDescFamilia_repetido(txtFamilia.Text, id_tabla_familia) != null)
                 {
                     txtFamilia.Focus();
                     throw new Exception("Ya existe una familia con ese nombre");
@@ -522,7 +522,7 @@ namespace Modulo_Administracion
                 familia.algoritmo_8 = txtAlgoritmo_8.Text == "" ? Convert.ToDecimal("0,0000") : Convert.ToDecimal(txtAlgoritmo_8.Text);
                 familia.algoritmo_9 = txtAlgoritmo_9.Text == "" ? Convert.ToDecimal("0,0000") : Convert.ToDecimal(txtAlgoritmo_9.Text);
                 familia.algoritmo_10 = txtAlgoritmo_10.Text == "" ? Convert.ToDecimal("0,0000") : Convert.ToDecimal(txtAlgoritmo_10.Text);
-                familia.marca = logica_marca.buscar_marca_por_id_tabla_marca(familia.id_tabla_marca);
+                familia.marca = Logica_Marca.buscar_marca(familia.id_tabla_marca);
 
 
 
@@ -547,7 +547,7 @@ namespace Modulo_Administracion
             {
                 txtFamilia.Focus();
                 iniciar(Program.Alta);
-                //txtCodigo.Text = (logica_familia.ult_nro_familia() + 1).ToString();
+                //txtCodigo.Text = (Logica_Familia.ult_nro_familia() + 1).ToString();
                 //SeteoObjeto();
 
             }
@@ -571,7 +571,7 @@ namespace Modulo_Administracion
                     return;
                 }
 
-                if (logica_familia.modificar_eliminar_familia(familia, 0, 2) == false)
+                if (Logica_Familia.dar_de_baja_familia(familia, 0) == false)
                 {
                     MessageBox.Show("Error al eliminar la familia " + txtFamilia.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -726,7 +726,7 @@ namespace Modulo_Administracion
                 if (Convert.ToDecimal(txtAlgoritmo_8.Text) > 0) { algoritmo8 = Convert.ToDecimal(txtAlgoritmo_8.Text); } else { algoritmo8 = 1; }
                 if (Convert.ToDecimal(txtAlgoritmo_9.Text) > 0 && txtAlgoritmo_9.Text != "") { algoritmo9 = Convert.ToDecimal(txtAlgoritmo_9.Text); } else { algoritmo9 = 1; }
 
-                precio_coeficiente = logica_familia.precio_coeficiente(tipo_de_coeficiente, algoritmo1, algoritmo2, algoritmo3, algoritmo4, algoritmo5, algoritmo6, algoritmo7, algoritmo8, algoritmo9).ToString();
+                precio_coeficiente = Logica_Familia.precio_coeficiente(tipo_de_coeficiente, algoritmo1, algoritmo2, algoritmo3, algoritmo4, algoritmo5, algoritmo6, algoritmo7, algoritmo8, algoritmo9).ToString();
 
                 return precio_coeficiente;
             }
@@ -1057,7 +1057,7 @@ namespace Modulo_Administracion
             {
                 if (cbProveedor.SelectedItem != null) //si tengo algo elegido en el combo de proveedor y marca , cargo el combo de familia segun lo que dice proveedor y marca
                 {
-                    Logica_Funciones_Generales.CargarComboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
+                    Logica_Funciones_Generales.cargar_comboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
                 }
             }
             catch (Exception ex)

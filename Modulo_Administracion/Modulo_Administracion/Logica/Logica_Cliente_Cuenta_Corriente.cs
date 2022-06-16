@@ -9,49 +9,11 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Cliente_Cuenta_Corriente
+    static class Logica_Cliente_Cuenta_Corriente
     {
 
-        Logica_Cliente logica_cliente = new Logica_Cliente();
-        //public bool alta_movimiento_cuenta_corriente(factura factura, Modulo_AdministracionContext db)
-        //{
-
-        //    bool bandera = false;
-        //    cliente_cuenta_corriente cliente_cuenta_corriente_a_insertar;
-        //    try
-        //    {
-        //        cliente_cuenta_corriente_a_insertar = new cliente_cuenta_corriente();
-        //        cliente_cuenta_corriente_a_insertar.id_cliente = factura.id_cliente;
-        //        cliente_cuenta_corriente_a_insertar.id_factura = factura.id_factura;
-
-        //        if (factura.cod_tipo_factura == 2) //si es nota de credito , guardo el precio final en la primer columna que resta , osea pago_1...
-        //        {
-        //            cliente_cuenta_corriente_a_insertar.pago_1 = factura.precio_final;
-        //            cliente_cuenta_corriente_a_insertar.pago_1_fecha = DateTime.Now.Date;
-        //        }
-        //        else if (factura.cod_tipo_factura == 1) //si es factura
-        //        {
-        //            cliente_cuenta_corriente_a_insertar.imp_factura = factura.precio_final_con_pago_mayor_a_30_dias; //el imp_factura es el precio_final_con_pago_mayor_a_30_dias porque lo dijo maxi
-        //        }
-        //        else if (factura.cod_tipo_factura == 6) //si es nota de debito
-        //        {
-        //            cliente_cuenta_corriente_a_insertar.imp_factura = factura.precio_final;
-        //        }
-
-        //        db.cliente_cuenta_corriente.Add(cliente_cuenta_corriente_a_insertar);
-        //        db.SaveChanges();
-
-        //        bandera = true;
-        //        return bandera;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
-
-        public Int64 buscar_ultimo_nro_factura_vieja()
+       
+        public static Int64 buscar_ultimo_nro_factura_vieja()
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
@@ -79,65 +41,10 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-
-
-        public DataSet buscar_factura_por_nro_tipo_cliente(Int64 nro_factura, int cod_tipo_factura)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_factura_por_nro_tipo_cliente", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@nro_factura", nro_factura);
-                    command.Parameters.AddWithValue("@cod_tipo_factura", cod_tipo_factura);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-
-
-        public bool alta_movimiento_cuenta_corriente(factura factura, Modulo_AdministracionContext db) // esta funcion se relaciona 100% al dar de alta una factura en el sistema
+        public static bool alta_movimiento_CCC(factura factura, Modulo_AdministracionContext db) // esta funcion se relaciona 100% al dar de alta una factura en el sistema
         {
 
             bool bandera = false;
-            cliente cliente_factura = null;
             cliente_cuenta_corriente cliente_cuenta_corriente_a_insertar;
             try
             {
@@ -181,7 +88,7 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public bool eliminar_movimiento_cuenta_corriente(int id_cliente_cuenta_corriente)
+        public static bool eliminar_movimiento_CCC(int id_cliente_cuenta_corriente)
         {
             bool bandera = false;
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -216,7 +123,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public bool modificar_movimientos_cuenta_corriente(List<cliente_cuenta_corriente> lista_cliente_cuenta_corriente)
+        public static bool modificar_movimientos_CCC(List<cliente_cuenta_corriente> lista_cliente_cuenta_corriente)
         {
             bool bandera = false;
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -227,7 +134,7 @@ namespace Modulo_Administracion.Logica
                 {
                     foreach (cliente_cuenta_corriente ccc in lista_cliente_cuenta_corriente)
                     {
-                        if (modificar_movimiento_cuenta_corriente(ccc, db) == false)
+                        if (modificar_movimiento_CCC(ccc, db) == false)
                         {
                             throw new Exception("Error al actualizar cuenta corriente");
                         }
@@ -256,7 +163,7 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public bool modificar_movimiento_cuenta_corriente(cliente_cuenta_corriente cliente_cuenta_corriente, Modulo_AdministracionContext db)
+        public static bool modificar_movimiento_CCC(cliente_cuenta_corriente cliente_cuenta_corriente, Modulo_AdministracionContext db)
         {
 
             try
@@ -319,54 +226,46 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public DataSet buscar_movimientos_cuenta_corriente_por_id_cliente(int id_cliente, int tipo)
+        public static DataSet buscar_movimientos_CCC(int id_cliente, int tipo)
         {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
 
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
 
-                    SqlCommand command = new SqlCommand("buscar_cuenta_corriente_por_id_cliente", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@id_cliente", id_cliente);
-                    command.Parameters.AddWithValue("@tipo", tipo);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
+                    try
                     {
-                        reader.Close();
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("cliente_cuenta_corriente_buscar_por_idCliente", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@id_cliente", id_cliente);
+                        command.Parameters.AddWithValue("@tipo", tipo);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+                        sqlTransaction.Commit();
+                        return ds;
+
                     }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
-            return set2;
+
         }
 
     }

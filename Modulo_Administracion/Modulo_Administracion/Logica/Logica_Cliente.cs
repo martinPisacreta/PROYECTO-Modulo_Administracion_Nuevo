@@ -9,13 +9,12 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Cliente
+    static class Logica_Cliente
     {
 
-        Logica_Cliente_Datos logica_cliente_datos = new Logica_Cliente_Datos();
-        Logica_Cliente_Direccion logica_cliente_direccion = new Logica_Cliente_Direccion();
+       
 
-        public bool alta_cliente(cliente cliente)
+        public static bool alta_cliente(cliente cliente)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -56,7 +55,7 @@ namespace Modulo_Administracion.Logica
                         {
                             foreach (cliente_datos cliente_dato in cliente.cliente_datos)
                             {
-                                if (logica_cliente_datos.alta_dato(cliente_dato, cliente_a_insertar.id_cliente, db) == false)
+                                if (Logica_Cliente_Datos.alta_clienteDatos(cliente_dato, cliente_a_insertar.id_cliente, db) == false)
                                 {
                                     throw new Exception("Error al dar de alta los datos del cliente");
                                 }
@@ -71,7 +70,7 @@ namespace Modulo_Administracion.Logica
                         {
                             foreach (cliente_dir cliente_dir in cliente.cliente_dir)
                             {
-                                if (logica_cliente_direccion.alta_direccion(cliente_dir, cliente_a_insertar.id_cliente, db) == false)
+                                if (Logica_Cliente_Direccion.alta_clienteDireccion(cliente_dir, cliente_a_insertar.id_cliente, db) == false)
                                 {
                                     throw new Exception("Error al dar de alta las direcciones del cliente");
                                 }
@@ -96,7 +95,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificar_cliente(cliente cliente)
+        public static bool modificar_cliente(cliente cliente)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -128,7 +127,7 @@ namespace Modulo_Administracion.Logica
                         {
                             foreach (cliente_datos cliente_dato in cliente.cliente_datos)
                             {
-                                if (logica_cliente_datos.modificar_dato(cliente_dato, db) == false)
+                                if (Logica_Cliente_Datos.modificar_clienteDatos(cliente_dato, db) == false)
                                 {
                                     throw new Exception("Error al modificar los datos del cliente");
                                 }
@@ -143,7 +142,7 @@ namespace Modulo_Administracion.Logica
                         {
                             foreach (cliente_dir cliente_dir in cliente.cliente_dir)
                             {
-                                if (logica_cliente_direccion.modificar_direccion(cliente_dir, db) == false)
+                                if (Logica_Cliente_Direccion.modificar_clienteDireccion(cliente_dir, db) == false)
                                 {
                                     throw new Exception("Error al modificar las direcciones del cliente");
                                 }
@@ -168,7 +167,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool eliminar_cliente(cliente cliente)
+        public static bool dar_de_baja_cliente(cliente cliente)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -196,8 +195,8 @@ namespace Modulo_Administracion.Logica
                     {
                         if (cliente.cliente_datos.Count > 0)
                         {
-                            Logica_Cliente_Datos logica_cliente_datos = new Logica_Cliente_Datos();
-                            if (logica_cliente_datos.dar_de_baja_cliente_datos_por_cliente(cliente.id_cliente, db) == false)
+                            
+                            if (Logica_Cliente_Datos.dar_de_baja_clienteDatos(cliente.id_cliente, db) == false)
                             {
                                 throw new Exception("Error al dar de baja dato/s del cliente");
                             }
@@ -209,8 +208,8 @@ namespace Modulo_Administracion.Logica
                     {
                         if (cliente.cliente_dir.Count > 0)
                         {
-                            Logica_Cliente_Direccion logica_cliente_direccion = new Logica_Cliente_Direccion();
-                            if (logica_cliente_direccion.dar_de_baja_cliente_dir_por_cliente(cliente.id_cliente, db) == false)
+                            
+                            if (Logica_Cliente_Direccion.dar_de_baja_clienteDireccion(cliente.id_cliente, db) == false)
                             {
                                 throw new Exception("Error al dar de baja direccion/es del cliente");
                             }
@@ -235,7 +234,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public object buscar_clientes()
+        public static object buscar_clientes_activos()
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -255,9 +254,9 @@ namespace Modulo_Administracion.Logica
 
                 return clientes;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -267,20 +266,22 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public cliente buscar_cliente_por_nombre_fantasia_activo(string nombre_fantasia, int id_cliente)
+        public static cliente buscar_clientes_activos_con_nombreFantasia_repetido(string nombre_fantasia, int id_cliente)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
             {
-
-                cliente cliente = db.cliente.FirstOrDefault(p => p.nombre_fantasia == nombre_fantasia && p.sn_activo == -1 && p.id_cliente != id_cliente);
+                //si esto devuelve algo , quiere decir que aparte del id_cliente que se envio por parametro , existe otro con ese mismo nombre_fantasia 
+                cliente cliente = db.cliente.FirstOrDefault(p => p.nombre_fantasia == nombre_fantasia && 
+                                                                 p.sn_activo == -1 && 
+                                                                 p.id_cliente != id_cliente);
 
                 return cliente;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -289,20 +290,22 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public cliente buscar_cliente_por_razon_social_activo(string razon_social, int id_cliente)
+        public static cliente buscar_clientes_activos_con_razonSocial_repetido(string razon_social, int id_cliente)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
             {
-
-                cliente cliente = db.cliente.FirstOrDefault(p => p.razon_social == razon_social && p.sn_activo == -1 && p.id_cliente != id_cliente);
+                //si esto devuelve algo , quiere decir que aparte del id_cliente que se envio por parametro , existe otro con ese mismo razon_social 
+                cliente cliente = db.cliente.FirstOrDefault(p => p.razon_social == razon_social && 
+                                                                 p.sn_activo == -1 
+                                                                 && p.id_cliente != id_cliente);
 
                 return cliente;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -312,48 +315,35 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public cliente buscar_cliente(int id_cliente)
-        {
-
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                cliente cliente = db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
-
-                return cliente;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-        public cliente buscar_cliente(int id_cliente, Modulo_AdministracionContext db)
+        public static cliente buscar_cliente(int id_cliente, Modulo_AdministracionContext db)
         {
 
 
             try
             {
-
-                cliente cliente = db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
+                cliente cliente = null;
+                if(db == null)
+                {
+                    Modulo_AdministracionContext _db = new Modulo_AdministracionContext();
+                    cliente = _db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
+                }
+                else
+                {
+                    cliente = db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
+                }
+              
 
                 return cliente;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
 
 
         }
 
-        public object filtro_cliente_nombre_fantasia(string txtBusqueda, int valor_busqueda)
+        public static object buscar_clientes(string nombreFantasia_o_nombreVendedor, int valor_busqueda)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -367,9 +357,9 @@ namespace Modulo_Administracion.Logica
                                       p.sn_activo == -1
                                       &&
                                       (
-                                          (p.nombre_fantasia.Contains(txtBusqueda) && valor_busqueda == 1)
+                                          (p.nombre_fantasia.Contains(nombreFantasia_o_nombreVendedor) && valor_busqueda == 1)
                                           ||
-                                          (p.vendedor.nombre.Contains(txtBusqueda) && valor_busqueda == 2)
+                                          (p.vendedor.nombre.Contains(nombreFantasia_o_nombreVendedor) && valor_busqueda == 2)
                                       )
                                 select new
                                 {
@@ -381,9 +371,9 @@ namespace Modulo_Administracion.Logica
 
                 return clientes;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -394,56 +384,47 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public DataSet buscar_clientes(string razon_social)
+        public static DataSet buscar_clientes_activos(string razon_social)
         {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
 
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
 
-                    SqlCommand command = new SqlCommand("buscar_cliente", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@nombre", razon_social);
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
+                    try
                     {
-                        reader.Close();
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("cliente_buscar_activos", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@nombre", razon_social);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+                        sqlTransaction.Commit();
+                        return ds;
+
                     }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
         }
 
-        public cliente buscar_cliente(string razon_social)
+        public static cliente buscar_cliente(string razon_social)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -454,9 +435,9 @@ namespace Modulo_Administracion.Logica
 
                 return cliente;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -465,7 +446,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public object buscar_clientes_activos_por_vendedor(int id_vendedor)
+        public static object buscar_clientes_activos(int id_vendedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -483,9 +464,9 @@ namespace Modulo_Administracion.Logica
 
                 return clientes;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {

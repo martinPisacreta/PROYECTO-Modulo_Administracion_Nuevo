@@ -10,12 +10,12 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Vendedor
+    static class Logica_Vendedor
     {
 
 
 
-        public bool alta_vendedor(vendedor vendedor)
+        public static bool alta_vendedor(vendedor vendedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -60,7 +60,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificar_vendedor(vendedor vendedor)
+        public static bool modificar_vendedor(vendedor vendedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -95,7 +95,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool eliminar_vendedor(vendedor vendedor)
+        public static bool dar_de_baja_vendedor(vendedor vendedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -131,7 +131,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public List<vendedor> buscar_vendedores()
+        public static List<vendedor> buscar_vendedores_activos()
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -146,9 +146,9 @@ namespace Modulo_Administracion.Logica
 
                 return vendedores;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -158,20 +158,22 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public vendedor buscar_vendedor_por_nombre_activo(string nombre, int id_vendedor)
+        public static vendedor buscar_vendedores_activos_con_Nombre_repetido(string nombre, int id_vendedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
             {
 
-                vendedor vendedor = db.vendedor.FirstOrDefault(p => p.nombre == nombre && p.sn_activo == -1 && p.id_vendedor != id_vendedor);
+                vendedor vendedor = db.vendedor.FirstOrDefault(p => p.nombre == nombre && 
+                                                                    p.sn_activo == -1 && 
+                                                                    p.id_vendedor != id_vendedor);
 
                 return vendedor;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -181,7 +183,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public vendedor buscar_vendedor(int? id_vendedor)
+        public static vendedor buscar_vendedor(int? id_vendedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -192,69 +194,57 @@ namespace Modulo_Administracion.Logica
 
                 return vendedor;
             }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-
-
-        public DataTable filtro_vendedor_nombre(string txtBusqueda)
-        {
-            try
-            {
-                using (SqlConnection cnx = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    string query = "select * from vendedor where nombre LIKE '%' + @param + '%' and accion <> 'ELIMINACION' ";
-
-
-                    SqlCommand cmd = new SqlCommand(query, cnx);
-                    cmd.Parameters.AddWithValue("@param", txtBusqueda.Trim());
-
-                    SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adaptador.Fill(dt);
-
-                    return dt;
-
-                }
-
-            }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }
-
-
-
-        public vendedor buscar_vendedor(string nombre)
-        {
-
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                vendedor vendedor = db.vendedor.FirstOrDefault(p => p.nombre == nombre);
-
-                return vendedor;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
             finally
             {
                 db = null;
             }
 
+        }
+
+
+        public static DataTable buscar_vendedores_activos(string txtBusqueda)
+        {
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            {
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("vendedor_buscar_activos", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@nombre", txtBusqueda.Trim());
+
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+
+                        sqlTransaction.Commit();
+                        return ds.Tables[0];
+
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
         }
     }
 }

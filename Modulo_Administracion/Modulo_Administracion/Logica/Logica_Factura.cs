@@ -9,15 +9,11 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Factura
+    static class Logica_Factura
     {
 
-        Logica_Cliente logica_cliente = new Logica_Cliente();
-        Logica_Factura_Detalle logica_factura_detalle = new Logica_Factura_Detalle();
-        Logica_Cliente_Cuenta_Corriente logica_cliente_cuenta_corriente = new Logica_Cliente_Cuenta_Corriente();
-        Logica_Factura_Tipo logica_factura_tipo = new Logica_Factura_Tipo();
-
-        public factura alta_factura(factura factura)
+       
+        public static factura alta_factura(factura factura)
         {
 
             int id_factura = 0;
@@ -28,7 +24,7 @@ namespace Modulo_Administracion.Logica
             using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
             {
                 ttipo_factura ttipo_factura_bd = db.ttipo_factura.FirstOrDefault(f => f.cod_tipo_factura == factura.cod_tipo_factura);
-                nro_factura = logica_factura_tipo.ult_nro_factura_no_usado_en_tipo_factura(factura.cod_tipo_factura); //voy a buscar el ult_nro_factura_no_usado_en_tipo_factura
+                nro_factura = ult_nro_factura_no_usado(factura.cod_tipo_factura); //voy a buscar el ult_nro_factura_no_usado de la tabla factura
 
                 try
                 {
@@ -52,7 +48,7 @@ namespace Modulo_Administracion.Logica
                     factura_a_insertar.sn_mostrar_pago_mayor_30_dias = factura.sn_mostrar_pago_mayor_30_dias;
                     factura_a_insertar.sn_mostrar_pago_menor_30_dias = factura.sn_mostrar_pago_menor_30_dias;
                     factura_a_insertar.sn_mostrar_pago_menor_7_dias = factura.sn_mostrar_pago_menor_7_dias;
-                    factura_a_insertar.id_condicion_factura = logica_cliente.buscar_cliente(factura.id_cliente, db).id_condicion_factura;
+                    factura_a_insertar.id_condicion_factura = Logica_Cliente.buscar_cliente(factura.id_cliente, db).id_condicion_factura;
 
                     if (factura_a_insertar.sn_emitida == -1)
                     {
@@ -73,7 +69,7 @@ namespace Modulo_Administracion.Logica
 
                     foreach (factura_detalle item_factura in factura.factura_detalle)
                     {
-                        if (logica_factura_detalle.alta_item_a_factura(item_factura, factura_a_insertar, db) == false)
+                        if (Logica_Factura_Detalle.alta_facturaDetalle(item_factura, factura_a_insertar, db) == false)
                         {
                             throw new Exception("Error al dar de alta el item a la factura");
                         }
@@ -81,7 +77,7 @@ namespace Modulo_Administracion.Logica
 
                     if (factura.sn_emitida == -1)
                     {
-                        if (logica_cliente_cuenta_corriente.alta_movimiento_cuenta_corriente(factura_a_insertar, db) == false)
+                        if (Logica_Cliente_Cuenta_Corriente.alta_movimiento_CCC(factura_a_insertar, db) == false)
                         {
                             throw new Exception("Error al dar de alta movimiento en cuenta corriente");
                         }
@@ -105,7 +101,53 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public factura modificar_factura(factura factura)
+        public static Int32 ult_nro_factura_no_usado(decimal cod_tipo_factura)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            {
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+                {
+
+                    try
+                    {
+                        int _ult_nro_factura_no_usado_en_tipo_factura = 0;
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("factura_buscar_ult_nro_no_usado_por_codTipoFactura", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@cod_tipo_factura", cod_tipo_factura);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            _ult_nro_factura_no_usado_en_tipo_factura = Convert.ToInt32(dr[0].ToString());
+                        }
+
+                        sqlTransaction.Commit();
+                        return _ult_nro_factura_no_usado_en_tipo_factura;
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
+
+                }
+            }
+        }
+
+        public static factura modificar_factura(factura factura)
         {
             bool bandera = false;
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -134,7 +176,7 @@ namespace Modulo_Administracion.Logica
                     factura_db.sn_mostrar_pago_mayor_30_dias = factura.sn_mostrar_pago_mayor_30_dias;
                     factura_db.sn_mostrar_pago_menor_30_dias = factura.sn_mostrar_pago_menor_30_dias;
                     factura_db.sn_mostrar_pago_menor_7_dias = factura.sn_mostrar_pago_menor_7_dias;
-                    factura_db.id_condicion_factura = logica_cliente.buscar_cliente(factura.id_cliente, db).id_condicion_factura;
+                    factura_db.id_condicion_factura = Logica_Cliente.buscar_cliente(factura.id_cliente, db).id_condicion_factura;
 
 
 
@@ -162,7 +204,7 @@ namespace Modulo_Administracion.Logica
                         factura_detalle factura_detalle_db = db.factura_detalle.FirstOrDefault(c => c.id_factura_detalle == item_factura.id_factura_detalle);
                         if (factura_detalle_db != null) //es modificacion
                         {
-                            if (logica_factura_detalle.modificacion_item_a_factura(factura_detalle_db, item_factura, factura_db, db) == false)
+                            if (Logica_Factura_Detalle.modificar_facturaDetalle(factura_detalle_db, item_factura, factura_db, db) == false)
                             {
                                 throw new Exception("Error al modificar el item a la factura");
                             }
@@ -170,7 +212,7 @@ namespace Modulo_Administracion.Logica
                         }
                         else
                         {
-                            if (logica_factura_detalle.alta_item_a_factura(item_factura, factura_db, db) == false)
+                            if (Logica_Factura_Detalle.alta_facturaDetalle(item_factura, factura_db, db) == false)
                             {
                                 throw new Exception("Error al dar de alta el item a la factura");
                             }
@@ -181,7 +223,7 @@ namespace Modulo_Administracion.Logica
 
                     if (factura.sn_emitida == -1 && factura.cod_tipo_factura == 1) //solamente si es remito guardo el movimiento en la cuenta corriente
                     {
-                        if (logica_cliente_cuenta_corriente.alta_movimiento_cuenta_corriente(factura, db) == false)
+                        if (Logica_Cliente_Cuenta_Corriente.alta_movimiento_CCC(factura, db) == false)
                         {
                             throw new Exception("Error al dar de alta movimiento en cuenta corriente");
                         }
@@ -207,7 +249,7 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public factura buscar_factura_por_id_factura(int id_factura)
+        public static factura buscar_factura(int id_factura)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
@@ -215,14 +257,13 @@ namespace Modulo_Administracion.Logica
 
                 factura factura = db.factura.FirstOrDefault(t => t.id_factura == id_factura);
                 factura.factura_detalle.Clear();
-                factura.factura_detalle = logica_factura_detalle.buscar_detalle_factura_por_id_factura(factura.id_factura, db);
+                factura.factura_detalle = Logica_Factura_Detalle.buscar_facturaDetalle(factura.id_factura, db);
 
                 return factura;
 
             }
             catch (Exception ex)
-            {
-                // return new List<Empresa>();
+            { 
                 throw ex;
             }
             finally
@@ -231,33 +272,8 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public List<factura> buscar_facturas_por_id_cliente(int id_cliente)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
 
-                List<factura> facturas = (from t in db.factura
-                                          where t.id_cliente == id_cliente
-                                          select t).ToList();
-
-
-                return facturas;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-
-
-        }
-
-        public List<factura> buscar_facturas_por_fecha(DateTime fecha)
+        public static List<factura> buscar_facturas(DateTime fecha)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
@@ -283,7 +299,51 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public List<factura> buscar_facturas(int cod_tipo_factura, Int64 nro_factura, int id_cliente, string codigo_articulo, string codigo_articulo_marca, DateTime? fecha_desde, DateTime? fecha_hasta)
+
+        //voy a buscar a las tablas : FACTURA - CLIENTE_CUENTA_CORRIENTE
+        public static DataSet buscar_facturas(Int64 nro_factura, int cod_tipo_factura)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            {
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("factura_buscar_por_nroFactura_codTipoFactura", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@nro_factura", nro_factura);
+                        command.Parameters.AddWithValue("@cod_tipo_factura", cod_tipo_factura);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+
+                        return ds;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
+
+        }
+
+        public static List<factura> buscar_facturas(int cod_tipo_factura, Int64 nro_factura, int id_cliente, string codigo_articulo, string codigo_articulo_marca, DateTime? fecha_desde, DateTime? fecha_hasta)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
@@ -317,93 +377,39 @@ namespace Modulo_Administracion.Logica
         }
 
 
-
-
-
-        public factura buscar_factura(Int64 nro_factura)
+        public static bool eliminar_factura(factura factura)
         {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-                factura factura = db.factura.FirstOrDefault(t => t.nro_factura == nro_factura);
-
-
-                return factura;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-
-        public factura buscar_factura(int id_cliente, decimal id_factura)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                factura factura = db.factura.FirstOrDefault(t => t.id_cliente == id_cliente && t.id_factura == id_factura);
-
-
-                return factura;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-
-
-        public bool eliminar_factura(factura factura)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
-                    using (SqlCommand cmd = new SqlCommand("delete_factura", conn))
+
+                    try
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@id_factura", SqlDbType.Int).Value = factura.id_factura;
+                        DataSet ds = new DataSet();
 
-                        conn.Open();
-                        using (SqlTransaction trans = conn.BeginTransaction())
-                        {
-                            cmd.Transaction = trans;
-                            try
-                            {
-                                cmd.ExecuteNonQuery();
-                                trans.Commit();
-                                return true;
-                            }
-                            catch (Exception ex)
-                            {
-                                trans.Rollback();
-                                throw ex;
-                            }
+                        //store
+                        SqlCommand command = new SqlCommand("factura_eliminar", connection, sqlTransaction);
 
-                        }
+                        //parametros
+                        command.Parameters.AddWithValue("@id_factura", factura.id_factura);
 
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
 
+                        command.ExecuteNonQuery();
+                        sqlTransaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
     }

@@ -10,9 +10,8 @@ namespace Modulo_Administracion
     {
         proveedor proveedor = null;
         marca marca = null;
-        Logica_Familia logica_familia = new Logica_Familia();
-        Logica_Marca logica_marca = new Logica_Marca();
-        Logica_Proveedor logica_proveedor = new Logica_Proveedor();
+        
+     
         int Accion;
 
 
@@ -38,7 +37,7 @@ namespace Modulo_Administracion
                 InitializeComponent();
 
                 proveedor = _proveedor;
-                Logica_Funciones_Generales.CargarComboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
+                Logica_Funciones_Generales.cargar_comboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
 
             }
             catch (Exception ex)
@@ -111,15 +110,15 @@ namespace Modulo_Administracion
                             if (proveedor == null)
                             {
                                 //esto sirve para ordenar las columnas con click del usuario
-                                //SortableBindingList<marca> order = new SortableBindingList<marca>(logica_marca.buscar_marcas());
-                                dgvMarca.DataSource = logica_marca.buscar_marcas_activas();
+                                //SortableBindingList<marca> order = new SortableBindingList<marca>(Logica_Marca.buscar_marcas());
+                                dgvMarca.DataSource = Logica_Marca.buscar_marcas_activas();
 
                             }
                             else
                             {
                                 //esto sirve para ordenar las columnas con click del usuario
-                                //SortableBindingList<marca> order = new SortableBindingList<marca>(logica_marca.buscar_marcas_por_proveedor(proveedor.id_proveedor));
-                                dgvMarca.DataSource = logica_marca.buscar_marcas_activas_por_proveedor(proveedor.id_proveedor);
+                                //SortableBindingList<marca> order = new SortableBindingList<marca>(Logica_Marca.buscar_marcas_por_proveedor(proveedor.id_proveedor));
+                                dgvMarca.DataSource = Logica_Marca.buscar_marcas_activas(proveedor.id_proveedor);
                             }
 
 
@@ -261,7 +260,7 @@ namespace Modulo_Administracion
                 if (e.RowIndex >= 0)
                 {
 
-                    marca = logica_marca.buscar_marca_por_id_tabla_marca(Convert.ToInt32(dgvMarca.Rows[e.RowIndex].Cells[0].Value));
+                    marca = Logica_Marca.buscar_marca(Convert.ToInt32(dgvMarca.Rows[e.RowIndex].Cells[0].Value));
                     txtCodigo.Text = marca.id_tabla_marca.ToString();
                     txtMarca.Text = marca.txt_desc_marca;
                     cbProveedor.SelectedValue = marca.proveedor.id_proveedor;
@@ -308,7 +307,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_marca.alta_marca(marca) == false)
+                    if (Logica_Marca.alta_marca(marca) == false)
                     {
                         MessageBox.Show("Error al grabar la marca", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -325,7 +324,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_marca.modificar_eliminar_marca(marca, 1) == false)
+                    if (Logica_Marca.modificar_marca(marca) == false)
                     {
                         MessageBox.Show("Error al modificar la marca " + txtMarca.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -377,7 +376,7 @@ namespace Modulo_Administracion
                 {
                     id_tabla_marca = Convert.ToInt32(txtCodigo.Text);
                 }
-                if (logica_marca.buscar_marca_por_txt_desc_activo(txtMarca.Text, id_tabla_marca) != null)
+                if (Logica_Marca.buscar_marcas_activas_con_txtDescMarca_repetido(txtMarca.Text, id_tabla_marca) != null)
                 {
                     txtMarca.Focus();
                     throw new Exception("Ya existe una marca con ese nombre");
@@ -398,7 +397,7 @@ namespace Modulo_Administracion
 
                 marca.id_proveedor = Convert.ToInt32(cbProveedor.SelectedValue);
                 marca.txt_desc_marca = txtMarca.Text;
-                marca.proveedor = logica_proveedor.buscar_proveedor(marca.id_proveedor);
+                marca.proveedor = Logica_Proveedor.buscar_proveedor(marca.id_proveedor);
 
 
 
@@ -417,7 +416,7 @@ namespace Modulo_Administracion
             {
                 txtMarca.Focus();
                 iniciar(Program.Alta);
-                //txtCodigo.Text = (logica_marca.ult_nro_marca() + 1).ToString();
+                //txtCodigo.Text = (Logica_Marca.ult_nro_marca() + 1).ToString();
                 //SeteoObjeto();
 
             }
@@ -440,7 +439,7 @@ namespace Modulo_Administracion
                     return;
                 }
 
-                if (logica_marca.modificar_eliminar_marca(marca, 2) == false)
+                if (Logica_Marca.dar_de_baja_marca(marca) == false)
                 {
                     MessageBox.Show("Error al eliminar la marca " + txtMarca.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

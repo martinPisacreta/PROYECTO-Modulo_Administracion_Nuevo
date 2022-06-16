@@ -16,8 +16,7 @@ namespace Modulo_Administracion.Vista
     public partial class frmCliente_Cuenta_Corriente : Form
     {
         cliente cliente;
-        Logica_Cliente_Cuenta_Corriente logica_cliente_cuenta_corriente = new Logica_Cliente_Cuenta_Corriente();
-        Logica_Factura logica_factura = new Logica_Factura();
+       
 
 
         string valor_remito = "REMITO";
@@ -205,7 +204,7 @@ namespace Modulo_Administracion.Vista
 
                         //voy a buscar el ultimo nro de factura vieja y pongo (ese valor + 1)  en Nro Factura  
                         //ya que cuando hago click en "agregar movimiento" y elijo el tipo de remito , necesito que en Nro Factura me cargue el ultimo nro de factura vieja +  1
-                        Int64 ultimo_nro_factura_vieja = logica_cliente_cuenta_corriente.buscar_ultimo_nro_factura_vieja();
+                        Int64 ultimo_nro_factura_vieja = Logica_Cliente_Cuenta_Corriente.buscar_ultimo_nro_factura_vieja();
                         view.SetRowCellValue(e.RowHandle, view.Columns["Nro Factura"], ultimo_nro_factura_vieja + 1);
                     }
                 }
@@ -246,7 +245,7 @@ namespace Modulo_Administracion.Vista
                         if (cod_tipo_factura == 1) //solamente lo hago si es remito , en nota de credito y debito no
                         {
 
-                            DataTable dt = logica_cliente_cuenta_corriente.buscar_factura_por_nro_tipo_cliente(nro_factura, cod_tipo_factura).Tables[0]; //si existe la factura con ese nro y ese cod_tipo_factura , ya sea que la factura existe en el sistema o no... alerto de un error
+                            DataTable dt = Logica_Factura.buscar_facturas(nro_factura, cod_tipo_factura).Tables[0]; //si existe la factura con ese nro y ese cod_tipo_factura , ya sea que la factura existe en el sistema o no... alerto de un error
                             if (dt.Rows.Count > 0)
                             {
                                 if (Convert.ToInt32(dt.Rows[0][0].ToString()) > 0)
@@ -607,7 +606,7 @@ namespace Modulo_Administracion.Vista
                 }
 
 
-                if (logica_cliente_cuenta_corriente.modificar_movimientos_cuenta_corriente(lista_cliente_cuenta_corriente) == false)
+                if (Logica_Cliente_Cuenta_Corriente.modificar_movimientos_CCC(lista_cliente_cuenta_corriente) == false)
                 {
                     throw new Exception("Error al actualizar cuenta corriente");
                 }
@@ -662,7 +661,7 @@ namespace Modulo_Administracion.Vista
                         if (id != "")
                         {
                             int id_cliente_cuenta_corriente = Convert.ToInt32(id);
-                            if (logica_cliente_cuenta_corriente.eliminar_movimiento_cuenta_corriente(id_cliente_cuenta_corriente) == false)
+                            if (Logica_Cliente_Cuenta_Corriente.eliminar_movimiento_CCC(id_cliente_cuenta_corriente) == false)
                             {
                                 throw new Exception("Error al eliminar el movimiento de la cuenta corriente");
                             }
@@ -671,7 +670,7 @@ namespace Modulo_Administracion.Vista
                         gridView1.DeleteRow(gridView1.FocusedRowHandle);
                         gridView1.Columns["Fecha"].SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
                         //gridControl1.DataSource = null;
-                        //gridControl1.DataSource = logica_cliente_cuenta_corriente.buscar_movimientos_cuenta_corriente_por_id_cliente(cliente.id_cliente).Tables[0]; //cargo en gridControl1
+                        //gridControl1.DataSource = Logica_Cliente_Cuenta_Corriente.buscar_movimientos_cuenta_corriente_por_id_cliente(cliente.id_cliente).Tables[0]; //cargo en gridControl1
                     }
                     else
                     {
@@ -786,7 +785,7 @@ namespace Modulo_Administracion.Vista
                 }
 
                 gridControl1.DataSource = null;
-                gridControl1.DataSource = logica_cliente_cuenta_corriente.buscar_movimientos_cuenta_corriente_por_id_cliente(cliente.id_cliente, tipo).Tables[0]; //cargo en gridControl1
+                gridControl1.DataSource = Logica_Cliente_Cuenta_Corriente.buscar_movimientos_CCC(cliente.id_cliente, tipo).Tables[0]; //cargo en gridControl1
             }
             catch (Exception ex)
             {

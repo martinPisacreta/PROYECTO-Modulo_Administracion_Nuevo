@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Proveedor_Datos
+    static class Logica_Proveedor_Datos
     {
 
-        public bool alta_dato(proveedor_datos dato, int id_proveedor, Modulo_AdministracionContext db)
+        public static bool alta_proveedorDatos(proveedor_datos dato, int id_proveedor, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -39,7 +39,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool modificar_dato(proveedor_datos dato, Modulo_AdministracionContext db)
+        public static bool modificar_proveedorDatos(proveedor_datos dato, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -47,7 +47,7 @@ namespace Modulo_Administracion.Logica
             {
                 if (dato.sn_activo == 0)
                 {
-                    if (eliminar_dato(dato, db) == false)
+                    if (eliminar_proveedorDatos(dato, db) == false)
                     {
                         throw new Exception("Error al eliminar un dato del proveedor");
                     }
@@ -57,7 +57,7 @@ namespace Modulo_Administracion.Logica
                     proveedor_datos proveedor_datos_db = db.proveedor_datos.FirstOrDefault(c => c.id_proveedor == dato.id_proveedor && c.cod_tipo_dato == dato.cod_tipo_dato);
                     if (proveedor_datos_db == null)
                     {
-                        if (alta_dato(dato, dato.id_proveedor, db) == false)
+                        if (alta_proveedorDatos(dato, dato.id_proveedor, db) == false)
                         {
                             throw new Exception("Error al dar de alta un dato del proveedor");
                         }
@@ -87,7 +87,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool eliminar_dato(proveedor_datos dato, Modulo_AdministracionContext db)
+        public static bool eliminar_proveedorDatos(proveedor_datos dato, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -111,102 +111,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public DataSet buscar_tipos_datos()
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_tipo_dato", conn);
-                    command.CommandTimeout = 0;
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-        public List<proveedor_datos> buscar_datos_por_id_proveedor(int id_proveedor)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                List<proveedor_datos> datos = (from t in db.proveedor_datos
-                                               where t.id_proveedor == id_proveedor && t.sn_activo == -1
-                                               select t).ToList();
-
-
-                return datos;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-
-
-        }
-
-        public proveedor_datos buscar_dato(int id_proveedor, decimal cod_tipo_dato)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                proveedor_datos dato = db.proveedor_datos.FirstOrDefault(t => t.id_proveedor == id_proveedor && t.cod_tipo_dato == cod_tipo_dato);
-
-
-                return dato;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-        public bool dar_de_baja_proveedor_datos_por_proveedor(int id_proveedor, Modulo_AdministracionContext db)
+        public static bool dar_de_baja_proveedorDatos(int id_proveedor, Modulo_AdministracionContext db)
         {
             bool bandera = false;
             try

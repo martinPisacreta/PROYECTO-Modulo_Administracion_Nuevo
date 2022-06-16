@@ -6,11 +6,39 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Factura_Detalle
+    static class Logica_Factura_Detalle
     {
 
+        //pongo en factura_detalle NULL en el id_articulo enviado por parametro -> ya que se da de baja ese articulo , pero debe seguir figurando en el detalle de factura
+        public static bool modificar_facturaDetalle(long id_articulo, Modulo_AdministracionContext db)
+        {
 
-        public List<factura_detalle> buscar_detalle_factura_por_id_factura(int id_factura, Modulo_AdministracionContext db)
+            bool bandera = false;
+            try
+            {
+
+                List<factura_detalle> lista_factura_detalle = (from fd in db.factura_detalle
+                                                               where fd.id_articulo == id_articulo
+                                                               select fd).ToList();
+
+                if (lista_factura_detalle != null)
+                {
+                    foreach (factura_detalle fd in lista_factura_detalle)
+                    {
+                        fd.id_articulo = null;
+                    }
+                }
+                db.SaveChanges();
+                bandera = true;
+                return bandera;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public static List<factura_detalle> buscar_facturaDetalle(int id_factura, Modulo_AdministracionContext db)
         {
 
             try
@@ -36,13 +64,13 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public bool baja_item_a_factura(int id_factura_detalle)
+        public static bool dar_de_baja_facturaDetalle(int id_factura_detalle)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
 
-            using (DbContextTransaction transaction = db.Database.BeginTransaction())
+            using (DbContextTransaction sqlTransaction = db.Database.BeginTransaction())
             {
                 try
                 {
@@ -51,14 +79,14 @@ namespace Modulo_Administracion.Logica
                     factura_detalle_db.fec_baja = DateTime.Now;
                     db.SaveChanges();
 
-                    transaction.Commit();
+                    sqlTransaction.Commit();
                     bandera = true;
 
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    sqlTransaction.Rollback();
                     throw ex;
                 }
                 finally
@@ -71,7 +99,7 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public bool alta_item_a_factura(factura_detalle item_factura, factura factura_db, Modulo_AdministracionContext db)
+        public static bool alta_facturaDetalle(factura_detalle item_factura, factura factura_db, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -110,7 +138,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificacion_item_a_factura(factura_detalle factura_detalle_db, factura_detalle item_factura_a_modificar, factura factura_db, Modulo_AdministracionContext db)
+        public static bool modificar_facturaDetalle(factura_detalle factura_detalle_db, factura_detalle item_factura_a_modificar, factura factura_db, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;

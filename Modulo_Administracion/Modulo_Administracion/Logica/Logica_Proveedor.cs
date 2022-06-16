@@ -9,14 +9,11 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Proveedor
+    static class Logica_Proveedor
     {
 
-        Logica_Proveedor_Datos logica_proveedor_datos = new Logica_Proveedor_Datos();
-        Logica_Proveedor_Direccion logica_proveedor_direccion = new Logica_Proveedor_Direccion();
-
-
-        public bool alta_proveedor(proveedor proveedor)
+       
+        public static bool alta_proveedor(proveedor proveedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -52,7 +49,7 @@ namespace Modulo_Administracion.Logica
                     {
                         foreach (proveedor_datos proveedor_dato in proveedor.proveedor_datos)
                         {
-                            if (logica_proveedor_datos.alta_dato(proveedor_dato, proveedor_a_insertar.id_proveedor, db) == false)
+                            if (Logica_Proveedor_Datos.alta_proveedorDatos(proveedor_dato, proveedor_a_insertar.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de alta los datos del proveedor");
                             }
@@ -64,7 +61,7 @@ namespace Modulo_Administracion.Logica
                     {
                         foreach (proveedor_dir proveedor_dir in proveedor.proveedor_dir)
                         {
-                            if (logica_proveedor_direccion.alta_direccion(proveedor_dir, proveedor_a_insertar.id_proveedor, db) == false)
+                            if (Logica_Proveedor_Direccion.alta_proveedorDireccion(proveedor_dir, proveedor_a_insertar.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de alta las direcciones del proveedor");
                             }
@@ -88,7 +85,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificar_proveedor(proveedor proveedor)
+        public static bool modificar_proveedor(proveedor proveedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -115,7 +112,7 @@ namespace Modulo_Administracion.Logica
                     {
                         foreach (proveedor_datos proveedor_dato in proveedor.proveedor_datos)
                         {
-                            if (logica_proveedor_datos.modificar_dato(proveedor_dato, db) == false)
+                            if (Logica_Proveedor_Datos.modificar_proveedorDatos(proveedor_dato, db) == false)
                             {
                                 throw new Exception("Error al modificar los datos del proveedor");
                             }
@@ -127,7 +124,7 @@ namespace Modulo_Administracion.Logica
                     {
                         foreach (proveedor_dir proveedor_dir in proveedor.proveedor_dir)
                         {
-                            if (logica_proveedor_direccion.modificar_direccion(proveedor_dir, db) == false)
+                            if (Logica_Proveedor_Direccion.modificar_proveedorDireccion(proveedor_dir, db) == false)
                             {
                                 throw new Exception("Error al modificar las direcciones del proveedor");
                             }
@@ -151,7 +148,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool eliminar_proveedor(proveedor proveedor)
+        public static bool dar_de_baja_proveedor(proveedor proveedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -177,8 +174,8 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.proveedor_dir.Count > 0)
                         {
-                            Logica_Proveedor_Direccion logica_direccion = new Logica_Proveedor_Direccion();
-                            if (logica_direccion.dar_de_baja_proveedor_dir_por_proveedor(proveedor.id_proveedor, db) == false)
+                            
+                            if (Logica_Proveedor_Direccion.dar_de_baja_proveedorDireccion(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja direccion/es del proveedor");
                             }
@@ -189,8 +186,8 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.proveedor_datos.Count > 0)
                         {
-                            Logica_Proveedor_Datos Logica_Proveedor_Datos = new Logica_Proveedor_Datos();
-                            if (Logica_Proveedor_Datos.dar_de_baja_proveedor_datos_por_proveedor(proveedor.id_proveedor, db) == false)
+                            
+                            if (Logica_Proveedor_Datos.dar_de_baja_proveedorDatos(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja dato/s del proveedor");
                             }
@@ -202,8 +199,8 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.marca.Count > 0)
                         {
-                            Logica_Marca logica_marca = new Logica_Marca();
-                            if (logica_marca.dar_de_baja_marcas_por_proveedor(proveedor.id_proveedor, db) == false)
+                            
+                            if (Logica_Marca.dar_de_baja_marcas(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja marcas del proveedor");
                             }
@@ -228,7 +225,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public List<proveedor> buscar_proveedores()
+        public static List<proveedor> buscar_proveedores()
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -243,9 +240,9 @@ namespace Modulo_Administracion.Logica
 
                 return proveedores;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -254,7 +251,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public proveedor buscar_proveedor(int id_proveedor)
+        public static proveedor buscar_proveedor(int id_proveedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -265,68 +262,62 @@ namespace Modulo_Administracion.Logica
 
                 return proveedor;
             }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-        public proveedor buscar_proveedor(string razon_social)
-        {
-
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                proveedor proveedor = db.proveedor.FirstOrDefault(p => p.razon_social == razon_social);
-
-                return proveedor;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-
-        public DataTable filtro_proveedor_razon_social(string txtBusqueda)
-        {
-            try
-            {
-                using (SqlConnection cnx = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    string query = "select * from proveedor where razon_social LIKE '%' + @param + '%' and accion <> 'ELIMINACION'";
-
-
-                    SqlCommand cmd = new SqlCommand(query, cnx);
-                    cmd.Parameters.AddWithValue("@param", txtBusqueda.Trim());
-
-                    SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adaptador.Fill(dt);
-
-                    return dt;
-
-                }
-
-            }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                db = null;
+            }
+
         }
-        public proveedor buscar_proveedor_por_razon_social_activo(string razon_social, int id_proveedor)
+
+
+
+        public static DataTable buscar_proveedores_activos(string txtBusqueda)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            {
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("proveedor_buscar_activos", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@razon_social", txtBusqueda.Trim());
+                      
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+
+                        sqlTransaction.Commit();
+                        return ds.Tables[0];
+
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        public static proveedor buscar_proveedores_activos_con_razonSocial_repetido(string razon_social, int id_proveedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -337,9 +328,9 @@ namespace Modulo_Administracion.Logica
 
                 return proveedor;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {

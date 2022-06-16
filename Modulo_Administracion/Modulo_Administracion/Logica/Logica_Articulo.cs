@@ -8,18 +8,18 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Articulo
+    static class Logica_Articulo
     {
-        Logica_Familia logica_familia = new Logica_Familia();
-
-        public void modificar_datos_a_tabla_articulo_por_metodo_actualizar_porcentaje(DataTable dt)
+      
+        
+        public static void modificar_articulos_por_metodo_actualizar_porcentaje(DataTable dt)
         {
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                conn.Open();
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
-                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, transaction))
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, sqlTransaction))
                     {
                         try
                         {
@@ -30,7 +30,7 @@ namespace Modulo_Administracion.Logica
                                                                         "(" +
                                                                             "id_articulo bigint, " +
                                                                             "precio_lista numeric(18, 4)" +
-                                                                        ")", conn, transaction
+                                                                        ")", connection, sqlTransaction
                                                                     );
 
                             SqlCommand actualizar_precios = new SqlCommand(
@@ -40,7 +40,7 @@ namespace Modulo_Administracion.Logica
                                                                                 "art.precio_lista = tmp.precio_lista," +
                                                                                 "art.fecha_ult_modif = GETDATE(),art.accion = 'MODIFICACION' " +
                                                                             "from	" +
-                                                                                "articulo art inner join #tmp_articulos tmp on tmp.id_articulo = art.id_articulo", conn, transaction
+                                                                                "articulo art inner join #tmp_articulos tmp on tmp.id_articulo = art.id_articulo", connection, sqlTransaction
                                                                             );
 
                             crear_tabla.ExecuteNonQuery();
@@ -51,13 +51,11 @@ namespace Modulo_Administracion.Logica
 
                             actualizar_precios.ExecuteNonQuery();
 
-                            transaction.Commit();
+                            sqlTransaction.Commit();
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
-
-                            conn.Close();
+                            sqlTransaction.Rollback();
                             throw ex;
                         }
 
@@ -69,14 +67,14 @@ namespace Modulo_Administracion.Logica
 
         //SI "busqueda" ES 1 -> BUSCO LOS ARTICULOS EXISTENTES EN LA BASE DE DATOS EN RELACION A LA TABLA #tmp_lista_precios_proveedor
         //SI "busqueda" ES 2 -> BUSCO LOS ARTICULOS INEEXISTENTES EN LA BASE DE DATOS EN RELACION A LA TABLA #tmp_lista_precios_proveedor
-        public DataSet buscar_articulos_en_relacion_a_dataTable(DataTable dt, int busqueda, int id_proveedor)
+        public static DataSet buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(DataTable dt, int busqueda, int id_proveedor)
         {
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                conn.Open();
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
-                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, transaction))
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, sqlTransaction))
                     {
                         try
                         {
@@ -90,7 +88,7 @@ namespace Modulo_Administracion.Logica
                                                                                     "codigo_articulo nvarchar(255) NULL," +
                                                                                     "descripcion_articulo nvarchar(255) NULL," +
                                                                                     "precio_lista float NULL" +
-                                                                                ")", conn, transaction
+                                                                                ")", connection, sqlTransaction
                                                                                );
 
 
@@ -103,9 +101,9 @@ namespace Modulo_Administracion.Logica
                             bulkCopy.WriteToServer(dt);
 
 
-                            DataSet dataSet = new DataSet("TimeRanges");
+                            DataSet dataSet = new DataSet();
 
-                            SqlCommand command = new SqlCommand("buscar_articulos_en_relacion_a_dataTable", conn, transaction);
+                            SqlCommand command = new SqlCommand("articulo_buscar_en_relacion_a_tmpListaPreciosProveedor", connection, sqlTransaction);
                             SqlParameter param = new SqlParameter();
                             param.ParameterName = "@busqueda";
                             param.Value = busqueda;
@@ -126,15 +124,14 @@ namespace Modulo_Administracion.Logica
                             adapter.SelectCommand = command;
                             adapter.Fill(dataSet);
 
-                            transaction.Commit();
+                            sqlTransaction.Commit();
 
                             return dataSet;
 
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
-                            conn.Close();
+                            sqlTransaction.Rollback();
                             throw ex;
                         }
 
@@ -144,14 +141,14 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public DataSet alta_articulos_a_tabla_articulo_por_metodo_subida_excel(DataTable dt)
+        public static DataSet alta_articulos_por_metodo_subida_excelMaxi(DataTable dt)
         {
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                conn.Open();
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
-                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, transaction))
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, sqlTransaction))
                     {
                         try
                         {
@@ -161,9 +158,9 @@ namespace Modulo_Administracion.Logica
                             bulkCopy.WriteToServer(dt);
 
 
-                            DataSet dataSet = new DataSet("TimeRanges");
+                            DataSet dataSet = new DataSet();
 
-                            SqlCommand command = new SqlCommand("ABM_articulos", conn, transaction);
+                            SqlCommand command = new SqlCommand("articulo_alta_por_metodo_subida_excelMaxi", connection, sqlTransaction);
                             command.CommandTimeout = 0;
 
                             command.CommandType = CommandType.StoredProcedure;
@@ -172,15 +169,14 @@ namespace Modulo_Administracion.Logica
                             adapter.SelectCommand = command;
                             adapter.Fill(dataSet);
 
-                            transaction.Commit();
+                            sqlTransaction.Commit();
 
                             return dataSet;
 
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
-                            conn.Close();
+                            sqlTransaction.Rollback();
                             throw ex;
                         }
 
@@ -192,91 +188,54 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public DataSet buscar_articulo_por_codigo_articulo_marca_y_codigo_articulo(string codigo_articulo_marca, string codigo_articulo)
+        public static DataSet buscar_articulos_activos(string codigo_articulo_marca, string codigo_articulo)
         {
-
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
 
-                    SqlCommand command = new SqlCommand("buscar_articulos_por_codigo_articulo_marca_y_codigo_articulo", conn);
-                    command.CommandTimeout = 0;
-
-                    command.Parameters.AddWithValue("@codigo_articulo_marca", codigo_articulo_marca);
-                    command.Parameters.AddWithValue("@codigo_articulo", codigo_articulo);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
+                    try
                     {
-                        reader.Close();
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("articulo_buscar_por_codigoArticuloMarca_codigoArticulo", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@codigo_articulo_marca", codigo_articulo_marca);
+                        command.Parameters.AddWithValue("@codigo_articulo", codigo_articulo);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+                        sqlTransaction.Commit();
+                        return ds;
+
                     }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
-            return set2;
         }
-
-
-
-
-        //public articulo buscar_articulo(string codigo_articulo_marca, string codigo_articulo)
-        //{
-        //    Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-        //    try
-        //    {
-        //        articulo articulo = db.articulo.FirstOrDefault(a => a.codigo_articulo_marca == codigo_articulo_marca && a.codigo_articulo == codigo_articulo);
-
-        //        return articulo;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        db = null;
-        //    }
-
-
-        //}
-
-        public bool dar_de_baja_articulos_por_familia(int id_tabla_familia, Modulo_AdministracionContext db) //doy de baja los articulos de una familia
+        
+        public static bool dar_de_baja_articulos(int id_tabla_familia, Modulo_AdministracionContext db) //doy de baja los articulos de una familia
         {
 
             bool bandera = false;
             try
             {
 
-                List<articulo> lista_articulos = (from p in db.articulo //listo
+                List<articulo> lista_articulos = (from p in db.articulo
                                                   where p.id_tabla_familia == id_tabla_familia
                                                   select p).ToList();
 
@@ -285,7 +244,7 @@ namespace Modulo_Administracion.Logica
                     foreach (articulo p in lista_articulos)
                     {
                         //pongo en factura_detalle NULL en el id_articulo enviado por parametro -> ya que se da de baja ese articulo , pero debe seguir figurando en el detalle de factura
-                        if (modificar_id_articulo_en_factura_detalle(p.id_articulo, db) == false)
+                        if (Logica_Factura_Detalle.modificar_facturaDetalle(p.id_articulo, db) == false)
                         {
                             throw new Exception("Error al modificar id articulo en factura detalle");
                         }
@@ -308,195 +267,93 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        //pongo en factura_detalle NULL en el id_articulo enviado por parametro -> ya que se da de baja ese articulo , pero debe seguir figurando en el detalle de factura
-        public bool modificar_id_articulo_en_factura_detalle(long id_articulo, Modulo_AdministracionContext db)
+       
+
+        public static DataSet buscar_articulos_activos(int id_proveedor, int id_tabla_marca, int id_tabla_familia, string cod_articulo, string descripcion)
         {
 
-            bool bandera = false;
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-                List<factura_detalle> lista_factura_detalle = (from fd in db.factura_detalle
-                                                               where fd.id_articulo == id_articulo
-                                                               select fd).ToList();
-
-                if (lista_factura_detalle != null)
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
-                    foreach (factura_detalle fd in lista_factura_detalle)
+
+                    try
                     {
-                        fd.id_articulo = null;
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("articulo_buscar_por_idProveedor_idTablaMarca_idTablaFamilia_codArticulo_descripcionArticulo", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@id_proveedor", id_proveedor);
+                        command.Parameters.AddWithValue("@id_tabla_marca", id_tabla_marca);
+                        command.Parameters.AddWithValue("@id_tabla_familia", id_tabla_familia);
+                        command.Parameters.AddWithValue("@cod_articulo", cod_articulo);
+                        command.Parameters.AddWithValue("@descripcion", descripcion);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+                        sqlTransaction.Commit();
+                        return ds;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
                     }
                 }
-                db.SaveChanges();
-                bandera = true;
-                return bandera;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        public DataSet buscar_articulos(int id_proveedor, int id_tabla_marca, int id_tabla_familia, string cod_articulo, string descripcion)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_articulos_por_idProveedor_idTablaMarca_idTablaFamilia_codArticulo_descripcionArticulo", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@id_proveedor", id_proveedor);
-                    command.Parameters.AddWithValue("@id_tabla_marca", id_tabla_marca);
-                    command.Parameters.AddWithValue("@id_tabla_familia", id_tabla_familia);
-                    command.Parameters.AddWithValue("@cod_articulo", cod_articulo);
-                    command.Parameters.AddWithValue("@descripcion", descripcion);
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-        public DataSet generar_listado(int nro_excel)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("generar_excel_santiago", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@nro_excel", nro_excel);
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-
         }
 
 
-        public DataSet buscar_articulos()
+        public static DataSet buscar_articulos_activos()
         {
 
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
 
-                    SqlCommand command = new SqlCommand("buscar_articulos_todos", conn);
-                    command.CommandTimeout = 0;
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
+                    try
                     {
-                        reader.Close();
+
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("articulo_buscar_activos", connection, sqlTransaction);
+
+
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+                        sqlTransaction.Commit();
+                        return ds;
+
                     }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
-            return set2;
         }
 
-
-
-
-        public bool modificar_articulos_existentes(List<articulo> lista_articulo, Modulo_AdministracionContext db)
+        public static bool modificar_articulos_existentes_en_relacion_a_ListaProveedor(List<articulo> lista_articulo, Modulo_AdministracionContext db)
         {
 
 
@@ -523,7 +380,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool modificar_articulo(articulo articulo, Modulo_AdministracionContext db)
+        public static bool modificar_articulo(articulo articulo, Modulo_AdministracionContext db)
         {
             try
             {
@@ -546,7 +403,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public bool alta_articulos_inexistentes(List<articulo> lista_articulo, Modulo_AdministracionContext db)
+        public static bool alta_articulos_inexistentes_en_relacion_a_ListaProveedor(List<articulo> lista_articulo, Modulo_AdministracionContext db)
         {
 
 
@@ -571,62 +428,13 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool alta_articulo(articulo articulo, Modulo_AdministracionContext db)
+        public static bool alta_articulo(articulo articulo, Modulo_AdministracionContext db)
         {
             try
             {
                 bool bandera = false;
                 articulo articulo_a_insertar = new articulo();
-                familia familia_articulo = logica_familia.buscar_familia_por_id_tabla_familia(articulo.id_tabla_familia.Value);
-
-                decimal algoritmo1 = 1;
-                decimal algoritmo2 = 1;
-                decimal algoritmo3 = 1;
-                decimal algoritmo4 = 1;
-                decimal algoritmo5 = 1;
-                decimal algoritmo6 = 1;
-                decimal algoritmo7 = 1;
-                decimal algoritmo8 = 1;
-                decimal algoritmo9 = 1;
-
-                if (familia_articulo.algoritmo_1 != 0)
-                {
-                    algoritmo1 = familia_articulo.algoritmo_1;
-                }
-                if (familia_articulo.algoritmo_2 != 0)
-                {
-                    algoritmo2 = familia_articulo.algoritmo_2;
-                }
-                if (familia_articulo.algoritmo_3 != 0)
-                {
-                    algoritmo3 = familia_articulo.algoritmo_3;
-                }
-                if (familia_articulo.algoritmo_4 != 0)
-                {
-                    algoritmo4 = familia_articulo.algoritmo_4;
-                }
-                if (familia_articulo.algoritmo_5 != 0)
-                {
-                    algoritmo5 = familia_articulo.algoritmo_5;
-                }
-                if (familia_articulo.algoritmo_6 != 0)
-                {
-                    algoritmo6 = familia_articulo.algoritmo_6;
-                }
-                if (familia_articulo.algoritmo_7 != 0)
-                {
-                    algoritmo7 = familia_articulo.algoritmo_7;
-                }
-                if (familia_articulo.algoritmo_8 != 0)
-                {
-                    algoritmo8 = familia_articulo.algoritmo_8;
-                }
-                if (familia_articulo.algoritmo_9 != 0)
-                {
-                    algoritmo9 = familia_articulo.algoritmo_9;
-                }
-
-
+                familia familia_articulo = Logica_Familia.buscar_familia(articulo.id_tabla_familia.Value);
 
                 //id_articulo es identity
                 articulo_a_insertar.codigo_articulo_marca = familia_articulo.marca.txt_desc_marca;

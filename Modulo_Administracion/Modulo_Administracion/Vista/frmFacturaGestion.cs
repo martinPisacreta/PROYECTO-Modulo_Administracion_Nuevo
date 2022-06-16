@@ -14,8 +14,8 @@ namespace Modulo_Administracion.Vista
     {
 
         factura factura = null;
-        Logica_Factura logica_factura = new Logica_Factura();
-        Logica_Cliente logica_cliente = new Logica_Cliente();
+       
+       
         int Accion;
 
         string opcion_1_dropDownButton = "Nueva Factura";
@@ -33,7 +33,7 @@ namespace Modulo_Administracion.Vista
             {
                 if (e.RowIndex >= 0)
                 {
-                    factura = logica_factura.buscar_factura_por_id_factura(Convert.ToInt32(dgvFacturas.Rows[e.RowIndex].Cells[0].Value));
+                    factura = Logica_Factura.buscar_factura(Convert.ToInt32(dgvFacturas.Rows[e.RowIndex].Cells[0].Value));
 
                     if (factura == null)
                     {
@@ -92,7 +92,7 @@ namespace Modulo_Administracion.Vista
             try
             {
                 InitializeComponent();
-                Logica_Funciones_Generales.CargarComboBox("ttipo_factura", cbTipoFactura, "txt_desc", "cod_tipo_factura in (1,2,6)", "cod_tipo_factura", "cod_tipo_factura");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_factura", cbTipoFactura, "txt_desc", "cod_tipo_factura in (1,2,6)", "cod_tipo_factura", "cod_tipo_factura");
 
                 txtClienteId.Visible = false;
                 DXPopupMenu popupMenu = new DXPopupMenu();
@@ -344,7 +344,7 @@ namespace Modulo_Administracion.Vista
 
                 //datagridview
                 dgvFacturas.Rows.Clear();
-                List<factura> lista_facturas_por_fecha = logica_factura.buscar_facturas_por_fecha(monthCalendar1.SelectionRange.Start.Date);
+                List<factura> lista_facturas_por_fecha = Logica_Factura.buscar_facturas(monthCalendar1.SelectionRange.Start.Date);
                 if (lista_facturas_por_fecha != null)
                 {
                     if (lista_facturas_por_fecha.Count > 0)
@@ -445,7 +445,7 @@ namespace Modulo_Administracion.Vista
             {
                 if (txtFechaDesde.Text != "")
                 {
-                    txtFechaDesde.Text = Logica_Funciones_Generales.ValidarFecha(txtFechaDesde.Text);
+                    txtFechaDesde.Text = Logica_Funciones_Generales.validar_fecha(txtFechaDesde.Text);
                 }
             }
             catch (Exception ex)
@@ -461,7 +461,7 @@ namespace Modulo_Administracion.Vista
             {
                 if (txtFechaHasta.Text != "")
                 {
-                    txtFechaHasta.Text = Logica_Funciones_Generales.ValidarFecha(txtFechaHasta.Text);
+                    txtFechaHasta.Text = Logica_Funciones_Generales.validar_fecha(txtFechaHasta.Text);
                 }
             }
             catch (Exception ex)
@@ -554,7 +554,7 @@ namespace Modulo_Administracion.Vista
                 }
 
 
-                List<factura> lista_facturas = logica_factura.buscar_facturas(cod_tipo_factura, nro_factura, id_cliente, codigo_articulo, codigo_articulo_marca, fecha_desde, fecha_hasta);
+                List<factura> lista_facturas = Logica_Factura.buscar_facturas(cod_tipo_factura, nro_factura, id_cliente, codigo_articulo, codigo_articulo_marca, fecha_desde, fecha_hasta);
                 if (lista_facturas != null)
                 {
                     if (lista_facturas.Count > 0)
@@ -637,7 +637,7 @@ namespace Modulo_Administracion.Vista
                         {
                             foreach (DataGridViewRow row in dgvFacturas.SelectedRows)
                             {
-                                factura factura_db = logica_factura.buscar_factura_por_id_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos 
+                                factura factura_db = Logica_Factura.buscar_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos 
                                 if (factura_db.sn_emitida == 0) //si la factura no esta emitida...
                                 {
                                     //modifico ciertos datos del objeto , SI CAMBIO ACA , TAMBIEN CAMBIAR LINEA DONDE DICE "PEPE EL PISTOLERO"
@@ -646,7 +646,7 @@ namespace Modulo_Administracion.Vista
                                     factura_db.fecha_sn_emitida = DateTime.Now;
                                     //hasta aca
 
-                                    factura factura_modificada = logica_factura.modificar_factura(factura_db); //establesco el valor en la base de datos
+                                    factura factura_modificada = Logica_Factura.modificar_factura(factura_db); //establesco el valor en la base de datos
                                     if (factura_modificada != null)
                                     {
                                         string FilePath_PDF = Logica_Funciones_Generales.generar_Pdf(factura_modificada);
@@ -709,7 +709,7 @@ namespace Modulo_Administracion.Vista
                         {
                             foreach (DataGridViewRow row in dgvFacturas.SelectedRows)
                             {
-                                factura factura_db = logica_factura.buscar_factura_por_id_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos
+                                factura factura_db = Logica_Factura.buscar_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos
                                 if (factura_db.sn_emitida == 0) //si la factura no esta emitida...
                                 {
                                     //modifico ciertos datos del objeto , SI CAMBIO ACA , TAMBIEN CAMBIAR LINEA DONDE DICE "PEPE EL PISTOLERO"
@@ -718,7 +718,7 @@ namespace Modulo_Administracion.Vista
                                     factura_db.fecha_sn_emitida = DateTime.Now;
                                     //hasta aca
 
-                                    factura factura_modificada = logica_factura.modificar_factura(factura_db); //establesco el valor en la base de datos
+                                    factura factura_modificada = Logica_Factura.modificar_factura(factura_db); //establesco el valor en la base de datos
                                     if (factura_modificada != null)
                                     {
                                         string FilePath_PDF = Logica_Funciones_Generales.generar_Pdf(factura_modificada);
@@ -829,7 +829,7 @@ namespace Modulo_Administracion.Vista
 
 
 
-                frm.IniciarForm(logica_cliente.buscar_clientes(razon_social).Tables[0], 2);
+                frm.IniciarForm(Logica_Cliente.buscar_clientes_activos(razon_social).Tables[0], 2);
 
 
 
@@ -921,7 +921,7 @@ namespace Modulo_Administracion.Vista
                     {
                         foreach (DataGridViewRow row in dgvFacturas.SelectedRows)
                         {
-                            factura factura_db = logica_factura.buscar_factura_por_id_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos
+                            factura factura_db = Logica_Factura.buscar_factura(Convert.ToInt32(row.Cells[0].Value)); //voy a buscar la factura en la base de datos
 
 
                             if (factura_db.path_factura != null) //si el archivo que quiero borrar , tiene path ...
@@ -934,7 +934,7 @@ namespace Modulo_Administracion.Vista
 
                             if (factura_db != null)
                             {
-                                bandera = logica_factura.eliminar_factura(factura_db);
+                                bandera = Logica_Factura.eliminar_factura(factura_db);
                                 if (bandera == true) //si se elimino correctamente la factura y la misma fue emitida...
                                 {
                                     if (factura_db.sn_emitida == -1) //si la factura fue emitida entro aca...

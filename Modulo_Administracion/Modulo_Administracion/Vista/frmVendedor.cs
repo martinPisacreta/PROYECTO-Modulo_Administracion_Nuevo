@@ -10,7 +10,7 @@ namespace Modulo_Administracion
     {
 
         vendedor vendedor = null;
-        Logica_Vendedor logica_vendedor = new Logica_Vendedor();
+        
         int Accion;
 
 
@@ -92,8 +92,8 @@ namespace Modulo_Administracion
                             dgvVendedor.DataSource = null;
 
                             //esto sirve para ordenar las columnas con click del usuario
-                            //SortableBindingList<vendedor> order = new SortableBindingList<vendedor>(logica_vendedor.buscar_vendedores());
-                            dgvVendedor.DataSource = logica_vendedor.buscar_vendedores();
+                            //SortableBindingList<vendedor> order = new SortableBindingList<vendedor>(Logica_Vendedor.buscar_vendedores());
+                            dgvVendedor.DataSource = Logica_Vendedor.buscar_vendedores_activos();
 
                             //seteo columnas
                             seteoColumnasDataGridView();
@@ -207,7 +207,7 @@ namespace Modulo_Administracion
             {
                 if (e.RowIndex >= 0)
                 {
-                    vendedor = logica_vendedor.buscar_vendedor(Convert.ToInt32(dgvVendedor.Rows[e.RowIndex].Cells[0].Value));
+                    vendedor = Logica_Vendedor.buscar_vendedor(Convert.ToInt32(dgvVendedor.Rows[e.RowIndex].Cells[0].Value));
 
                     txtCodigo.Text = vendedor.id_vendedor.ToString();
                     txtNombre.Text = vendedor.nombre.ToString();
@@ -261,7 +261,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_vendedor.alta_vendedor(vendedor) == false)
+                    if (Logica_Vendedor.alta_vendedor(vendedor) == false)
                     {
                         MessageBox.Show("Error al grabar el vendedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -278,7 +278,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_vendedor.modificar_vendedor(vendedor) == false)
+                    if (Logica_Vendedor.modificar_vendedor(vendedor) == false)
                     {
                         MessageBox.Show("Error al modificar el vendedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -329,7 +329,7 @@ namespace Modulo_Administracion
 
                 }
 
-                if (logica_vendedor.buscar_vendedor_por_nombre_activo(txtNombre.Text, id_vendedor) != null)
+                if (Logica_Vendedor.buscar_vendedores_activos_con_Nombre_repetido(txtNombre.Text, id_vendedor) != null)
                 {
                     txtNombre.Focus();
                     throw new Exception("Ya existe un vendedor con este nombre");
@@ -395,7 +395,7 @@ namespace Modulo_Administracion
                     return;
                 }
 
-                if (logica_vendedor.eliminar_vendedor(vendedor) == false)
+                if (Logica_Vendedor.dar_de_baja_vendedor(vendedor) == false)
                 {
                     MessageBox.Show("Error al eliminar el vendedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -464,7 +464,7 @@ namespace Modulo_Administracion
             try
             {
 
-                dgvVendedor.DataSource = logica_vendedor.filtro_vendedor_nombre(txtBusqueda.Text.Trim());
+                dgvVendedor.DataSource = Logica_Vendedor.buscar_vendedores_activos(txtBusqueda.Text.Trim());
             }
             catch (Exception ex)
             {

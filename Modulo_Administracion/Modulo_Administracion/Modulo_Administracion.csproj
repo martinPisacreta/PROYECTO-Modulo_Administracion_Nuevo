@@ -183,9 +183,9 @@
     <Compile Include="Logica\Logica_Cliente_Direccion.cs" />
     <Compile Include="Logica\Logica_Factura.cs" />
     <Compile Include="Logica\Logica_Factura_Detalle.cs" />
-    <Compile Include="Logica\Logica_Factura_Tipo.cs" />
     <Compile Include="Logica\Logica_Familia.cs" />
     <Compile Include="Logica\Logica_Funciones_Generales.cs" />
+    <Compile Include="Logica\Logica_Geografia.cs" />
     <Compile Include="Logica\Logica_Marca.cs" />
     <Compile Include="Logica\Logica_Proveedor.cs" />
     <Compile Include="Logica\Logica_Proveedor_Datos.cs" />
@@ -339,6 +339,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

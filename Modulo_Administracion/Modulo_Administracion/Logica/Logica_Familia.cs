@@ -9,10 +9,10 @@ namespace Modulo_Administracion.Logica
 {
 
 
-    public class Logica_Familia
+    static class Logica_Familia
     {
-
-        public bool alta_familia(familia familia)
+       
+        public static bool alta_familia(familia familia)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -72,9 +72,9 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificar_eliminar_familia(familia familia, decimal coeficiente, int accion)
+        public static bool modificar_familia(familia familia, decimal coeficiente)
         {
-            Logica_Articulo logica_articulo = new Logica_Articulo();
+            
 
 
 
@@ -90,50 +90,25 @@ namespace Modulo_Administracion.Logica
 
                     familia_db.id_tabla_familia = familia.id_tabla_familia;
 
+                    familia_db.id_familia = familia.id_familia;
+                    familia_db.id_tabla_marca = familia.id_tabla_marca;
+                    familia_db.txt_desc_familia = familia.txt_desc_familia;
 
-                    if (accion == 1) //si es modificacion...
-                    {
-                        familia_db.id_familia = familia.id_familia;
-                        familia_db.id_tabla_marca = familia.id_tabla_marca;
-                        familia_db.txt_desc_familia = familia.txt_desc_familia;
+                    familia_db.sn_activo = familia.sn_activo;
+                    familia_db.accion = "MODIFICACION";
 
-                        familia_db.sn_activo = familia.sn_activo;
-                        familia_db.accion = "MODIFICACION";
-
-                        familia_db.fec_ult_modif = familia.fec_ult_modif;
-                        familia_db.path_img = familia.path_img;
-                        familia_db.algoritmo_1 = familia.algoritmo_1;
-                        familia_db.algoritmo_2 = familia.algoritmo_2;
-                        familia_db.algoritmo_3 = familia.algoritmo_3;
-                        familia_db.algoritmo_4 = familia.algoritmo_4;
-                        familia_db.algoritmo_5 = familia.algoritmo_5;
-                        familia_db.algoritmo_6 = familia.algoritmo_6;
-                        familia_db.algoritmo_7 = familia.algoritmo_7;
-                        familia_db.algoritmo_8 = familia.algoritmo_8;
-                        familia_db.algoritmo_9 = familia.algoritmo_9;
-                        familia_db.algoritmo_10 = familia.algoritmo_10;
-
-
-
-
-                    }
-                    else //si es baja -> doy de baja la familia y a su vez : articulos de esa familia
-                    {
-                        familia_db.sn_activo = 0;
-                        familia_db.accion = "ELIMINACION";
-
-                        if (logica_articulo.dar_de_baja_articulos_por_familia(familia.id_tabla_familia, db) == false)
-                        {
-                            throw new Exception("Error al dar de baja articulos de familia");
-                        }
-                    }
-
-
-
-
-
-
-
+                    familia_db.fec_ult_modif = familia.fec_ult_modif;
+                    familia_db.path_img = familia.path_img;
+                    familia_db.algoritmo_1 = familia.algoritmo_1;
+                    familia_db.algoritmo_2 = familia.algoritmo_2;
+                    familia_db.algoritmo_3 = familia.algoritmo_3;
+                    familia_db.algoritmo_4 = familia.algoritmo_4;
+                    familia_db.algoritmo_5 = familia.algoritmo_5;
+                    familia_db.algoritmo_6 = familia.algoritmo_6;
+                    familia_db.algoritmo_7 = familia.algoritmo_7;
+                    familia_db.algoritmo_8 = familia.algoritmo_8;
+                    familia_db.algoritmo_9 = familia.algoritmo_9;
+                    familia_db.algoritmo_10 = familia.algoritmo_10;
 
 
                     db.SaveChanges();
@@ -154,8 +129,51 @@ namespace Modulo_Administracion.Logica
             }
         }
 
+        public static bool dar_de_baja_familia(familia familia, decimal coeficiente)
+        {
+          
 
-        public decimal precio_coeficiente(int tipo_de_coeficiente, decimal algoritmo1, decimal algoritmo2, decimal algoritmo3, decimal algoritmo4, decimal algoritmo5, decimal algoritmo6, decimal algoritmo7, decimal algoritmo8, decimal algoritmo9)
+
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
+            using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
+            {
+
+                try
+                {
+                    bool bandera = false;
+
+                    familia familia_db = db.familia.FirstOrDefault(f => f.id_tabla_familia == familia.id_tabla_familia);
+
+                    familia_db.id_tabla_familia = familia.id_tabla_familia;
+
+                    familia_db.sn_activo = 0;
+                    familia_db.accion = "ELIMINACION";
+
+                    if (Logica_Articulo.dar_de_baja_articulos(familia.id_tabla_familia, db) == false)
+                    {
+                        throw new Exception("Error al dar de baja articulos de familia");
+                    }
+                    
+                    db.SaveChanges();
+                    dbContextTransaction.Commit();
+                    bandera = true;
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw ex;
+                }
+                finally
+                {
+                    db = null;
+                }
+            }
+        }
+
+
+        public static decimal precio_coeficiente(int tipo_de_coeficiente, decimal algoritmo1, decimal algoritmo2, decimal algoritmo3, decimal algoritmo4, decimal algoritmo5, decimal algoritmo6, decimal algoritmo7, decimal algoritmo8, decimal algoritmo9)
         {
 
             try
@@ -225,7 +243,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool dar_de_baja_familias_por_marca(int id_tabla_marca, Modulo_AdministracionContext db) //doy de baja las familias de una marca 
+        public static bool dar_de_baja_familias(int id_tabla_marca, Modulo_AdministracionContext db) //doy de baja las familias de una marca 
         {
 
             bool bandera = false;
@@ -238,8 +256,8 @@ namespace Modulo_Administracion.Logica
 
                 foreach (familia f in lista_familias)
                 {
-                    Logica_Articulo logica_articulo = new Logica_Articulo();
-                    if (logica_articulo.dar_de_baja_articulos_por_familia(f.id_tabla_familia, db) == false)
+                
+                    if (Logica_Articulo.dar_de_baja_articulos(f.id_tabla_familia, db) == false)
                     {
                         throw new Exception("Error al dar de baja articulos de la familia");
                     }
@@ -264,7 +282,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public object buscar_familias_activas_por_marca(int id_tabla_marca)
+        public static object buscar_familias_activas(int id_tabla_marca)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
@@ -284,9 +302,9 @@ namespace Modulo_Administracion.Logica
 
                 return familias;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -294,7 +312,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public object buscar_familias_activas()
+        public static object buscar_familias_activas()
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
@@ -314,9 +332,9 @@ namespace Modulo_Administracion.Logica
 
                 return familias;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -324,7 +342,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public familia buscar_familia_por_id_tabla_familia(int id_tabla_familia)
+        public static familia buscar_familia(int id_tabla_familia)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -335,9 +353,9 @@ namespace Modulo_Administracion.Logica
 
                 return familia;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -347,42 +365,23 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public familia buscar_familia_por_txt_desc_familia(string txt_desc_familia)
+      
+        public static familia buscar_familias_activas_con_txtDescFamilia_repetido(string txt_desc_familia, int id_tabla_familia)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
             {
 
-                familia familia = db.familia.FirstOrDefault(p => p.txt_desc_familia == txt_desc_familia);
+                familia familia = db.familia.FirstOrDefault(f => f.txt_desc_familia.Contains(txt_desc_familia) && 
+                                                                 f.sn_activo == -1 && 
+                                                                 f.id_tabla_familia != id_tabla_familia);
 
                 return familia;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-        public familia buscar_familia_por_txt_desc_activo(string txt_desc_familia, int id_tabla_familia)
-        {
-
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                familia familia = db.familia.FirstOrDefault(f => f.txt_desc_familia.Contains(txt_desc_familia) && f.sn_activo == -1 && f.id_tabla_familia != id_tabla_familia);
-
-                return familia;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
+                throw ex;
             }
             finally
             {

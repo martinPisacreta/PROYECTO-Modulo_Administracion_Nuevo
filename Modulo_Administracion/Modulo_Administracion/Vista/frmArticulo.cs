@@ -12,10 +12,7 @@ namespace Modulo_Administracion
 
         articulo articulo = null;
 
-        Logica_Proveedor logica_proveedor = new Logica_Proveedor();
-        Logica_Marca logica_marca = new Logica_Marca();
-        Logica_Familia logica_familia = new Logica_Familia();
-        Logica_Articulo logica_articulo = new Logica_Articulo();
+       
 
         familia familia;
 
@@ -156,7 +153,7 @@ namespace Modulo_Administracion
                     cbFamilia.DataSource = null;
 
                     cbProveedor.Enabled = false;
-                    Logica_Funciones_Generales.CargarComboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
+                    Logica_Funciones_Generales.cargar_comboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
 
                     cbProveedor.SelectedItem = null;
                     cbProveedor.SelectedIndexChanged += new EventHandler(cbProveedor_SelectedIndexChanged);
@@ -166,7 +163,7 @@ namespace Modulo_Administracion
 
                     cbMarca.DataSource = null;
                     cbFamilia.DataSource = null;
-                    Logica_Funciones_Generales.CargarComboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
+                    Logica_Funciones_Generales.cargar_comboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
 
                     cbMarca.SelectedItem = null;
                     cbMarca.SelectedIndexChanged += new EventHandler(cbMarca_SelectedIndexChanged);
@@ -175,7 +172,7 @@ namespace Modulo_Administracion
                 if (tipo == 3) // limpio familia y cargo familia 
                 {
                     cbFamilia.DataSource = null;
-                    Logica_Funciones_Generales.CargarComboBox("familia", cbFamilia, "txt_desc_familia", "id_tabla_marca = " + cbMarca.SelectedValue + "and sn_activo = -1", "txt_desc_familia", "id_tabla_familia");
+                    Logica_Funciones_Generales.cargar_comboBox("familia", cbFamilia, "txt_desc_familia", "id_tabla_marca = " + cbMarca.SelectedValue + "and sn_activo = -1", "txt_desc_familia", "id_tabla_familia");
                     cbFamilia.SelectedItem = null;
                 }
 
@@ -385,7 +382,7 @@ namespace Modulo_Administracion
 
 
                 dgvArticulo.DataSource = null;
-                dgvArticulo.DataSource = logica_articulo.buscar_articulos(id_proveedor, id_tabla_marca, id_tabla_familia, txtCodArticulo.Text, txtDescripcion.Text).Tables[0];
+                dgvArticulo.DataSource = Logica_Articulo.buscar_articulos_activos(id_proveedor, id_tabla_marca, id_tabla_familia, txtCodArticulo.Text, txtDescripcion.Text).Tables[0];
                 seteoColumnasDataGridView();
                 form.Hide();
                 Cursor.Current = Cursors.Default;
@@ -503,7 +500,7 @@ namespace Modulo_Administracion
 
                 if (cbProveedor.SelectedItem != null)
                 {
-                    _proveedor = logica_proveedor.buscar_proveedor(Convert.ToInt32(cbProveedor.SelectedValue));
+                    _proveedor = Logica_Proveedor.buscar_proveedor(Convert.ToInt32(cbProveedor.SelectedValue));
                 }
                 else
                 {
@@ -513,7 +510,7 @@ namespace Modulo_Administracion
 
                 if (cbMarca.SelectedItem != null)
                 {
-                    _marca = logica_marca.buscar_marca_por_id_tabla_marca(Convert.ToInt32(cbMarca.SelectedValue));
+                    _marca = Logica_Marca.buscar_marca(Convert.ToInt32(cbMarca.SelectedValue));
                 }
                 else
                 {
@@ -523,7 +520,7 @@ namespace Modulo_Administracion
 
                 if (cbFamilia.SelectedItem != null)
                 {
-                    _familia = logica_familia.buscar_familia_por_id_tabla_familia(Convert.ToInt32(cbFamilia.SelectedValue));
+                    _familia = Logica_Familia.buscar_familia(Convert.ToInt32(cbFamilia.SelectedValue));
                 }
 
                 //frmActualizarPrecioPorListaProveedor form = new frmActualizarPrecioPorListaProveedor(_proveedor,_marca,_familia);
@@ -584,7 +581,7 @@ namespace Modulo_Administracion
             try
             {
 
-                Logica_Articulo logica_articulo = new Logica_Articulo();
+               
                 if (txtPorcentaje.Text == "")
                 {
                     txtPorcentaje.Focus();
@@ -600,7 +597,7 @@ namespace Modulo_Administracion
                 {
                     return;
                 }
-                logica_articulo.modificar_datos_a_tabla_articulo_por_metodo_actualizar_porcentaje(dt);
+                Logica_Articulo.modificar_articulos_por_metodo_actualizar_porcentaje(dt);
                 MessageBox.Show("Actualización correcta", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 buscar();
 

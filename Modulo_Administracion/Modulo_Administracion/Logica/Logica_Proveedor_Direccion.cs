@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Proveedor_Direccion
+    static class Logica_Proveedor_Direccion
     {
 
 
-        public bool alta_direccion(proveedor_dir direccion, int id_proveedor, Modulo_AdministracionContext db)
+        public static bool alta_proveedorDireccion(proveedor_dir direccion, int id_proveedor, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -53,7 +53,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public bool modificar_direccion(proveedor_dir direccion, Modulo_AdministracionContext db)
+        public static bool modificar_proveedorDireccion(proveedor_dir direccion, Modulo_AdministracionContext db)
         {
             bool bandera = false;
             try
@@ -61,7 +61,7 @@ namespace Modulo_Administracion.Logica
 
                 if (direccion.sn_activo == 0)
                 {
-                    if (eliminar_direccion(direccion, db) == false)
+                    if (eliminar_proveedorDireccion(direccion, db) == false)
                     {
                         throw new Exception("Error al eliminar una direccion del proveedor");
                     }
@@ -71,7 +71,7 @@ namespace Modulo_Administracion.Logica
                     proveedor_dir direccion_db = db.proveedor_dir.FirstOrDefault(p => p.id_proveedor == direccion.id_proveedor && p.cod_tipo_dir == direccion.cod_tipo_dir);
                     if (direccion_db == null)
                     {
-                        if (alta_direccion(direccion, direccion.id_proveedor, db) == false)
+                        if (alta_proveedorDireccion(direccion, direccion.id_proveedor, db) == false)
                         {
                             throw new Exception("Error al dar de alta una direccion del proveedor");
                         }
@@ -117,7 +117,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool eliminar_direccion(proveedor_dir direccion, Modulo_AdministracionContext db)
+        public static bool eliminar_proveedorDireccion(proveedor_dir direccion, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -139,254 +139,9 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public DataSet buscar_calle(List<string> Calle)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
+     
 
-            try
-            {
-
-
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_calle", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@txt_desc", Calle[0]);
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-        public DataSet buscar_municipio(List<string> Municipio)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_municipio", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@Cod_Pais", Municipio[0]);
-                    command.Parameters.AddWithValue("@Cod_provincia", Municipio[1]);
-                    command.Parameters.AddWithValue("@municipio", Municipio[2]);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-
-
-        public DataSet buscar_provincia(List<string> Provincia)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_provincia", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@Cod_Pais", Provincia[0]);
-                    command.Parameters.AddWithValue("@Provincia", Provincia[1]);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-        public DataSet buscar_pais(List<string> Pais)
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_pais", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@txt_desc", Pais[0]);
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-
-        public List<proveedor_dir> buscar_direcciones_por_id_proveedor(int id_proveedor)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                List<proveedor_dir> direcciones = (from d in db.proveedor_dir
-                                                   where d.id_proveedor == id_proveedor && d.sn_activo == -1
-                                                   select d).ToList();
-
-
-                return direcciones;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-
-
-        public proveedor_dir buscar_direccion(int id_proveedor, decimal cod_tipo_dir)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                proveedor_dir direccion = db.proveedor_dir.FirstOrDefault(p => p.id_proveedor == id_proveedor && p.cod_tipo_dir == cod_tipo_dir);
-
-
-                return direccion;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-
-        public bool dar_de_baja_proveedor_dir_por_proveedor(int id_proveedor, Modulo_AdministracionContext db)
+        public static bool dar_de_baja_proveedorDireccion(int id_proveedor, Modulo_AdministracionContext db)
         {
             bool bandera = false;
             try

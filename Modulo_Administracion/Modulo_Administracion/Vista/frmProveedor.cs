@@ -12,9 +12,7 @@ namespace Modulo_Administracion
     {
 
         proveedor proveedor = null;
-        Logica_Proveedor logica_proveedor = new Logica_Proveedor();
-        Logica_Proveedor_Direccion logica_proveedor_direccion = new Logica_Proveedor_Direccion();
-        Logica_Proveedor_Datos logica_proveedor_datos = new Logica_Proveedor_Datos();
+       
         int Accion;
 
 
@@ -93,8 +91,8 @@ namespace Modulo_Administracion
             try
             {
                 InitializeComponent();
-                Logica_Funciones_Generales.CargarComboBox("ttipo_condicion_iva", cbCondicionIVA, "txt_desc", "1=1", "txt_desc", "id_condicion_ante_iva");
-                Logica_Funciones_Generales.CargarComboBox("ttipo_condicion_pago", cbCondicionPago, "txt_desc", "1=1", "txt_desc", "id_condicion_pago");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_condicion_iva", cbCondicionIVA, "txt_desc", "1=1", "txt_desc", "id_condicion_ante_iva");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_condicion_pago", cbCondicionPago, "txt_desc", "1=1", "txt_desc", "id_condicion_pago");
 
             }
             catch (Exception ex)
@@ -171,8 +169,8 @@ namespace Modulo_Administracion
                             dgvProveedor.DataSource = null;
 
                             //esto sirve para ordenar las columnas con click del usuario
-                            //SortableBindingList<proveedor> order = new SortableBindingList<proveedor>(logica_proveedor.buscar_proveedores());
-                            dgvProveedor.DataSource = logica_proveedor.buscar_proveedores();
+                            //SortableBindingList<proveedor> order = new SortableBindingList<proveedor>(Logica_Proveedor.buscar_proveedores());
+                            dgvProveedor.DataSource = Logica_Proveedor.buscar_proveedores();
 
                             //seteo columnas
                             seteoColumnasDataGridView();
@@ -288,7 +286,7 @@ namespace Modulo_Administracion
             {
                 if (e.RowIndex >= 0)
                 {
-                    proveedor = logica_proveedor.buscar_proveedor(Convert.ToInt32(dgvProveedor.Rows[e.RowIndex].Cells[0].Value));
+                    proveedor = Logica_Proveedor.buscar_proveedor(Convert.ToInt32(dgvProveedor.Rows[e.RowIndex].Cells[0].Value));
 
                     txtCodigo.Text = proveedor.id_proveedor.ToString();
                     txtRazonSocial.Text = proveedor.razon_social.ToString();
@@ -349,7 +347,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_proveedor.alta_proveedor(proveedor) == false)
+                    if (Logica_Proveedor.alta_proveedor(proveedor) == false)
                     {
                         MessageBox.Show("Error al grabar el proveedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -366,7 +364,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_proveedor.modificar_proveedor(proveedor) == false)
+                    if (Logica_Proveedor.modificar_proveedor(proveedor) == false)
                     {
                         MessageBox.Show("Error al modificar el proveedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -427,7 +425,7 @@ namespace Modulo_Administracion
                 {
                     id_proveedor = Convert.ToInt32(txtCodigo.Text);
                 }
-                if (logica_proveedor.buscar_proveedor_por_razon_social_activo(txtRazonSocial.Text, id_proveedor) != null)
+                if (Logica_Proveedor.buscar_proveedores_activos_con_razonSocial_repetido(txtRazonSocial.Text, id_proveedor) != null)
                 {
                     txtRazonSocial.Focus();
                     throw new Exception("Ya existe un proveedor con esa razon social");
@@ -520,7 +518,7 @@ namespace Modulo_Administracion
             {
                 txtRazonSocial.Focus();
                 iniciar(Program.Alta);
-                //txtCodigo.Text = (logica_proveedor.ult_nro_proveedor() + 1).ToString();
+                //txtCodigo.Text = (Logica_Proveedor.ult_nro_proveedor() + 1).ToString();
                 //SeteoObjeto();
 
             }
@@ -543,7 +541,7 @@ namespace Modulo_Administracion
                     return;
                 }
 
-                if (logica_proveedor.eliminar_proveedor(proveedor) == false)
+                if (Logica_Proveedor.dar_de_baja_proveedor(proveedor) == false)
                 {
                     MessageBox.Show("Error al eliminar el proveedor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -609,7 +607,7 @@ namespace Modulo_Administracion
         {
             try
             {
-                dgvProveedor.DataSource = logica_proveedor.filtro_proveedor_razon_social(txtBusqueda.Text.Trim());
+                dgvProveedor.DataSource = Logica_Proveedor.buscar_proveedores_activos(txtBusqueda.Text.Trim());
             }
             catch (Exception ex)
             {

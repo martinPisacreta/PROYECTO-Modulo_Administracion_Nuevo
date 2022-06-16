@@ -752,19 +752,19 @@
             // 
             this.sqlDataSource2.ConnectionName = "desktop-i7nmoje.CarritoCompras.dbo";
             this.sqlDataSource2.Name = "sqlDataSource2";
-            storedProcQuery1.Name = "imprimir_factura";
+            storedProcQuery1.Name = "factura_imprimir";
             queryParameter1.Name = "@id_factura";
             queryParameter1.Type = typeof(DevExpress.DataAccess.Expression);
             queryParameter1.Value = new DevExpress.DataAccess.Expression("?id_factura", typeof(int));
             storedProcQuery1.Parameters.Add(queryParameter1);
-            storedProcQuery1.StoredProcName = "imprimir_factura";
+            storedProcQuery1.StoredProcName = "factura_imprimir";
             this.sqlDataSource2.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
             storedProcQuery1});
             this.sqlDataSource2.ResultSchemaSerializable = resources.GetString("sqlDataSource2.ResultSchemaSerializable");
             // 
             // calculado_importe
             // 
-            this.calculado_importe.DataMember = "imprimir_factura";
+            this.calculado_importe.DataMember = "factura_imprimir";
             this.calculado_importe.Expression = "[detalle_cantidad] * Round([detalle_precio],2)";
             this.calculado_importe.Name = "calculado_importe";
             // 
@@ -889,7 +889,7 @@
             this.calculado_importe});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.sqlDataSource2});
-            this.DataMember = "imprimir_factura";
+            this.DataMember = "factura_imprimir";
             this.DataSource = this.sqlDataSource2;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
             this.Margins = new System.Drawing.Printing.Margins(27, 31, 5, 5);

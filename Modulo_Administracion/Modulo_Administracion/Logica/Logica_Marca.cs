@@ -7,10 +7,11 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Marca
+    static class Logica_Marca
     {
+        
 
-        public bool alta_marca(marca marca)
+        public static bool alta_marca(marca marca)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             bool bandera = false;
@@ -57,7 +58,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool modificar_eliminar_marca(marca marca, int accion)
+        public static bool modificar_marca(marca marca)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -73,22 +74,55 @@ namespace Modulo_Administracion.Logica
                     marca_db.id_marca = marca.id_marca;
                     marca_db.id_proveedor = marca.id_proveedor;
                     marca_db.txt_desc_marca = marca.txt_desc_marca;
-                    if (accion == 1) //si es modificacion...
-                    {
-                        marca_db.sn_activo = marca.sn_activo;
-                        marca_db.accion = "MODIFICACION";
-                    }
-                    else //si es baja -> doy de baja la marca y a su vez :  familas y articulos de esa marca
-                    {
-                        marca_db.sn_activo = 0;
-                        marca_db.accion = "ELIMINACION";
+                    marca_db.sn_activo = marca.sn_activo;
+                    marca_db.accion = "MODIFICACION";
+                    marca_db.fec_ult_modif = DateTime.Now;
+                    marca_db.path_img = marca.path_img;
 
-                        Logica_Familia logica_familia = new Logica_Familia();
-                        if (logica_familia.dar_de_baja_familias_por_marca(marca.id_tabla_marca, db) == false)
-                        {
-                            throw new Exception("Error al dar de baja familias de la marca");
-                        }
+                    db.SaveChanges();
+                    dbContextTransaction.Commit();
+                    bandera = true;
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw ex;
+                }
+                finally
+                {
+                    db = null;
+                }
+            }
+        }
+
+        public static bool dar_de_baja_marca(marca marca)
+        {
+
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
+            using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
+            {
+
+                try
+                {
+
+                    bool bandera = false;
+                    marca marca_db = db.marca.FirstOrDefault(f => f.id_tabla_marca == marca.id_tabla_marca);
+                    marca_db.id_tabla_marca = marca.id_tabla_marca;
+                    marca_db.id_marca = marca.id_marca;
+                    marca_db.id_proveedor = marca.id_proveedor;
+                    marca_db.txt_desc_marca = marca.txt_desc_marca;
+                    //doy de baja la marca y a su vez :  familas y articulos de esa marca
+                    marca_db.sn_activo = 0;
+                    marca_db.accion = "ELIMINACION";
+
+                    
+                    if (Logica_Familia.dar_de_baja_familias(marca.id_tabla_marca, db) == false)
+                    {
+                        throw new Exception("Error al dar de baja familias de la marca");
                     }
+                    
 
                     marca_db.fec_ult_modif = DateTime.Now;
                     marca_db.path_img = marca.path_img;
@@ -111,7 +145,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public bool dar_de_baja_marcas_por_proveedor(int id_proveedor, Modulo_AdministracionContext db) //doy de baja las marcas de un proveedor
+        public static bool dar_de_baja_marcas(int id_proveedor, Modulo_AdministracionContext db) //doy de baja las marcas de un proveedor
         {
 
             bool bandera = false;
@@ -124,8 +158,8 @@ namespace Modulo_Administracion.Logica
 
                 foreach (marca m in lista_marcas)
                 {
-                    Logica_Familia logica_familia = new Logica_Familia();
-                    if (logica_familia.dar_de_baja_familias_por_marca(m.id_tabla_marca, db) == false)
+                    
+                    if (Logica_Familia.dar_de_baja_familias(m.id_tabla_marca, db) == false)
                     {
                         throw new Exception("Error al dar de baja familias de la marca");
                     }
@@ -152,7 +186,7 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public object buscar_marcas_activas_por_proveedor(int id_proveedor)
+        public static object buscar_marcas_activas(int id_proveedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -170,9 +204,9 @@ namespace Modulo_Administracion.Logica
 
                 return marcas;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -181,7 +215,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-        public object buscar_marcas_activas()
+        public static object buscar_marcas_activas()
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -200,9 +234,9 @@ namespace Modulo_Administracion.Logica
                 return marcas;
 
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -210,7 +244,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public marca buscar_marca_por_id_tabla_marca(int id_tabla_marca)
+        public static marca buscar_marca(int id_tabla_marca)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -221,9 +255,9 @@ namespace Modulo_Administracion.Logica
 
                 return marca;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
+                throw ex;
             }
             finally
             {
@@ -231,43 +265,23 @@ namespace Modulo_Administracion.Logica
             }
 
         }
-
-        public marca buscar_marca_por_txt_desc_marca(string txt_desc_marca)
+        
+        public static marca buscar_marcas_activas_con_txtDescMarca_repetido(string txt_desc_marca, int id_tabla_marca)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             try
             {
 
-                marca marca = db.marca.FirstOrDefault(p => p.txt_desc_marca == txt_desc_marca);
+                marca marca = db.marca.FirstOrDefault(m =>  m.txt_desc_marca.Contains(txt_desc_marca) && 
+                                                            m.sn_activo == -1 && 
+                                                            m.id_tabla_marca != id_tabla_marca);
 
                 return marca;
             }
-            catch (Exception exception1)
+            catch (Exception ex)
             {
-                throw exception1;
-            }
-            finally
-            {
-                db = null;
-            }
-
-        }
-
-        public marca buscar_marca_por_txt_desc_activo(string txt_desc_marca, int id_tabla_marca)
-        {
-
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                marca marca = db.marca.FirstOrDefault(m => m.txt_desc_marca.Contains(txt_desc_marca) && m.sn_activo == -1 && m.id_tabla_marca != id_tabla_marca);
-
-                return marca;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
+                throw ex;
             }
             finally
             {

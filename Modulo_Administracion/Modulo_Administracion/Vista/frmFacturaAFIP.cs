@@ -36,11 +36,8 @@ namespace Modulo_Administracion.Vista
         articulo articulo;
         familia familia;
 
-        Logica_Cliente logica_cliente = new Logica_Cliente();
-        Logica_Articulo logica_articulo = new Logica_Articulo();
-        Logica_Factura_Detalle logica_factura_detalle = new Logica_Factura_Detalle();
-        Logica_Factura logica_factura = new Logica_Factura();
-        Logica_Familia logica_familia = new Logica_Familia();
+      
+        
 
         int Accion;
 
@@ -649,7 +646,7 @@ namespace Modulo_Administracion.Vista
                                         precio_lista = Math.Round(precio_lista, nro_redondeo, MidpointRounding.AwayFromZero);
 
                                         //NO TENGO QUE REDONDEAR NUNCA
-                                        coeficiente = (logica_familia.precio_coeficiente(2, factura_detalle.articulo.familia.algoritmo_1, factura_detalle.articulo.familia.algoritmo_2, factura_detalle.articulo.familia.algoritmo_3, factura_detalle.articulo.familia.algoritmo_4, factura_detalle.articulo.familia.algoritmo_5, factura_detalle.articulo.familia.algoritmo_6, factura_detalle.articulo.familia.algoritmo_7, factura_detalle.articulo.familia.algoritmo_8, factura_detalle.articulo.familia.algoritmo_9));
+                                        coeficiente = (Logica_Familia.precio_coeficiente(2, factura_detalle.articulo.familia.algoritmo_1, factura_detalle.articulo.familia.algoritmo_2, factura_detalle.articulo.familia.algoritmo_3, factura_detalle.articulo.familia.algoritmo_4, factura_detalle.articulo.familia.algoritmo_5, factura_detalle.articulo.familia.algoritmo_6, factura_detalle.articulo.familia.algoritmo_7, factura_detalle.articulo.familia.algoritmo_8, factura_detalle.articulo.familia.algoritmo_9));
 
                                         precio_lista_x_coeficiente = (precio_lista * coeficiente);
                                         precio_lista_x_coeficiente = Math.Round(precio_lista_x_coeficiente, nro_redondeo, MidpointRounding.AwayFromZero);
@@ -970,21 +967,21 @@ namespace Modulo_Administracion.Vista
         {
             try
             {
-                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString);
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString);
                 SqlCommand cmd = null;
                 string campo;
                 if (codigo_articulo_marca == "")
                 {
                     campo = "codigo_articulo_marca";
-                    cmd = new SqlCommand("Select codigo_articulo_marca from articulo where fec_baja is null", conn);
+                    cmd = new SqlCommand("Select codigo_articulo_marca from articulo where fec_baja is null", connection);
                 }
                 else
                 {
                     campo = "codigo_articulo";
-                    cmd = new SqlCommand("Select codigo_articulo from articulo where codigo_articulo_marca = '" + codigo_articulo_marca + "' and fec_baja is null", conn);
+                    cmd = new SqlCommand("Select codigo_articulo from articulo where codigo_articulo_marca = '" + codigo_articulo_marca + "' and fec_baja is null", connection);
                 }
 
-                conn.Open();
+                connection.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 AutoCompleteStringCollection mycoll = new AutoCompleteStringCollection();
                 while (dr.Read())
@@ -1178,7 +1175,7 @@ namespace Modulo_Administracion.Vista
         {
             frmEspere form = new frmEspere();
             bool cierro_el_modulo = false;
-            Logica_Factura_Tipo logica_facura_tipo = new Logica_Factura_Tipo();
+ 
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -1193,7 +1190,7 @@ namespace Modulo_Administracion.Vista
 
                 if (Accion == 1) //alta
                 {
-                    _factura_insertada = logica_factura.alta_factura(factura);
+                    _factura_insertada = Logica_Factura.alta_factura(factura);
                     if (_factura_insertada == null)
                     {
                         throw new Exception("Error en el alta de la factura");
@@ -1202,7 +1199,7 @@ namespace Modulo_Administracion.Vista
                 }
                 else if (Accion == 2) //modificacion
                 {
-                    _factura_modificada = logica_factura.modificar_factura(factura);
+                    _factura_modificada = Logica_Factura.modificar_factura(factura);
                     if (_factura_modificada == null)
                     {
                         throw new Exception("Error en la modificación de la factura");
@@ -1479,7 +1476,7 @@ namespace Modulo_Administracion.Vista
 
                     if (item.Cells["col_id_factura_detalle"].Value != null) //si la columna "col_id_factura_detalle" tiene algo .. elimino el registro de la base
                     {
-                        if (logica_factura_detalle.baja_item_a_factura(Convert.ToInt32(item.Cells["col_id_factura_detalle"].Value)) == true)
+                        if (Logica_Factura_Detalle.dar_de_baja_facturaDetalle(Convert.ToInt32(item.Cells["col_id_factura_detalle"].Value)) == true)
                         {
 
                             foreach (DataGridViewCell cell in item.Cells)
@@ -1576,7 +1573,7 @@ namespace Modulo_Administracion.Vista
                 frm.btnNuevo.Enabled = false;
 
 
-                DataSet ds = logica_cliente.buscar_clientes(razon_social);
+                DataSet ds = Logica_Cliente.buscar_clientes_activos(razon_social);
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -1598,14 +1595,14 @@ namespace Modulo_Administracion.Vista
                         cliente_a_insertar.id_condicion_factura = 2;
                         cliente_a_insertar.id_tipo_cliente = 2;
 
-                        if (logica_cliente.alta_cliente(cliente_a_insertar) == false)
+                        if (Logica_Cliente.alta_cliente(cliente_a_insertar) == false)
                         {
                             MessageBox.Show("Error al grabar el cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         else
                         {
-                            txtClienteId.Text = logica_cliente.buscar_cliente(txtCliente.Text).id_cliente.ToString();
+                            txtClienteId.Text = Logica_Cliente.buscar_cliente(txtCliente.Text).id_cliente.ToString();
                             MessageBox.Show("Grabación exitosa del cliente", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
@@ -2065,7 +2062,7 @@ namespace Modulo_Administracion.Vista
                         Cursor.Current = Cursors.WaitCursor;
 
 
-                        DataTable dt = logica_articulo.buscar_articulo_por_codigo_articulo_marca_y_codigo_articulo(marca, codigo).Tables[0];
+                        DataTable dt = Logica_Articulo.buscar_articulos_activos(marca, codigo).Tables[0];
                         if (dt.Rows.Count > 0)
                         {
                             descripcion = dt.Rows[0]["descripcion_articulo"].ToString();

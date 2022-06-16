@@ -23,8 +23,9 @@ namespace Modulo_Administracion
         public List<proveedor_dir> lista_aux_proveedor = new List<proveedor_dir>();
         public List<cliente_dir> lista_aux_cliente = new List<cliente_dir>();
 
-        Logica_Proveedor_Direccion logica_proveedor_direccion = new Logica_Proveedor_Direccion();
-        Logica_Cliente_Direccion logica_cliente_direccion = new Logica_Cliente_Direccion();
+        
+        
+        
 
         int tipo; //1 es proveedor , 2 es cliente
         public frmDireccion()
@@ -70,8 +71,8 @@ namespace Modulo_Administracion
                     }
                 }
 
-                Logica_Funciones_Generales.CargarComboBox("ttipo_dir", cbTipoDir, "txt_desc", "1=1", "cod_tipo_dir", "cod_tipo_dir");
-                Logica_Funciones_Generales.CargarComboBox("ttipo_calle", cbTipoCalle, "txt_desc", "1=1", "cod_tipo_calle", "cod_tipo_calle");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_dir", cbTipoDir, "txt_desc", "1=1", "cod_tipo_dir", "cod_tipo_dir");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_calle", cbTipoCalle, "txt_desc", "1=1", "cod_tipo_calle", "cod_tipo_calle");
 
                 cbTipoDir.SelectedValue = 1;
 
@@ -729,11 +730,11 @@ namespace Modulo_Administracion
                             frm.Text = "Buscar Calle";
                             if (tipo == 1)
                             {
-                                frm.IniciarForm(logica_proveedor_direccion.buscar_calle(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_calles_por_txtDesc(Valores).Tables[0], 2);
                             }
                             else if (tipo == 2)
                             {
-                                frm.IniciarForm(logica_cliente_direccion.buscar_calle(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_calles_por_txtDesc(Valores).Tables[0], 2);
                             }
                             break;
                         }
@@ -743,11 +744,11 @@ namespace Modulo_Administracion
                             frm.Text = "Buscar Provincia";
                             if (tipo == 1)
                             {
-                                frm.IniciarForm(logica_proveedor_direccion.buscar_provincia(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_provincia_por_codPais_y_txtDesc(Valores).Tables[0], 2);
                             }
                             else if (tipo == 2)
                             {
-                                frm.IniciarForm(logica_cliente_direccion.buscar_provincia(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_provincia_por_codPais_y_txtDesc(Valores).Tables[0], 2);
                             }
                             break;
                         }
@@ -757,11 +758,11 @@ namespace Modulo_Administracion
                             frm.Text = "Buscar Pais";
                             if (tipo == 1)
                             {
-                                frm.IniciarForm(logica_proveedor_direccion.buscar_pais(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_pais_por_txtDesc(Valores).Tables[0], 2);
                             }
                             else if (tipo == 2)
                             {
-                                frm.IniciarForm(logica_cliente_direccion.buscar_pais(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_pais_por_txtDesc(Valores).Tables[0], 2);
                             }
                             break;
                         }
@@ -771,11 +772,11 @@ namespace Modulo_Administracion
                             frm.Text = "Buscar Municipio";
                             if (tipo == 1)
                             {
-                                frm.IniciarForm(logica_proveedor_direccion.buscar_municipio(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_municipio_por_codPais_codProvincia_y_txtDesc(Valores).Tables[0], 2);
                             }
                             else if (tipo == 2)
                             {
-                                frm.IniciarForm(logica_cliente_direccion.buscar_municipio(Valores).Tables[0], 2);
+                                frm.IniciarForm(Logica_Geografia.buscar_municipio_por_codPais_codProvincia_y_txtDesc(Valores).Tables[0], 2);
                             }
                             break;
                         }

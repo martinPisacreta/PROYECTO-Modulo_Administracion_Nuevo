@@ -16,15 +16,12 @@ namespace Modulo_Administracion
     public partial class frmImportarExcelProveedor : Form
     {
 
-        Logica_Articulo logica_articulo = new Logica_Articulo();
-
-
         public frmImportarExcelProveedor()
         {
             try
             {
                 InitializeComponent();
-                Logica_Funciones_Generales.CargarComboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
+                Logica_Funciones_Generales.cargar_comboBox("proveedor", cbProveedor, "razon_social", "sn_activo = -1", "razon_social", "id_proveedor");
                 cbProveedor.Focus();
             }
             catch (Exception ex)
@@ -213,9 +210,9 @@ namespace Modulo_Administracion
 
 
                     //cargo los dataGridView
-                    dgvExcelExistentes.DataSource = logica_articulo.buscar_articulos_en_relacion_a_dataTable(data_table_datos, 1, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
-                    dgvExcelInexistentes.DataSource = logica_articulo.buscar_articulos_en_relacion_a_dataTable(data_table_datos, 2, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
-                    dgvDatosErroneos.DataSource = logica_articulo.buscar_articulos_en_relacion_a_dataTable(data_table_datos, 3, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
+                    dgvExcelExistentes.DataSource = Logica_Articulo.buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(data_table_datos, 1, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
+                    dgvExcelInexistentes.DataSource = Logica_Articulo.buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(data_table_datos, 2, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
+                    dgvDatosErroneos.DataSource = Logica_Articulo.buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(data_table_datos, 3, Convert.ToInt32(cbProveedor.SelectedValue)).Tables[0];
 
 
                     if (dgvExcelInexistentes.Rows.Count > 0)
@@ -259,7 +256,7 @@ namespace Modulo_Administracion
 
                     cbMarca.DataSource = null;
                     cbFamilia.DataSource = null;
-                    Logica_Funciones_Generales.CargarComboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
+                    Logica_Funciones_Generales.cargar_comboBox("marca", cbMarca, "txt_desc_marca", "id_proveedor = " + cbProveedor.SelectedValue + "and sn_activo = -1", "txt_desc_marca", "id_tabla_marca");
 
                     cbMarca.SelectedItem = null;
                     cbMarca.SelectedIndexChanged += new EventHandler(cbMarca_SelectedIndexChanged);
@@ -268,7 +265,7 @@ namespace Modulo_Administracion
                 if (tipo == 3) // limpio familia y cargo familia 
                 {
                     cbFamilia.DataSource = null;
-                    Logica_Funciones_Generales.CargarComboBox("familia", cbFamilia, "txt_desc_familia", "id_tabla_marca = " + cbMarca.SelectedValue + "and sn_activo = -1", "txt_desc_familia", "id_tabla_familia");
+                    Logica_Funciones_Generales.cargar_comboBox("familia", cbFamilia, "txt_desc_familia", "id_tabla_marca = " + cbMarca.SelectedValue + "and sn_activo = -1", "txt_desc_familia", "id_tabla_familia");
                     cbFamilia.SelectedItem = null;
                 }
 
@@ -381,7 +378,7 @@ namespace Modulo_Administracion
                         }
 
 
-                        if (logica_articulo.modificar_articulos_existentes(lista_articulos, db) == false)
+                        if (Logica_Articulo.modificar_articulos_existentes_en_relacion_a_ListaProveedor(lista_articulos, db) == false)
                         {
                             throw new Exception("Error al actualizar los articulos EXISTENTES");
                         }
@@ -413,7 +410,7 @@ namespace Modulo_Administracion
                         }
 
 
-                        if (logica_articulo.alta_articulos_inexistentes(lista_articulos, db) == false)
+                        if (Logica_Articulo.alta_articulos_inexistentes_en_relacion_a_ListaProveedor(lista_articulos, db) == false)
                         {
                             throw new Exception("Error al actualizar los articulos INEXISTENTES");
                         }

@@ -12,8 +12,8 @@ namespace Modulo_Administracion
     {
         vendedor vendedor = null;
         cliente cliente = null;
-        Logica_Vendedor logica_vendedor = new Logica_Vendedor();
-        Logica_Cliente logica_cliente = new Logica_Cliente();
+        
+      
 
         int Accion;
 
@@ -63,11 +63,11 @@ namespace Modulo_Administracion
             {
                 InitializeComponent();
                 vendedor = _vendedor;
-                Logica_Funciones_Generales.CargarComboBox("ttipo_condicion_iva", cbCondicionIVA, "txt_desc", "1=1", "txt_desc", "id_condicion_ante_iva");
-                Logica_Funciones_Generales.CargarComboBox("ttipo_condicion_pago", cbCondicionPago, "txt_desc", "1=1", "txt_desc", "id_condicion_pago");
-                Logica_Funciones_Generales.CargarComboBox("ttipo_cliente", cbTipoCliente, "txt_desc", "sn_activo = -1", "txt_desc", "id_tipo_cliente");
-                Logica_Funciones_Generales.CargarComboBox("ttipo_condicion_factura", cbCondicionFactura, "txt_desc", "sn_activo = -1", "txt_desc", "id_condicion_factura");
-                Logica_Funciones_Generales.CargarComboBox("vendedor", cbVendedor, "nombre", "sn_activo = -1", "nombre", "id_vendedor");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_condicion_iva", cbCondicionIVA, "txt_desc", "1=1", "txt_desc", "id_condicion_ante_iva");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_condicion_pago", cbCondicionPago, "txt_desc", "1=1", "txt_desc", "id_condicion_pago");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_cliente", cbTipoCliente, "txt_desc", "sn_activo = -1", "txt_desc", "id_tipo_cliente");
+                Logica_Funciones_Generales.cargar_comboBox("ttipo_condicion_factura", cbCondicionFactura, "txt_desc", "sn_activo = -1", "txt_desc", "id_condicion_factura");
+                Logica_Funciones_Generales.cargar_comboBox("vendedor", cbVendedor, "nombre", "sn_activo = -1", "nombre", "id_vendedor");
             }
             catch (Exception ex)
             {
@@ -277,15 +277,15 @@ namespace Modulo_Administracion
                 if (vendedor == null)
                 {
                     //esto sirve para ordenar las columnas con click del usuario
-                    //SortableBindingList<cliente> order = new SortableBindingList<cliente>(logica_cliente.buscar_clientes());
-                    dgvCliente.DataSource = logica_cliente.buscar_clientes();
+                    //SortableBindingList<cliente> order = new SortableBindingList<cliente>(Logica_Cliente.buscar_clientes());
+                    dgvCliente.DataSource = Logica_Cliente.buscar_clientes_activos();
 
                 }
                 else
                 {
                     //esto sirve para ordenar las columnas con click del usuario
-                    //SortableBindingList<cliente> order = new SortableBindingList<cliente>(logica_cliente.buscar_clientes_activos_por_vendedor());
-                    dgvCliente.DataSource = logica_cliente.buscar_clientes_activos_por_vendedor(vendedor.id_vendedor);
+                    //SortableBindingList<cliente> order = new SortableBindingList<cliente>(Logica_Cliente.buscar_clientes_activos_por_vendedor());
+                    dgvCliente.DataSource = Logica_Cliente.buscar_clientes_activos(vendedor.id_vendedor);
                 }
 
                 //seteo columnas
@@ -332,7 +332,7 @@ namespace Modulo_Administracion
             {
                 if (e.RowIndex >= 0)
                 {
-                    cliente = logica_cliente.buscar_cliente(Convert.ToInt32(dgvCliente.Rows[e.RowIndex].Cells[0].Value));
+                    cliente = Logica_Cliente.buscar_cliente(Convert.ToInt32(dgvCliente.Rows[e.RowIndex].Cells[0].Value),null);
 
                     txtCodigo.Text = cliente.id_cliente.ToString();
                     txtNombreFantasia.Text = cliente.nombre_fantasia.ToString();
@@ -408,7 +408,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_cliente.alta_cliente(cliente) == false)
+                    if (Logica_Cliente.alta_cliente(cliente) == false)
                     {
                         MessageBox.Show("Error al grabar el cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -425,7 +425,7 @@ namespace Modulo_Administracion
                         return;
                     }
 
-                    if (logica_cliente.modificar_cliente(cliente) == false)
+                    if (Logica_Cliente.modificar_cliente(cliente) == false)
                     {
                         MessageBox.Show("Error al modificar el cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -507,14 +507,14 @@ namespace Modulo_Administracion
 
 
 
-                if (logica_cliente.buscar_cliente_por_nombre_fantasia_activo(txtNombreFantasia.Text, id_cliente) != null)
+                if (Logica_Cliente.buscar_clientes_activos_con_nombreFantasia_repetido(txtNombreFantasia.Text, id_cliente) != null)
                 {
                     txtNombreFantasia.Focus();
                     throw new Exception("Ya existe un cliente con este nombre");
                 }
 
 
-                if (logica_cliente.buscar_cliente_por_razon_social_activo(txtRazonSocial_Cliente.Text, id_cliente) != null)
+                if (Logica_Cliente.buscar_clientes_activos_con_razonSocial_repetido(txtRazonSocial_Cliente.Text, id_cliente) != null)
                 {
                     txtRazonSocial_Cliente.Focus();
                     throw new Exception("Ya existe un cliente con esa razon social");
@@ -595,7 +595,7 @@ namespace Modulo_Administracion
                 cliente.id_tipo_cliente = (Convert.ToInt32(cbTipoCliente.SelectedValue));
                 cliente.id_condicion_factura = (Convert.ToInt32(cbCondicionFactura.SelectedValue));
                 cliente.id_vendedor = Convert.ToInt32(cbVendedor.SelectedValue);
-                cliente.vendedor = logica_vendedor.buscar_vendedor(cliente.id_vendedor);
+                cliente.vendedor = Logica_Vendedor.buscar_vendedor(cliente.id_vendedor);
             }
             catch (Exception ex)
             {
@@ -631,7 +631,7 @@ namespace Modulo_Administracion
                     return;
                 }
 
-                if (logica_cliente.eliminar_cliente(cliente) == false)
+                if (Logica_Cliente.dar_de_baja_cliente(cliente) == false)
                 {
                     MessageBox.Show("Error al eliminar el cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -762,7 +762,7 @@ namespace Modulo_Administracion
                 {
                     valor_busqueda = 2; //el filtro es por vendedor
                 }
-                dgvCliente.DataSource = logica_cliente.filtro_cliente_nombre_fantasia(txtBusqueda.Text.Trim(), valor_busqueda);
+                dgvCliente.DataSource = Logica_Cliente.buscar_clientes(txtBusqueda.Text.Trim(), valor_busqueda);
             }
             catch (Exception ex)
             {

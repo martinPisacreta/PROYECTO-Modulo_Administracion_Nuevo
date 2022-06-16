@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Modulo_Administracion.Logica
 {
-    public class Logica_Cliente_Datos
+    static class Logica_Cliente_Datos
     {
 
-        public bool alta_dato(cliente_datos dato, int id_cliente, Modulo_AdministracionContext db)
+        public static bool alta_clienteDatos(cliente_datos dato, int id_cliente, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -39,7 +39,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool modificar_dato(cliente_datos dato, Modulo_AdministracionContext db)
+        public static bool modificar_clienteDatos(cliente_datos dato, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -47,7 +47,7 @@ namespace Modulo_Administracion.Logica
             {
                 if (dato.sn_activo == 0)
                 {
-                    if (eliminar_dato(dato, db) == false)
+                    if (eliminar_clienteDatos(dato, db) == false)
                     {
                         throw new Exception("Error al eliminar un dato del cliente");
                     }
@@ -57,7 +57,7 @@ namespace Modulo_Administracion.Logica
                     cliente_datos cliente_datos_db = db.cliente_datos.FirstOrDefault(c => c.id_cliente == dato.id_cliente && c.cod_tipo_dato == dato.cod_tipo_dato);
                     if (cliente_datos_db == null)
                     {
-                        if (alta_dato(dato, dato.id_cliente, db) == false)
+                        if (alta_clienteDatos(dato, dato.id_cliente, db) == false)
                         {
                             throw new Exception("Error al dar de alta un dato del cliente");
                         }
@@ -87,7 +87,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public bool eliminar_dato(cliente_datos dato, Modulo_AdministracionContext db)
+        public static bool eliminar_clienteDatos(cliente_datos dato, Modulo_AdministracionContext db)
         {
 
             bool bandera = false;
@@ -110,104 +110,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-
-
-        public DataSet buscar_tipos_datos()
-        {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-
-            try
-            {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
-                {
-
-                    SqlCommand command = new SqlCommand("buscar_tipo_dato", conn);
-                    command.CommandTimeout = 0;
-
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                return dataSet;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
-                    {
-                        reader.Close();
-                    }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-            }
-            return set2;
-        }
-
-        public List<cliente_datos> buscar_datos_por_id_cliente(int id_cliente)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                List<cliente_datos> datos = (from t in db.cliente_datos
-                                             where t.id_cliente == id_cliente && t.sn_activo == -1
-                                             select t).ToList();
-
-
-                return datos;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-
-
-        }
-
-        public cliente_datos buscar_dato(int id_cliente, decimal cod_tipo_dato)
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            try
-            {
-
-                cliente_datos dato = db.cliente_datos.FirstOrDefault(t => t.id_cliente == id_cliente && t.cod_tipo_dato == cod_tipo_dato);
-
-
-                return dato;
-
-            }
-            catch (Exception ex)
-            {
-                // return new List<Empresa>();
-                throw ex;
-            }
-            finally
-            {
-                db = null;
-            }
-        }
-        public bool dar_de_baja_cliente_datos_por_cliente(int id_cliente, Modulo_AdministracionContext db)
+        public static bool dar_de_baja_clienteDatos(int id_cliente, Modulo_AdministracionContext db)
         {
             bool bandera = false;
             try

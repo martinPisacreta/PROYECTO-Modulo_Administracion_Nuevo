@@ -17,87 +17,90 @@ namespace Modulo_Administracion.Logica
     static class Logica_Funciones_Generales
     {
 
-        public static DataSet CargarComboBox(string sTablas, ComboBox cControl, string sNomCamp, string sWhere, string sOrderBy, string sValueMember)
+        public static DataSet cargar_comboBox(string sTablas, ComboBox cControl, string sNomCamp, string sWhere, string sOrderBy, string sValueMember)
         {
-            SqlConnection conn = null;
-            SqlDataReader reader = null;
-            DataSet set2;
-            ComboBox rb = cControl;
 
-            try
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                DataSet dataSet = new DataSet("TimeRanges");
-                using (conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+                connection.Open();
+                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
                 {
 
-                    SqlCommand command = new SqlCommand("cargar_combo_box", conn);
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@Tabla", sTablas);
-                    command.Parameters.AddWithValue("@WHERE", sWhere);
-                    command.Parameters.AddWithValue("@ORDERBY", sOrderBy);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-                    adapter.Fill(dataSet);
-                }
-                set2 = dataSet;
-
-                rb.DataSource = set2.Tables[0];
-                rb.DisplayMember = sNomCamp;
-                rb.ValueMember = sValueMember;
-            }
-            catch (Exception exception1)
-            {
-                throw exception1;
-            }
-            finally
-            {
-                if (reader != null)
-                {
-                    if (!reader.IsClosed)
+                    try
                     {
-                        reader.Close();
+                        ComboBox rb = cControl;
+                        DataSet ds = new DataSet();
+
+                        //store
+                        SqlCommand command = new SqlCommand("cargar_combo_box", connection, sqlTransaction);
+
+                        //parametros
+                        command.Parameters.AddWithValue("@Tabla", sTablas);
+                        command.Parameters.AddWithValue("@WHERE", sWhere);
+                        command.Parameters.AddWithValue("@ORDERBY", sOrderBy);
+
+                        //tiempo y tipo
+                        command.CommandTimeout = 0;
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter();
+                        adapter.SelectCommand = command;
+                        adapter.Fill(ds);
+
+                        sqlTransaction.Commit();
+                        rb.DataSource = ds.Tables[0];
+                        rb.DisplayMember = sNomCamp;
+                        rb.ValueMember = sValueMember;
+
+                        return ds;
+
                     }
-                    reader = null;
-                }
-                if (conn != null)
-                {
-                    conn.Close();
-                    conn = null;
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
-            return set2;
         }
 
         public static bool validar_cuit(string cuit)
         {
-            if (string.IsNullOrEmpty(cuit)) throw new ArgumentNullException(nameof(cuit));
-            if (cuit.Length != 13) throw new ArgumentException(nameof(cuit));
-            bool rv = false;
-            int verificador;
-            int resultado = 0;
-            string cuit_nro = cuit.Replace("-", string.Empty);
-            string codes = "6789456789";
-            long cuit_long = 0;
-            if (long.TryParse(cuit_nro, out cuit_long))
-            {
-                verificador = int.Parse(cuit_nro[cuit_nro.Length - 1].ToString());
-                int x = 0;
-                while (x < 10)
-                {
 
-                    int digitoValidador = int.Parse(codes.Substring((x), 1));
-                    int digito = int.Parse(cuit_nro.Substring((x), 1));
-                    int digitoValidacion = digitoValidador * digito;
-                    resultado += digitoValidacion;
-                    x++;
+            try
+            {
+
+
+                if (string.IsNullOrEmpty(cuit)) throw new ArgumentNullException(nameof(cuit));
+                if (cuit.Length != 13) throw new ArgumentException(nameof(cuit));
+                bool rv = false;
+                int verificador;
+                int resultado = 0;
+                string cuit_nro = cuit.Replace("-", string.Empty);
+                string codes = "6789456789";
+                long cuit_long = 0;
+                if (long.TryParse(cuit_nro, out cuit_long))
+                {
+                    verificador = int.Parse(cuit_nro[cuit_nro.Length - 1].ToString());
+                    int x = 0;
+                    while (x < 10)
+                    {
+
+                        int digitoValidador = int.Parse(codes.Substring((x), 1));
+                        int digito = int.Parse(cuit_nro.Substring((x), 1));
+                        int digitoValidacion = digitoValidador * digito;
+                        resultado += digitoValidacion;
+                        x++;
+                    }
+                    resultado = resultado % 11;
+                    rv = (resultado == verificador);
                 }
-                resultado = resultado % 11;
-                rv = (resultado == verificador);
+                return rv;
             }
-            return rv;
+            catch(Exception ex)
+            {
+                throw ex;
+            }
 
         }
 
@@ -105,7 +108,7 @@ namespace Modulo_Administracion.Logica
         {
             string FilePath = "";
             cliente cliente = null;
-            Logica_Cliente logica_cliente = new Logica_Cliente();
+         
             try
             {
                 string anio = factura.fecha.ToString("yyyy", CultureInfo.CreateSpecificCulture("es"));
@@ -137,7 +140,7 @@ namespace Modulo_Administracion.Logica
                     Directory.CreateDirectory(FilePath);
                 }
 
-                cliente = logica_cliente.buscar_cliente(factura.id_cliente);
+                cliente = Logica_Cliente.buscar_cliente(factura.id_cliente,null);
                 FilePath = FilePath + "\\" + cliente.nombre_fantasia + " - " + factura.ttipo_factura.letra + factura.nro_factura.ToString() + ".pdf";
 
                 return FilePath;
@@ -239,7 +242,7 @@ namespace Modulo_Administracion.Logica
             }
         }
 
-        public static string ValidarFecha(string dtfecha)
+        public static string validar_fecha(string dtfecha)
         {
             // Tiene que venir la fecha con por lo menos el día y algún separador
             // (blancos, puntos, etc.) Si recibe una fecha con el mes mayor que 12,

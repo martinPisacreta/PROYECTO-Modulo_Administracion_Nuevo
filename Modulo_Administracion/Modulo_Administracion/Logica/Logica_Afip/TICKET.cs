@@ -20,17 +20,17 @@ namespace Modulo_Administracion.Capas.Logica_Afip
 
         public bool INSERT_TICKET(string TOKEN, string SIGN, DateTime EXPIRATION_TIME, DateTime GENERATION_TIME, string XDOC_REQUEST, string XDOC_RESPONSE, string AMBIENTE) //1 HOMOLOGACION , 2 PRODUCCION
         {
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                conn.Open();
+                connection.Open();
 
                 try
                 {
 
-                    DataSet dataSet = new DataSet("TimeRanges");
+                    DataSet dataSet = new DataSet();
                     SqlParameter param = null;
                     bool bandera = false;
-                    SqlCommand command = new SqlCommand("insert_ticket", conn);
+                    SqlCommand command = new SqlCommand("insert_ticket", connection);
 
                     param = new SqlParameter();
                     param.DbType = DbType.String;
@@ -87,7 +87,7 @@ namespace Modulo_Administracion.Capas.Logica_Afip
                 }
                 catch (Exception ex)
                 {
-                    conn.Close();
+                    connection.Close();
                     throw ex;
                 }
 
@@ -99,20 +99,20 @@ namespace Modulo_Administracion.Capas.Logica_Afip
 
         public TICKET BUSCAR_TICKET(AFIP_ELECTRONICA.WS_AMBIENTE AMBIENTE) //1 HOMOLOGACION , 2 PRODUCCION
         {
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
-                conn.Open();
+                connection.Open();
 
 
                 try
                 {
 
-                    DataSet dataSet = new DataSet("TimeRanges");
+                    DataSet dataSet = new DataSet();
                     SqlDataReader reader = null;
                     SqlParameter param = null;
                     TICKET TICKET = null;
 
-                    SqlCommand command = new SqlCommand("buscar_ticket", conn);
+                    SqlCommand command = new SqlCommand("buscar_ticket", connection);
 
                     param = new SqlParameter();
                     param.DbType = DbType.String;
@@ -141,7 +141,7 @@ namespace Modulo_Administracion.Capas.Logica_Afip
                 }
                 catch (Exception ex)
                 {
-                    conn.Close();
+                    connection.Close();
                     throw ex;
                 }
 
