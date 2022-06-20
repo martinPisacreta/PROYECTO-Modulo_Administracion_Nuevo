@@ -277,44 +277,48 @@ namespace Modulo_Administracion.Logica
 
         public static DataTable buscar_proveedores_activos(string txtBusqueda)
         {
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            var proveedores = (from p in db.proveedor
+                               where p.razon_social.Contains(txtBusqueda) &&
+                                     p.sn_activo == -1
+                              select new
+                              {
+                                  id_proveedor = p.id_proveedor,
+                                  razon_social = p.razon_social,
+                                  sn_activo = p.sn_activo,
+                                  fec_ult_modif = p.fec_ult_modif,
+                                  accion = p.accion,
+                                  path_img = p.path_img,
+                                  id_condicion_ante_iva = p.id_condicion_ante_iva,
+                                  id_condicion_pago = p.id_condicion_pago
+                              }).ToList();
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id_proveedor");
+            dt.Columns.Add("razon_social");
+            dt.Columns.Add("sn_activo");
+            dt.Columns.Add("fec_ult_modif");
+            dt.Columns.Add("accion");
+            dt.Columns.Add("path_img");
+            dt.Columns.Add("id_condicion_ante_iva");
+            dt.Columns.Add("id_condicion_pago");
+
+            foreach (var proveedor in proveedores)
             {
-                connection.Open();
-                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
-                {
-
-                    try
-                    {
-
-                        DataSet ds = new DataSet();
-
-                        //store
-                        SqlCommand command = new SqlCommand("proveedor_buscar_activos", connection, sqlTransaction);
-
-                        //parametros
-                        command.Parameters.AddWithValue("@razon_social", txtBusqueda.Trim());
-                      
-
-                        //tiempo y tipo
-                        command.CommandTimeout = 0;
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter();
-                        adapter.SelectCommand = command;
-                        adapter.Fill(ds);
-
-                        sqlTransaction.Commit();
-                        return ds.Tables[0];
-
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        throw ex;
-                    }
-                }
+                DataRow row = dt.NewRow();
+                row["id_proveedor"] = proveedor.id_proveedor;
+                row["razon_social"] = proveedor.razon_social;
+                row["sn_activo"] = proveedor.sn_activo;
+                row["fec_ult_modif"] = proveedor.fec_ult_modif;
+                row["accion"] = proveedor.accion;
+                row["path_img"] = proveedor.path_img;
+                row["id_condicion_ante_iva"] = proveedor.id_condicion_ante_iva;
+                row["id_condicion_pago"] = proveedor.id_condicion_pago;
+                dt.Rows.Add(row);
             }
+            return dt;
         }
 
         public static proveedor buscar_proveedores_activos_con_razonSocial_repetido(string razon_social, int id_proveedor)

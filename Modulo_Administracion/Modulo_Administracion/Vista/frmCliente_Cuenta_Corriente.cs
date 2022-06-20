@@ -4,6 +4,7 @@ using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraReports.UI;
 using Modulo_Administracion.Clases;
+using Modulo_Administracion.Clases.Custom;
 using Modulo_Administracion.Logica;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,8 @@ namespace Modulo_Administracion.Vista
     public partial class frmCliente_Cuenta_Corriente : Form
     {
         cliente cliente;
-       
 
 
-        string valor_remito = "REMITO";
-        string valor_nota_credito = "NOTA DE CREDITO";
-        string valor_nota_debito = "NOTA DE DEBITO";
-        string valor_factura_a = "FACTURA A";
-        string valor_factura_b = "FACTURA B";
 
         public frmCliente_Cuenta_Corriente(cliente _cliente)
         {
@@ -64,7 +59,7 @@ namespace Modulo_Administracion.Vista
 
                 gridControl1.ForceInitialize();
                 RepositoryItemComboBox _riEditor = new RepositoryItemComboBox();
-                _riEditor.Items.AddRange(new string[] { valor_remito, valor_nota_credito, valor_nota_debito, valor_factura_a, valor_factura_b });
+                _riEditor.Items.AddRange(Logica_Tipo_Factura.loadComboBox_cbTipoFactura_relacionado_a_CCC(false)); //MANDO FALSE PORQUE NO ESTOY LLAMANDO DESDE "AGREGAR MOVIMIENTO"
                 gridControl1.RepositoryItems.Add(_riEditor);
                 gridView1.Columns[3].ColumnEdit = _riEditor;
 
@@ -181,6 +176,52 @@ namespace Modulo_Administracion.Vista
             this.Close();
         }
 
+
+        private int convert_tipoFactura_de_STRING_a_INT(string valor_seleccionado_combo)
+        {
+            try
+            {
+                int cod_tipo_factura = ttipo_factura_constantes.i_valor_vacio;
+                if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_remito)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_remito;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_nota_credito)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_nota_credito;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_nota_debito)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_nota_debito;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_factura_a_sin_comprobante)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_factura_a_sin_comprobante;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_factura_b_sin_comprobante)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_factura_b_sin_comprobante;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_remito_sin_comprobante)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_remito_sin_comprobante;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_nota_credito_sin_comprobante)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_nota_credito_sin_comprobante;
+                }
+                else if (valor_seleccionado_combo == ttipo_factura_constantes.s_valor_nota_debito_sin_comprobante)
+                {
+                    cod_tipo_factura = ttipo_factura_constantes.i_valor_nota_debito_sin_comprobante;
+                }
+
+                return cod_tipo_factura;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
         private void gridView1_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -195,17 +236,16 @@ namespace Modulo_Administracion.Vista
                 decimal pago3 = 0.0000M;
                 decimal pago4 = 0.0000M;
                 Int64 nro_factura;
-                int cod_tipo_factura = 0;
+                int cod_tipo_factura = ttipo_factura_constantes.i_valor_vacio;
 
                 if (e.Column.FieldName == "Tipo Factura") //si la columna de la que estoy saliendo es Tipo Factura
                 {
                     if (view.GetRowCellValue(e.RowHandle, view.Columns["Tipo Factura"]).ToString() != "") //si hay algo escrito en Tipo Factura
                     {
+                        cod_tipo_factura = convert_tipoFactura_de_STRING_a_INT(view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString());
 
-                        //voy a buscar el ultimo nro de factura vieja y pongo (ese valor + 1)  en Nro Factura  
-                        //ya que cuando hago click en "agregar movimiento" y elijo el tipo de remito , necesito que en Nro Factura me cargue el ultimo nro de factura vieja +  1
-                        Int64 ultimo_nro_factura_vieja = Logica_Cliente_Cuenta_Corriente.buscar_ultimo_nro_factura_vieja();
-                        view.SetRowCellValue(e.RowHandle, view.Columns["Nro Factura"], ultimo_nro_factura_vieja + 1);
+                        Int64 ultimo_nro_factura_vieja = Logica_Factura.ult_nro_factura_no_usado(cod_tipo_factura,false); //el FALSE indica que voy a buscar los datos a la tabla cliente_cuenta_corriente
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Nro Factura"], ultimo_nro_factura_vieja);
                     }
                 }
                 else if (e.Column.FieldName == "Nro Factura") //si la columna de la que estoy saliendo es Nro Factura
@@ -215,46 +255,11 @@ namespace Modulo_Administracion.Vista
                         nro_factura = Convert.ToInt64(view.GetRowCellValue(e.RowHandle, view.Columns["Nro Factura"]).ToString()); //convierto Nro Factura en INT64
                         if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() != "") //si hay algo escrito en Tipo Factura , cargo cod_tipo_factura
                         {
-                            if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() == valor_remito)
-                            {
-                                cod_tipo_factura = 1;
-                            }
-                            else if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() == valor_nota_credito)
-                            {
-                                cod_tipo_factura = 2;
-                            }
-                            else if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() == valor_nota_debito)
-                            {
-                                cod_tipo_factura = 6;
-                            }
-                            else if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() == valor_factura_a)
-                            {
-                                cod_tipo_factura = 7;
-                            }
-                            else if (view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString() == valor_factura_b)
-                            {
-                                cod_tipo_factura = 8;
-                            }
-
+                            cod_tipo_factura = convert_tipoFactura_de_STRING_a_INT(view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString());
                         }
-                        if (cod_tipo_factura == 0) //si cod_tipo_factura es 0 , hubo un error
+                        if (cod_tipo_factura == ttipo_factura_constantes.i_valor_vacio) //si cod_tipo_factura es 0 , hubo un error
                         {
                             throw new Exception("Error en el tipo de factura");
-                        }
-
-                        if (cod_tipo_factura == 1) //solamente lo hago si es remito , en nota de credito y debito no
-                        {
-
-                            DataTable dt = Logica_Factura.buscar_facturas(nro_factura, cod_tipo_factura).Tables[0]; //si existe la factura con ese nro y ese cod_tipo_factura , ya sea que la factura existe en el sistema o no... alerto de un error
-                            if (dt.Rows.Count > 0)
-                            {
-                                if (Convert.ToInt32(dt.Rows[0][0].ToString()) > 0)
-                                {
-                                    view.SetRowCellValue(e.RowHandle, view.Columns["Nro Factura"], "");
-                                    throw new Exception("Ya existe ese nro de factura en el tipo : " + view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString());
-                                }
-                            }
-
                         }
                     }
                 }
@@ -505,30 +510,7 @@ namespace Modulo_Administracion.Vista
                         cliente_cuenta_corriente.cod_tipo_factura_vieja = null;
                         if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() != "")
                         {
-                            if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() == valor_remito)
-                            {
-                                cliente_cuenta_corriente.cod_tipo_factura_vieja = 1;
-                            }
-                            else if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() == valor_nota_credito)
-                            {
-                                cliente_cuenta_corriente.cod_tipo_factura_vieja = 2;
-                            }
-                            else if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() == valor_nota_debito)
-                            {
-                                cliente_cuenta_corriente.cod_tipo_factura_vieja = 6;
-                            }
-                            else if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() == valor_factura_a)
-                            {
-                                cliente_cuenta_corriente.cod_tipo_factura_vieja = 7;
-                            }
-                            else if (gridView1.GetRowCellValue(i, "Tipo Factura").ToString() == valor_factura_b)
-                            {
-                                cliente_cuenta_corriente.cod_tipo_factura_vieja = 8;
-                            }
-
-
-
-
+                            cliente_cuenta_corriente.cod_tipo_factura_vieja = convert_tipoFactura_de_STRING_a_INT(gridView1.GetRowCellValue(i, "Tipo Factura").ToString());
                         }
 
                     }
@@ -640,6 +622,13 @@ namespace Modulo_Administracion.Vista
             try
             {
                 gridView1.AddNewRow();
+
+                RepositoryItemComboBox _riEditor = new RepositoryItemComboBox();
+                _riEditor.Items.AddRange(Logica_Tipo_Factura.loadComboBox_cbTipoFactura_relacionado_a_CCC(true)); //MANDO TRUE PORQUE  ESTOY LLAMANDO DESDE "AGREGAR MOVIMIENTO"
+                gridControl1.RepositoryItems.Add(_riEditor);
+                gridView1.Columns[3].ColumnEdit = _riEditor;
+
+                
             }
             catch (Exception ex)
             {
@@ -712,7 +701,7 @@ namespace Modulo_Administracion.Vista
                 {
                     e.Cancel = true;
                 }
-                else if (id != "" && gridView1.FocusedColumn.FieldName == "Imp Factura" && tipo_factura == valor_remito) //NO VOY A PODER MODIFICAR "Imp Factura" SI EL TIPO DE FACTURA ES "REMITO" , PARA LOS DEMAS SI
+                else if (id != "" && gridView1.FocusedColumn.FieldName == "Imp Factura" && tipo_factura == ttipo_factura_constantes.s_valor_remito) //NO VOY A PODER MODIFICAR "Imp Factura" SI EL TIPO DE FACTURA ES "REMITO" , PARA LOS DEMAS SI
                 {
                     e.Cancel = true;
                 }
@@ -721,7 +710,12 @@ namespace Modulo_Administracion.Vista
                 {
                     e.Cancel = true;
                     throw new Exception("Debe seleccionar un tipo de factura antes de cargar el número de la misma");
+                }
 
+                //SI ESTOY AGREANDO UN MOVIMIENTO , NO VOY A PODER EDITAR EL NRO FACTURA , PORQUE ESE VALOR LO TRAIGO DE LA BD
+                if(id == "" && gridView1.FocusedColumn.FieldName == "Nro Factura")
+                {
+                    e.Cancel = true;
                 }
             }
             catch (Exception ex)

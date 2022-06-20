@@ -384,44 +384,38 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public static DataSet buscar_clientes_activos(string razon_social)
+        public static DataSet buscar_clientes_activos(string nombre_fantasia)
         {
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            var clientes = (from c in db.cliente
+                            where c.nombre_fantasia.Contains(nombre_fantasia) &&
+                                  c.sn_activo == -1
+                            select new
+                            {
+                                c.id_cliente,
+                                c.nombre_fantasia,
+                                c.id_condicion_factura
+                            }).ToList();
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Codigo Cliente");
+            dt.Columns.Add("Nombre");
+            dt.Columns.Add("Id Condicion Factura");
+
+            foreach (var cliente in clientes)
             {
-                connection.Open();
-                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
-                {
-
-                    try
-                    {
-
-                        DataSet ds = new DataSet();
-
-                        //store
-                        SqlCommand command = new SqlCommand("cliente_buscar_activos", connection, sqlTransaction);
-
-                        //parametros
-                        command.Parameters.AddWithValue("@nombre", razon_social);
-
-                        //tiempo y tipo
-                        command.CommandTimeout = 0;
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter();
-                        adapter.SelectCommand = command;
-                        adapter.Fill(ds);
-                        sqlTransaction.Commit();
-                        return ds;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        throw ex;
-                    }
-                }
+                DataRow row = dt.NewRow();
+                row["Codigo Cliente"] = cliente.id_cliente;
+                row["Nombre"] = cliente.nombre_fantasia;
+                row["Id Condicion Factura"] = cliente.id_condicion_factura;
+                dt.Rows.Add(row);
             }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+            return ds;
         }
 
         public static cliente buscar_cliente(string razon_social)

@@ -1,9 +1,11 @@
 ﻿using DevExpress.Utils.Menu;
 using DevExpress.XtraReports.UI;
 using Modulo_Administracion.Clases;
+using Modulo_Administracion.Clases.Custom;
 using Modulo_Administracion.Logica;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
@@ -87,12 +89,15 @@ namespace Modulo_Administracion.Vista
         }
 
 
+
         public frmFacturaGestion()
         {
             try
             {
                 InitializeComponent();
-                Logica_Funciones_Generales.cargar_comboBox("ttipo_factura", cbTipoFactura, "txt_desc", "cod_tipo_factura in (1,2,6)", "cod_tipo_factura", "cod_tipo_factura");
+
+                Logica_Tipo_Factura.loadComboBox_cbTipoFactura_relacionado_a_FACTURA(cbTipoFactura);
+
 
                 txtClienteId.Visible = false;
                 DXPopupMenu popupMenu = new DXPopupMenu();
@@ -290,7 +295,7 @@ namespace Modulo_Administracion.Vista
                     dgvFacturas.Rows[indice].Cells[2].Value = factura.ttipo_factura.letra + " " + factura.nro_factura.ToString();
                     dgvFacturas.Rows[indice].Cells[3].Value = factura.fecha.ToString("dd/MM/yyyy");
                     dgvFacturas.Rows[indice].Cells[4].Value = factura.cliente.nombre_fantasia;
-                    if (factura.ttipo_factura.cod_tipo_factura == 2 || factura.ttipo_factura.cod_tipo_factura == 6) //si es nota de credito o debito
+                    if (factura.ttipo_factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_credito || factura.ttipo_factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_debito) //si es nota de credito o debito
                     {
                         dgvFacturas.Rows[indice].Cells[5].Value = factura.precio_final;
                     }
@@ -514,7 +519,7 @@ namespace Modulo_Administracion.Vista
 
 
 
-                int cod_tipo_factura = -999;
+                int cod_tipo_factura = ttipo_factura_constantes.i_valor_todos;
                 Int64 nro_factura = 0;
                 string codigo_articulo = "";
                 string codigo_articulo_marca = "";
@@ -548,7 +553,7 @@ namespace Modulo_Administracion.Vista
                 }
 
 
-                if (cod_tipo_factura == -999 && nro_factura == 0 && codigo_articulo == "" && codigo_articulo_marca == "" && fecha_desde == null && fecha_hasta == null && id_cliente == -999)
+                if (cod_tipo_factura == ttipo_factura_constantes.i_valor_todos && nro_factura == 0 && codigo_articulo == "" && codigo_articulo_marca == "" && fecha_desde == null && fecha_hasta == null && id_cliente == -999)
                 {
                     throw new Exception("Debe aplicar algun filtro");
                 }
@@ -810,7 +815,7 @@ namespace Modulo_Administracion.Vista
                 if (txtCliente.Text != "")
                 {
                     txtCliente.Text = txtCliente.Text.ToUpper();
-                    buscar_cliente_por_razon_social(txtCliente.Text);
+                    buscar_cliente_por_nombre_fantasia(txtCliente.Text);
                 }
             }
             catch (Exception ex)
@@ -819,7 +824,7 @@ namespace Modulo_Administracion.Vista
             }
         }
 
-        private void buscar_cliente_por_razon_social(string razon_social)
+        private void buscar_cliente_por_nombre_fantasia(string nombre_fantasia)
         {
             try
             {
@@ -829,7 +834,7 @@ namespace Modulo_Administracion.Vista
 
 
 
-                frm.IniciarForm(Logica_Cliente.buscar_clientes_activos(razon_social).Tables[0], 2);
+                frm.IniciarForm(Logica_Cliente.buscar_clientes_activos(nombre_fantasia).Tables[0], 2);
 
 
 

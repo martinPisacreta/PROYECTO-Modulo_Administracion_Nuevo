@@ -1,6 +1,7 @@
 ﻿using DevExpress.Utils.Menu;
 using Modulo_Administracion.Capas.Logica_Afip;
 using Modulo_Administracion.Clases;
+using Modulo_Administracion.Clases.Custom;
 using Modulo_Administracion.Logica;
 using Modulo_Administracion.WSFEHOMO;
 using System;
@@ -692,14 +693,14 @@ namespace Modulo_Administracion.Vista
                             chkMostrarMenor7Dias.Checked = true;
                         }
 
-                        if (factura.cod_tipo_factura == 2) //si es nota de credito
+                        if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_credito) //si es nota de credito
                         {
                             lblImporteTotal.Text = (-factura.precio_final).ToString("N2");
                             lblImportePagoMayor30Dias.Text = "0.00";
                             lblImportePagoMenor7Dias.Text = "0.00";
                             lblImportePagoMenor30Dias.Text = "0.00";
                         }
-                        else if (factura.cod_tipo_factura == 6) //si es nota de debito
+                        else if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_debito) //si es nota de debito
                         {
                             lblImporteTotal.Text = (+factura.precio_final).ToString("N2");
                             lblImportePagoMayor30Dias.Text = "0.00";
@@ -1313,7 +1314,7 @@ namespace Modulo_Administracion.Vista
 
 
 
-                //if (factura.cod_tipo_factura == 2) //si es nota de credito
+                //if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_credito) //si es nota de credito
                 //{
                 //    factura.precio_final = +Convert.ToDecimal(lblImporteTotal.Text);
 
@@ -1321,7 +1322,7 @@ namespace Modulo_Administracion.Vista
                 //    factura.precio_final_con_pago_menor_a_7_dias = 0;
                 //    factura.precio_final_con_pago_menor_a_30_dias = 0;
                 //}
-                //else if (factura.cod_tipo_factura == 6) //si es nota de debito
+                //else if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_debito) //si es nota de debito
                 //{
                 //    factura.precio_final = +Convert.ToDecimal(lblImporteTotal.Text);
 
@@ -1555,7 +1556,7 @@ namespace Modulo_Administracion.Vista
                 if (txtCliente.Text != "")
                 {
                     txtCliente.Text = txtCliente.Text.ToUpper();
-                    buscar_cliente_por_razon_social(txtCliente.Text);
+                    buscar_cliente_por_nombre_fantasia(txtCliente.Text);
                 }
             }
             catch (Exception ex)
@@ -1564,7 +1565,7 @@ namespace Modulo_Administracion.Vista
             }
         }
 
-        private void buscar_cliente_por_razon_social(string razon_social)
+        private void buscar_cliente_por_nombre_fantasia(string nombre_fantasia)
         {
             try
             {
@@ -1573,7 +1574,7 @@ namespace Modulo_Administracion.Vista
                 frm.btnNuevo.Enabled = false;
 
 
-                DataSet ds = Logica_Cliente.buscar_clientes_activos(razon_social);
+                DataSet ds = Logica_Cliente.buscar_clientes_activos(nombre_fantasia);
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -1585,8 +1586,8 @@ namespace Modulo_Administracion.Vista
                     if (dialogResult == DialogResult.Yes)
                     {
                         cliente cliente_a_insertar = new cliente();
-                        cliente_a_insertar.razon_social = razon_social;
-                        cliente_a_insertar.nombre_fantasia = razon_social;
+                        cliente_a_insertar.razon_social = nombre_fantasia;
+                        cliente_a_insertar.nombre_fantasia = nombre_fantasia;
                         cliente_a_insertar.id_condicion_ante_iva = 13;
                         cliente_a_insertar.id_condicion_pago = 1;
                         cliente_a_insertar.sn_activo = -1;
@@ -2062,7 +2063,7 @@ namespace Modulo_Administracion.Vista
                         Cursor.Current = Cursors.WaitCursor;
 
 
-                        DataTable dt = Logica_Articulo.buscar_articulos_activos(marca, codigo).Tables[0];
+                        DataTable dt = Logica_Articulo.buscar_articulo_activo(marca, codigo).Tables[0];
                         if (dt.Rows.Count > 0)
                         {
                             descripcion = dt.Rows[0]["descripcion_articulo"].ToString();

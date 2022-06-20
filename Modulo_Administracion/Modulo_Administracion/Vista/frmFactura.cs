@@ -3,6 +3,7 @@ using DevExpress.Utils.Menu;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using Modulo_Administracion.Clases;
+using Modulo_Administracion.Clases.Custom;
 using Modulo_Administracion.Logica;
 using System;
 using System.Collections.Generic;
@@ -109,7 +110,7 @@ namespace Modulo_Administracion.Vista
                 }
 
                 //cargo el combo
-                Logica_Funciones_Generales.cargar_comboBox("ttipo_factura", cbTipoFactura, "txt_desc", "cod_tipo_factura in (1,2,6)", "cod_tipo_factura", "cod_tipo_factura");
+                Logica_Tipo_Factura.loadComboBox_cbTipoFactura_relacionado_a_FACTURA(cbTipoFactura);
 
 
                 if (factura == null) //si la accion es alta
@@ -278,7 +279,7 @@ namespace Modulo_Administracion.Vista
 
                         precio_final_al_cargar_factura = factura.precio_final;
                         decimal _importe_total = importe_total(dgvFactura);
-                        if (factura.cod_tipo_factura == 2) //si es nota de credito
+                        if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_credito) //si es nota de credito
                         {
                             if (factura.sn_modifica_precio_final == -1) //si el usuario modifica MANUALMENTE el precio final...
                             {
@@ -293,7 +294,7 @@ namespace Modulo_Administracion.Vista
                             lblImportePagoMenor7Dias.Text = "0.00";
                             lblImportePagoMenor30Dias.Text = "0.00";
                         }
-                        else if (factura.cod_tipo_factura == 6) //si es nota de debito
+                        else if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_debito) //si es nota de debito
                         {
                             if (factura.sn_modifica_precio_final == -1) //si el usuario modifica MANUALMENTE el precio final...
                             {
@@ -938,7 +939,7 @@ namespace Modulo_Administracion.Vista
                 }
 
 
-                //if (factura.cod_tipo_factura == 2) //si es nota de credito
+                //if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_credito) //si es nota de credito
                 //{
                 //    factura.precio_final = +Convert.ToDecimal(lblImporteTotal.Text);
 
@@ -946,7 +947,7 @@ namespace Modulo_Administracion.Vista
                 //    factura.precio_final_con_pago_menor_a_7_dias = 0;
                 //    factura.precio_final_con_pago_menor_a_30_dias = 0;
                 //}
-                //else if (factura.cod_tipo_factura == 6) //si es nota de debito
+                //else if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_nota_debito) //si es nota de debito
                 //{
                 //    factura.precio_final = +Convert.ToDecimal(lblImporteTotal.Text);
 
@@ -1193,7 +1194,7 @@ namespace Modulo_Administracion.Vista
                 if (txtCliente.Text != "")
                 {
                     txtCliente.Text = txtCliente.Text.ToUpper();
-                    buscar_cliente_por_razon_social(txtCliente.Text);
+                    buscar_cliente_por_nombre_fantasia(txtCliente.Text);
                 }
             }
             catch (Exception ex)
@@ -1202,7 +1203,7 @@ namespace Modulo_Administracion.Vista
             }
         }
 
-        private void buscar_cliente_por_razon_social(string razon_social)
+        private void buscar_cliente_por_nombre_fantasia(string nombre_fantasia)
         {
             try
             {
@@ -1211,7 +1212,7 @@ namespace Modulo_Administracion.Vista
                 frm.btnNuevo.Enabled = false;
 
 
-                DataSet ds = Logica_Cliente.buscar_clientes_activos(razon_social);
+                DataSet ds = Logica_Cliente.buscar_clientes_activos(nombre_fantasia);
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -1223,8 +1224,8 @@ namespace Modulo_Administracion.Vista
                     if (dialogResult == DialogResult.Yes)
                     {
                         cliente cliente_a_insertar = new cliente();
-                        cliente_a_insertar.razon_social = razon_social;
-                        cliente_a_insertar.nombre_fantasia = razon_social;
+                        cliente_a_insertar.razon_social = nombre_fantasia;
+                        cliente_a_insertar.nombre_fantasia = nombre_fantasia;
                         cliente_a_insertar.id_condicion_ante_iva = 13;
                         cliente_a_insertar.id_condicion_pago = 1;
                         cliente_a_insertar.sn_activo = -1;
@@ -1788,7 +1789,7 @@ namespace Modulo_Administracion.Vista
                         Cursor.Current = Cursors.WaitCursor;
 
 
-                        DataTable dt = Logica_Articulo.buscar_articulos_activos(marca, codigo).Tables[0];
+                        DataTable dt = Logica_Articulo.buscar_articulo_activo(marca, codigo).Tables[0];
                         if (dt.Rows.Count > 0)
                         {
 
@@ -1889,7 +1890,7 @@ namespace Modulo_Administracion.Vista
                 else
                 {
                     //VOY A BUSCAR A LA BASE DE DATOS -> LOS DATOS DEL ARTICULO SEGUN "CODIGO_ARTICULO_MARCA" Y "CODIGO_ARTICULO"
-                    DataTable dt_db = Logica_Articulo.buscar_articulos_activos(marca, codigo).Tables[0];
+                    DataTable dt_db = Logica_Articulo.buscar_articulo_activo(marca, codigo).Tables[0];
                     if (dt_db.Rows.Count > 0)
                     {
 
@@ -2309,7 +2310,7 @@ namespace Modulo_Administracion.Vista
                         {
                             if (factura.cod_tipo_factura != Convert.ToInt32(cbTipoFactura.SelectedValue)) //y el tipo de factura seleccionado es distinto al que esta cargado en "factura" (al ingresar al modulo) ...
                             {
-                                txtNroFactura.Text = Logica_Factura.ult_nro_factura_no_usado(Convert.ToDecimal(cbTipoFactura.SelectedValue)).ToString(); //voy a buscar el ult_nro_factura_no_usado de la tabla factura
+                                txtNroFactura.Text = Logica_Factura.ult_nro_factura_no_usado(Convert.ToDecimal(cbTipoFactura.SelectedValue),true).ToString(); //el TRUE indica que voy a buscar los datos a la tabla factura
                             }
                             else
                             {

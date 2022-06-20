@@ -208,43 +208,40 @@ namespace Modulo_Administracion.Logica
 
         public static DataTable buscar_vendedores_activos(string txtBusqueda)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
+
+            var vendedores = (from v in db.vendedor
+                              where v.nombre.Contains(txtBusqueda) &&
+                                    v.sn_activo == -1
+                              select new
+                              {
+                                  id_vendedor = v.id_vendedor,
+                                  nombre = v.nombre,
+                                  sn_activo = v.sn_activo,
+                                  fec_ult_modif = v.fec_ult_modif,
+                                  accion = v.accion
+                              }).ToList();
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id_vendedor");
+            dt.Columns.Add("nombre");
+            dt.Columns.Add("sn_activo");
+            dt.Columns.Add("fec_ult_modif");
+            dt.Columns.Add("accion");
+
+            foreach (var vendedor in vendedores)
             {
-                connection.Open();
-                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
-                {
-
-                    try
-                    {
-
-                        DataSet ds = new DataSet();
-
-                        //store
-                        SqlCommand command = new SqlCommand("vendedor_buscar_activos", connection, sqlTransaction);
-
-                        //parametros
-                        command.Parameters.AddWithValue("@nombre", txtBusqueda.Trim());
-
-
-                        //tiempo y tipo
-                        command.CommandTimeout = 0;
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter();
-                        adapter.SelectCommand = command;
-                        adapter.Fill(ds);
-
-                        sqlTransaction.Commit();
-                        return ds.Tables[0];
-
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        throw ex;
-                    }
-                }
+                DataRow row = dt.NewRow();
+                row["id_vendedor"] = vendedor.id_vendedor;
+                row["nombre"] = vendedor.nombre;
+                row["sn_activo"] = vendedor.sn_activo;
+                row["fec_ult_modif"] = vendedor.fec_ult_modif;
+                row["accion"] = vendedor.accion;
+                dt.Rows.Add(row);
             }
+            return dt;
         }
     }
 }

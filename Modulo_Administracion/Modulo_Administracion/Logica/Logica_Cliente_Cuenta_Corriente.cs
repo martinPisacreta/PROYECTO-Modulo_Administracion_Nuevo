@@ -1,4 +1,5 @@
 ﻿using Modulo_Administracion.Clases;
+using Modulo_Administracion.Clases.Custom;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,34 +14,7 @@ namespace Modulo_Administracion.Logica
     {
 
        
-        public static Int64 buscar_ultimo_nro_factura_vieja()
-        {
-            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
-            using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
-            {
-
-                try
-                {
-
-                    var max_Query =
-                                      (from ccc in db.cliente_cuenta_corriente
-                                       select ccc.nro_factura_vieja).Max();
-
-
-                    return Convert.ToInt64(max_Query);
-                }
-                catch (Exception ex)
-                {
-                    dbContextTransaction.Rollback();
-                    throw ex;
-                }
-                finally
-                {
-                    db = null;
-                }
-            }
-        }
-
+     
         public static bool alta_movimiento_CCC(factura factura, Modulo_AdministracionContext db) // esta funcion se relaciona 100% al dar de alta una factura en el sistema
         {
 
@@ -48,7 +22,7 @@ namespace Modulo_Administracion.Logica
             cliente_cuenta_corriente cliente_cuenta_corriente_a_insertar;
             try
             {
-                if (factura.cod_tipo_factura == 1) //a pedido de maxi , solamente el remito se da de alta en cuenta corriente al generar una factura
+                if (factura.cod_tipo_factura == ttipo_factura_constantes.i_valor_remito) //a pedido de maxi , solamente el remito se da de alta en cuenta corriente al generar una factura
                 {
 
                     cliente_cuenta_corriente_a_insertar = new cliente_cuenta_corriente();
@@ -225,6 +199,9 @@ namespace Modulo_Administracion.Logica
                 throw ex;
             }
         }
+
+
+     
 
         public static DataSet buscar_movimientos_CCC(int id_cliente, int tipo)
         {

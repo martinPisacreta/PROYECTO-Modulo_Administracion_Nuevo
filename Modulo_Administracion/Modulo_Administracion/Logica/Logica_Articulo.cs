@@ -188,44 +188,98 @@ namespace Modulo_Administracion.Logica
 
 
 
-        public static DataSet buscar_articulos_activos(string codigo_articulo_marca, string codigo_articulo)
+        public static DataSet buscar_articulo_activo(string codigo_articulo_marca, string codigo_articulo)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
+
+            var articulo = (from a in db.articulo
+                             join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
+                             where a.codigo_articulo_marca == codigo_articulo_marca &&
+                                   a.codigo_articulo == codigo_articulo &&
+                                   a.fec_baja == null //ARTICULOS ACTIVOS
+                             select new
+                             {
+
+                                 descripcion_articulo = a.descripcion_articulo,
+                                 precio_lista = a.precio_lista,
+                                 id_tabla_familia = a.id_tabla_familia,
+                                 id_articulo = a.id_articulo,
+
+                                 algoritmo_1 = f.algoritmo_1,
+                                 algoritmo_2 = f.algoritmo_2,
+                                 algoritmo_3 = f.algoritmo_3,
+                                 algoritmo_4 = f.algoritmo_4,
+                                 algoritmo_5 = f.algoritmo_5,
+                                 algoritmo_6 = f.algoritmo_6,
+                                 algoritmo_7 = f.algoritmo_7,
+                                 algoritmo_8 = f.algoritmo_8,
+                                 algoritmo_9 = f.algoritmo_9,
+                             }).FirstOrDefault();
+
+
+            
+            DataTable dt = new DataTable();
+            dt.Columns.Add("descripcion_articulo");
+            dt.Columns.Add("precio_lista");
+            dt.Columns.Add("id_tabla_familia");
+            dt.Columns.Add("id_articulo");
+            dt.Columns.Add("coeficiente");
+
+            if (articulo != null)
             {
-                connection.Open();
-                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
-                {
+                decimal coeficiente = Logica_Familia.precio_coeficiente(2, articulo.algoritmo_1, articulo.algoritmo_2, articulo.algoritmo_3, articulo.algoritmo_4, articulo.algoritmo_5, articulo.algoritmo_6, articulo.algoritmo_7, articulo.algoritmo_8, articulo.algoritmo_9);
 
-                    try
-                    {
-
-                        DataSet ds = new DataSet();
-
-                        //store
-                        SqlCommand command = new SqlCommand("articulo_buscar_por_codigoArticuloMarca_codigoArticulo", connection, sqlTransaction);
-
-                        //parametros
-                        command.Parameters.AddWithValue("@codigo_articulo_marca", codigo_articulo_marca);
-                        command.Parameters.AddWithValue("@codigo_articulo", codigo_articulo);
-
-                        //tiempo y tipo
-                        command.CommandTimeout = 0;
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter();
-                        adapter.SelectCommand = command;
-                        adapter.Fill(ds);
-                        sqlTransaction.Commit();
-                        return ds;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        throw ex;
-                    }
-                }
+                DataRow row = dt.NewRow();
+                row["descripcion_articulo"] = articulo.descripcion_articulo;
+                row["precio_lista"] = articulo.precio_lista;
+                row["id_tabla_familia"] = articulo.id_tabla_familia;
+                row["id_articulo"] = articulo.id_articulo;
+                row["coeficiente"] = coeficiente;
+                dt.Rows.Add(row);
             }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+            return ds;
+
+
+            //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            //{
+            //    connection.Open();
+            //    using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+            //    {
+
+            //        try
+            //        {
+
+            //            DataSet ds = new DataSet();
+
+            //            //store
+            //            SqlCommand command = new SqlCommand("articulo_buscar_por_codigoArticuloMarca_codigoArticulo", connection, sqlTransaction);
+
+            //            //parametros
+            //            command.Parameters.AddWithValue("@codigo_articulo_marca", codigo_articulo_marca);
+            //            command.Parameters.AddWithValue("@codigo_articulo", codigo_articulo);
+
+            //            //tiempo y tipo
+            //            command.CommandTimeout = 0;
+            //            command.CommandType = CommandType.StoredProcedure;
+
+            //            SqlDataAdapter adapter = new SqlDataAdapter();
+            //            adapter.SelectCommand = command;
+            //            adapter.Fill(ds);
+            //            sqlTransaction.Commit();
+            //            return ds;
+
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            sqlTransaction.Rollback();
+            //            throw ex;
+            //        }
+            //    }
+            //}
         }
         
         public static bool dar_de_baja_articulos(int id_tabla_familia, Modulo_AdministracionContext db) //doy de baja los articulos de una familia
@@ -316,41 +370,75 @@ namespace Modulo_Administracion.Logica
 
         public static DataSet buscar_articulos_activos()
         {
+            Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
+            var articulos = (from a in db.articulo
+                            join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
+                            where a.fec_baja == null //ARTICULOS ACTIVOS
+                            orderby a.id_orden ascending
+                            select new
+                            {
+                                codigo_articulo_marca = a.codigo_articulo_marca,
+                                codigo_articulo = a.codigo_articulo,
+                                descripcion_articulo = a.descripcion_articulo,
+                                precio_lista = a.precio_lista,
+                                id_tabla_familia = a.id_tabla_familia,
+                                sn_oferta = a.sn_oferta,
+                                path_img = a.path_img, //ESTE DATO SOLAMENTE EXISTE EN LA BD DE LA WEB
+                                id_articulo = a.id_articulo,
+                                id_orden = a.id_orden,
+                                algoritmo_1 = f.algoritmo_1,
+                                algoritmo_2 = f.algoritmo_2,
+                                algoritmo_3 = f.algoritmo_3,
+                                algoritmo_4 = f.algoritmo_4,
+                                algoritmo_5 = f.algoritmo_5,
+                                algoritmo_6 = f.algoritmo_6,
+                                algoritmo_7 = f.algoritmo_7,
+                                algoritmo_8 = f.algoritmo_8,
+                                algoritmo_9 = f.algoritmo_9,
+                            }).ToList();
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("codigo_articulo_marca");
+            dt.Columns.Add("codigo_articulo");
+            dt.Columns.Add("descripcion_articulo");
+            dt.Columns.Add("precio_lista");
+            dt.Columns.Add("coeficiente");
+            dt.Columns.Add("precio_final");
+            dt.Columns.Add("id_tabla_familia");
+            dt.Columns.Add("sn_oferta");
+            dt.Columns.Add("path_img");
+            dt.Columns.Add("id_articulo");
+            dt.Columns.Add("id_orden");
+
+            if (articulos != null)
             {
-                connection.Open();
-                using (SqlTransaction sqlTransaction = connection.BeginTransaction())
+                foreach (var articulo in articulos)
                 {
 
-                    try
-                    {
-
-                        DataSet ds = new DataSet();
-
-                        //store
-                        SqlCommand command = new SqlCommand("articulo_buscar_activos", connection, sqlTransaction);
+                    decimal coeficiente = Logica_Familia.precio_coeficiente(2, articulo.algoritmo_1, articulo.algoritmo_2, articulo.algoritmo_3, articulo.algoritmo_4, articulo.algoritmo_5, articulo.algoritmo_6, articulo.algoritmo_7, articulo.algoritmo_8, articulo.algoritmo_9);
 
 
-
-                        //tiempo y tipo
-                        command.CommandTimeout = 0;
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter();
-                        adapter.SelectCommand = command;
-                        adapter.Fill(ds);
-                        sqlTransaction.Commit();
-                        return ds;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        throw ex;
-                    }
+                    DataRow row = dt.NewRow();
+                    row["codigo_articulo_marca"] = articulo.codigo_articulo_marca;
+                    row["codigo_articulo"] = articulo.codigo_articulo;
+                    row["descripcion_articulo"] = articulo.descripcion_articulo;
+                    row["precio_lista"] = articulo.precio_lista;
+                    row["coeficiente"] = coeficiente;
+                    row["precio_final"] = articulo.precio_lista * coeficiente;
+                    row["id_tabla_familia"] = articulo.id_tabla_familia;
+                    row["sn_oferta"] = articulo.sn_oferta;
+                    row["path_img"] = articulo.path_img;
+                    row["id_articulo"] = articulo.id_articulo;
+                    row["id_orden"] = articulo.id_orden;
+                    dt.Rows.Add(row);
                 }
             }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+            return ds;
         }
 
         public static bool modificar_articulos_existentes_en_relacion_a_ListaProveedor(List<articulo> lista_articulo, Modulo_AdministracionContext db)
