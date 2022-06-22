@@ -590,7 +590,7 @@
             // 
             this.sqlDataSource1.ConnectionName = "desktop-i7nmoje.CarritoCompras.dbo";
             this.sqlDataSource1.Name = "sqlDataSource1";
-            storedProcQuery1.Name = "buscar_cuenta_corriente_por_id_cliente";
+            storedProcQuery1.Name = "cliente_cuenta_corriente_buscar_por_idCliente";
             queryParameter1.Name = "@id_cliente";
             queryParameter1.Type = typeof(DevExpress.DataAccess.Expression);
             queryParameter1.Value = new DevExpress.DataAccess.Expression("?id_cliente", typeof(int));
@@ -599,7 +599,7 @@
             queryParameter2.Value = new DevExpress.DataAccess.Expression("?tipo", typeof(int));
             storedProcQuery1.Parameters.Add(queryParameter1);
             storedProcQuery1.Parameters.Add(queryParameter2);
-            storedProcQuery1.StoredProcName = "buscar_cuenta_corriente_por_id_cliente";
+            storedProcQuery1.StoredProcName = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.sqlDataSource1.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
             storedProcQuery1});
             this.sqlDataSource1.ResultSchemaSerializable = resources.GetString("sqlDataSource1.ResultSchemaSerializable");
@@ -626,44 +626,44 @@
             // 
             // saldo_calculate
             // 
-            this.saldo_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.saldo_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.saldo_calculate.Expression = "isnull([Imp Factura],0) - isnull([Pago 1],0) - isnull([Pago 2],0) - isnull([Pago " +
     "3],0) - isnull([Pago 4],0)";
             this.saldo_calculate.Name = "saldo_calculate";
             // 
             // imp_factura_calculate
             // 
-            this.imp_factura_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.imp_factura_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.imp_factura_calculate.Expression = "Sum([Imp Factura])";
             this.imp_factura_calculate.Name = "imp_factura_calculate";
             // 
             // pago_1_calculate
             // 
-            this.pago_1_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.pago_1_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.pago_1_calculate.Expression = "sum([Pago 1])";
             this.pago_1_calculate.Name = "pago_1_calculate";
             // 
             // pago_2_calculate
             // 
-            this.pago_2_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.pago_2_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.pago_2_calculate.Expression = "sum([Pago 2])";
             this.pago_2_calculate.Name = "pago_2_calculate";
             // 
             // pago_3_calculate
             // 
-            this.pago_3_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.pago_3_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.pago_3_calculate.Expression = "sum([Pago 3])\n";
             this.pago_3_calculate.Name = "pago_3_calculate";
             // 
             // pago_4_calculate
             // 
-            this.pago_4_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.pago_4_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.pago_4_calculate.Expression = "sum([Pago 4])\n";
             this.pago_4_calculate.Name = "pago_4_calculate";
             // 
             // saldo_total_calculate
             // 
-            this.saldo_total_calculate.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.saldo_total_calculate.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.saldo_total_calculate.Expression = "sum([saldo_calculate])\n";
             this.saldo_total_calculate.Name = "saldo_total_calculate";
             // 
@@ -709,7 +709,7 @@
             // 
             // acumulado_calculado
             // 
-            this.acumulado_calculado.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.acumulado_calculado.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.acumulado_calculado.Expression = "sum([Acumulado])\n";
             this.acumulado_calculado.Name = "acumulado_calculado";
             // 
@@ -785,7 +785,7 @@
             this.acumulado_calculado});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.sqlDataSource1});
-            this.DataMember = "buscar_cuenta_corriente_por_id_cliente";
+            this.DataMember = "cliente_cuenta_corriente_buscar_por_idCliente";
             this.DataSource = this.sqlDataSource1;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
             this.Margins = new System.Drawing.Printing.Margins(32, 37, 28, 75);

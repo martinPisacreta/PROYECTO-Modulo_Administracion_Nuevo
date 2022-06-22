@@ -23,7 +23,7 @@ namespace Modulo_Administracion.Vista
         articulo articulo;
         familia familia;
 
-       
+
 
         int Accion;
 
@@ -2310,7 +2310,7 @@ namespace Modulo_Administracion.Vista
                         {
                             if (factura.cod_tipo_factura != Convert.ToInt32(cbTipoFactura.SelectedValue)) //y el tipo de factura seleccionado es distinto al que esta cargado en "factura" (al ingresar al modulo) ...
                             {
-                                txtNroFactura.Text = Logica_Factura.ult_nro_factura_no_usado(Convert.ToDecimal(cbTipoFactura.SelectedValue),true).ToString(); //el TRUE indica que voy a buscar los datos a la tabla factura
+                                txtNroFactura.Text = Logica_Factura.ult_nro_factura_no_usado(Convert.ToDecimal(cbTipoFactura.SelectedValue), true).ToString(); //el TRUE indica que voy a buscar los datos a la tabla factura
                             }
                             else
                             {

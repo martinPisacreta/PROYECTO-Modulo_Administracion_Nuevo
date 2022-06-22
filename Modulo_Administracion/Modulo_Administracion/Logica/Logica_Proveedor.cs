@@ -1,10 +1,8 @@
 ﻿using Modulo_Administracion.Clases;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Modulo_Administracion.Logica
@@ -12,7 +10,7 @@ namespace Modulo_Administracion.Logica
     static class Logica_Proveedor
     {
 
-       
+
         public static bool alta_proveedor(proveedor proveedor)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -174,7 +172,7 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.proveedor_dir.Count > 0)
                         {
-                            
+
                             if (Logica_Proveedor_Direccion.dar_de_baja_proveedorDireccion(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja direccion/es del proveedor");
@@ -186,7 +184,7 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.proveedor_datos.Count > 0)
                         {
-                            
+
                             if (Logica_Proveedor_Datos.dar_de_baja_proveedorDatos(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja dato/s del proveedor");
@@ -199,7 +197,7 @@ namespace Modulo_Administracion.Logica
                     {
                         if (proveedor.marca.Count > 0)
                         {
-                            
+
                             if (Logica_Marca.dar_de_baja_marcas(proveedor.id_proveedor, db) == false)
                             {
                                 throw new Exception("Error al dar de baja marcas del proveedor");
@@ -282,17 +280,17 @@ namespace Modulo_Administracion.Logica
             var proveedores = (from p in db.proveedor
                                where p.razon_social.Contains(txtBusqueda) &&
                                      p.sn_activo == -1
-                              select new
-                              {
-                                  id_proveedor = p.id_proveedor,
-                                  razon_social = p.razon_social,
-                                  sn_activo = p.sn_activo,
-                                  fec_ult_modif = p.fec_ult_modif,
-                                  accion = p.accion,
-                                  path_img = p.path_img,
-                                  id_condicion_ante_iva = p.id_condicion_ante_iva,
-                                  id_condicion_pago = p.id_condicion_pago
-                              }).ToList();
+                               select new
+                               {
+                                   id_proveedor = p.id_proveedor,
+                                   razon_social = p.razon_social,
+                                   sn_activo = p.sn_activo,
+                                   fec_ult_modif = p.fec_ult_modif,
+                                   accion = p.accion,
+                                   path_img = p.path_img,
+                                   id_condicion_ante_iva = p.id_condicion_ante_iva,
+                                   id_condicion_pago = p.id_condicion_pago
+                               }).ToList();
 
 
             DataTable dt = new DataTable();

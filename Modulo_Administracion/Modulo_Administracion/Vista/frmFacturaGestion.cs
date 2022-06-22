@@ -5,7 +5,6 @@ using Modulo_Administracion.Clases.Custom;
 using Modulo_Administracion.Logica;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
@@ -16,8 +15,8 @@ namespace Modulo_Administracion.Vista
     {
 
         factura factura = null;
-       
-       
+
+
         int Accion;
 
         string opcion_1_dropDownButton = "Nueva Factura";

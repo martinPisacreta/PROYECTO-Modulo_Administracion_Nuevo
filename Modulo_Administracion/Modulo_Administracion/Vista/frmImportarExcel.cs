@@ -295,7 +295,7 @@ namespace Modulo_Administracion
                 Cursor.Current = Cursors.WaitCursor;
                 form.Show();
 
-              
+
                 dgvExcel.DataSource = Logica_Articulo.alta_articulos_por_metodo_subida_excelMaxi(GetDataGridViewAsDataTable(dgvExcel)).Tables[0];
                 dgvExcel.Refresh();
 

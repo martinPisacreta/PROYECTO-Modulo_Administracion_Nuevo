@@ -12,8 +12,8 @@ namespace Modulo_Administracion
     {
         vendedor vendedor = null;
         cliente cliente = null;
-        
-      
+
+
 
         int Accion;
 
@@ -332,7 +332,7 @@ namespace Modulo_Administracion
             {
                 if (e.RowIndex >= 0)
                 {
-                    cliente = Logica_Cliente.buscar_cliente(Convert.ToInt32(dgvCliente.Rows[e.RowIndex].Cells[0].Value),null);
+                    cliente = Logica_Cliente.buscar_cliente(Convert.ToInt32(dgvCliente.Rows[e.RowIndex].Cells[0].Value), null);
 
                     txtCodigo.Text = cliente.id_cliente.ToString();
                     txtNombreFantasia.Text = cliente.nombre_fantasia.ToString();

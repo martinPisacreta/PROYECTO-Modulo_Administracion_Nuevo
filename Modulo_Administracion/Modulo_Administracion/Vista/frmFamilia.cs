@@ -12,8 +12,8 @@ namespace Modulo_Administracion
 
         marca marca = null;
         familia familia = null;
-        
-        
+
+
         int Accion;
 
         decimal algoritmo1;

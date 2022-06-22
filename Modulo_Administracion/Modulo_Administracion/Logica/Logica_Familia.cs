@@ -11,7 +11,7 @@ namespace Modulo_Administracion.Logica
 
     static class Logica_Familia
     {
-       
+
         public static bool alta_familia(familia familia)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -74,7 +74,7 @@ namespace Modulo_Administracion.Logica
 
         public static bool modificar_familia(familia familia, decimal coeficiente)
         {
-            
+
 
 
 
@@ -131,7 +131,7 @@ namespace Modulo_Administracion.Logica
 
         public static bool dar_de_baja_familia(familia familia, decimal coeficiente)
         {
-          
+
 
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -153,7 +153,7 @@ namespace Modulo_Administracion.Logica
                     {
                         throw new Exception("Error al dar de baja articulos de familia");
                     }
-                    
+
                     db.SaveChanges();
                     dbContextTransaction.Commit();
                     bandera = true;
@@ -256,7 +256,7 @@ namespace Modulo_Administracion.Logica
 
                 foreach (familia f in lista_familias)
                 {
-                
+
                     if (Logica_Articulo.dar_de_baja_articulos(f.id_tabla_familia, db) == false)
                     {
                         throw new Exception("Error al dar de baja articulos de la familia");
@@ -365,7 +365,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-      
+
         public static familia buscar_familias_activas_con_txtDescFamilia_repetido(string txt_desc_familia, int id_tabla_familia)
         {
 
@@ -373,8 +373,8 @@ namespace Modulo_Administracion.Logica
             try
             {
 
-                familia familia = db.familia.FirstOrDefault(f => f.txt_desc_familia.Contains(txt_desc_familia) && 
-                                                                 f.sn_activo == -1 && 
+                familia familia = db.familia.FirstOrDefault(f => f.txt_desc_familia.Contains(txt_desc_familia) &&
+                                                                 f.sn_activo == -1 &&
                                                                  f.id_tabla_familia != id_tabla_familia);
 
                 return familia;

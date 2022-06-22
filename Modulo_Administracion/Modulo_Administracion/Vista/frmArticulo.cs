@@ -12,7 +12,7 @@ namespace Modulo_Administracion
 
         articulo articulo = null;
 
-       
+
 
         familia familia;
 
@@ -581,7 +581,7 @@ namespace Modulo_Administracion
             try
             {
 
-               
+
                 if (txtPorcentaje.Text == "")
                 {
                     txtPorcentaje.Focus();

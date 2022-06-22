@@ -12,7 +12,7 @@ namespace Modulo_Administracion
     {
 
         proveedor proveedor = null;
-       
+
         int Accion;
 
 

@@ -23,9 +23,9 @@ namespace Modulo_Administracion
         public List<proveedor_dir> lista_aux_proveedor = new List<proveedor_dir>();
         public List<cliente_dir> lista_aux_cliente = new List<cliente_dir>();
 
-        
-        
-        
+
+
+
 
         int tipo; //1 es proveedor , 2 es cliente
         public frmDireccion()

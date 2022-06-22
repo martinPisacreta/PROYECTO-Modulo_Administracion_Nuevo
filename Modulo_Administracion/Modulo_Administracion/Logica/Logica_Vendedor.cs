@@ -2,10 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Modulo_Administracion.Logica
@@ -165,8 +163,8 @@ namespace Modulo_Administracion.Logica
             try
             {
 
-                vendedor vendedor = db.vendedor.FirstOrDefault(p => p.nombre == nombre && 
-                                                                    p.sn_activo == -1 && 
+                vendedor vendedor = db.vendedor.FirstOrDefault(p => p.nombre == nombre &&
+                                                                    p.sn_activo == -1 &&
                                                                     p.id_vendedor != id_vendedor);
 
                 return vendedor;

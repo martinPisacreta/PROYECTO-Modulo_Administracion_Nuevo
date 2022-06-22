@@ -9,7 +9,7 @@ namespace Modulo_Administracion.Logica
 {
     static class Logica_Marca
     {
-        
+
 
         public static bool alta_marca(marca marca)
         {
@@ -117,12 +117,12 @@ namespace Modulo_Administracion.Logica
                     marca_db.sn_activo = 0;
                     marca_db.accion = "ELIMINACION";
 
-                    
+
                     if (Logica_Familia.dar_de_baja_familias(marca.id_tabla_marca, db) == false)
                     {
                         throw new Exception("Error al dar de baja familias de la marca");
                     }
-                    
+
 
                     marca_db.fec_ult_modif = DateTime.Now;
                     marca_db.path_img = marca.path_img;
@@ -158,7 +158,7 @@ namespace Modulo_Administracion.Logica
 
                 foreach (marca m in lista_marcas)
                 {
-                    
+
                     if (Logica_Familia.dar_de_baja_familias(m.id_tabla_marca, db) == false)
                     {
                         throw new Exception("Error al dar de baja familias de la marca");
@@ -265,7 +265,7 @@ namespace Modulo_Administracion.Logica
             }
 
         }
-        
+
         public static marca buscar_marcas_activas_con_txtDescMarca_repetido(string txt_desc_marca, int id_tabla_marca)
         {
 
@@ -273,8 +273,8 @@ namespace Modulo_Administracion.Logica
             try
             {
 
-                marca marca = db.marca.FirstOrDefault(m =>  m.txt_desc_marca.Contains(txt_desc_marca) && 
-                                                            m.sn_activo == -1 && 
+                marca marca = db.marca.FirstOrDefault(m => m.txt_desc_marca.Contains(txt_desc_marca) &&
+                                                            m.sn_activo == -1 &&
                                                             m.id_tabla_marca != id_tabla_marca);
 
                 return marca;

@@ -13,8 +13,8 @@ namespace Modulo_Administracion.Logica
     static class Logica_Cliente_Cuenta_Corriente
     {
 
-       
-     
+
+
         public static bool alta_movimiento_CCC(factura factura, Modulo_AdministracionContext db) // esta funcion se relaciona 100% al dar de alta una factura en el sistema
         {
 
@@ -201,7 +201,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-     
+
 
         public static DataSet buscar_movimientos_CCC(int id_cliente, int tipo)
         {

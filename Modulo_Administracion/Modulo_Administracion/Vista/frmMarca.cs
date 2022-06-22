@@ -10,8 +10,8 @@ namespace Modulo_Administracion
     {
         proveedor proveedor = null;
         marca marca = null;
-        
-     
+
+
         int Accion;
 
 

@@ -1,9 +1,7 @@
 ﻿using Modulo_Administracion.Clases;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Modulo_Administracion.Logica
@@ -139,7 +137,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-     
+
 
         public static bool dar_de_baja_proveedorDireccion(int id_proveedor, Modulo_AdministracionContext db)
         {

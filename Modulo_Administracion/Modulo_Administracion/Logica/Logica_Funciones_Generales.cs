@@ -97,7 +97,7 @@ namespace Modulo_Administracion.Logica
                 }
                 return rv;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -108,7 +108,7 @@ namespace Modulo_Administracion.Logica
         {
             string FilePath = "";
             cliente cliente = null;
-         
+
             try
             {
                 string anio = factura.fecha.ToString("yyyy", CultureInfo.CreateSpecificCulture("es"));
@@ -140,7 +140,7 @@ namespace Modulo_Administracion.Logica
                     Directory.CreateDirectory(FilePath);
                 }
 
-                cliente = Logica_Cliente.buscar_cliente(factura.id_cliente,null);
+                cliente = Logica_Cliente.buscar_cliente(factura.id_cliente, null);
                 FilePath = FilePath + "\\" + cliente.nombre_fantasia + " - " + factura.ttipo_factura.letra + factura.nro_factura.ToString() + ".pdf";
 
                 return FilePath;

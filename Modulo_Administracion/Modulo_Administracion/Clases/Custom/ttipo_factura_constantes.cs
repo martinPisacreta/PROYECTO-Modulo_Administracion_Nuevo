@@ -3,7 +3,7 @@ namespace Modulo_Administracion.Clases.Custom
 {
     public static class ttipo_factura_constantes
     {
-      
+
         public static string s_valor_remito = "REMITO";
         public static string s_valor_nota_credito = "NOTA DE CREDITO";
         public static string s_valor_nota_debito = "NOTA DE DEBITO";
@@ -24,6 +24,6 @@ namespace Modulo_Administracion.Clases.Custom
         public static int i_valor_nota_credito_sin_comprobante = 10;
         public static int i_valor_nota_debito_sin_comprobante = 11;
 
-       
+
     }
 }

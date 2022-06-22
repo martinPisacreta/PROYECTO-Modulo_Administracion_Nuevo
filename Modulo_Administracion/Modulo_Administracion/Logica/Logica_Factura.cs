@@ -13,7 +13,7 @@ namespace Modulo_Administracion.Logica
     static class Logica_Factura
     {
 
-     
+
 
         public static factura alta_factura(factura factura)
         {
@@ -26,7 +26,7 @@ namespace Modulo_Administracion.Logica
             using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
             {
                 ttipo_factura ttipo_factura_bd = db.ttipo_factura.FirstOrDefault(f => f.cod_tipo_factura == factura.cod_tipo_factura);
-                nro_factura = ult_nro_factura_no_usado(factura.cod_tipo_factura,true); //voy a buscar el ult_nro_factura_no_usado de la tabla factura
+                nro_factura = ult_nro_factura_no_usado(factura.cod_tipo_factura, true); //voy a buscar el ult_nro_factura_no_usado de la tabla factura
 
                 try
                 {
@@ -104,7 +104,7 @@ namespace Modulo_Administracion.Logica
         }
 
         //EN ESTE METODO VOY A BUSCAR A LA TABLA FACTURA O CLIENTE_CUENTA_CORRIENTE
-        public static Int32 ult_nro_factura_no_usado(decimal cod_tipo_factura,bool sn_busco_en_tabla_FACTURA)
+        public static Int32 ult_nro_factura_no_usado(decimal cod_tipo_factura, bool sn_busco_en_tabla_FACTURA)
         {
 
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
@@ -267,7 +267,7 @@ namespace Modulo_Administracion.Logica
 
             }
             catch (Exception ex)
-            { 
+            {
                 throw ex;
             }
             finally
@@ -383,12 +383,12 @@ namespace Modulo_Administracion.Logica
         public static bool eliminar_factura(factura factura)
         {
 
-           
+
             bool bandera = false;
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
             using (DbContextTransaction dbContextTransaction = db.Database.BeginTransaction())
             {
-              
+
                 try
                 {
 

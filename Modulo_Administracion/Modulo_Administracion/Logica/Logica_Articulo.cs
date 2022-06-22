@@ -10,8 +10,8 @@ namespace Modulo_Administracion.Logica
 {
     static class Logica_Articulo
     {
-      
-        
+
+
         public static void modificar_articulos_por_metodo_actualizar_porcentaje(DataTable dt)
         {
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
@@ -194,31 +194,31 @@ namespace Modulo_Administracion.Logica
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
             var articulo = (from a in db.articulo
-                             join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
-                             where a.codigo_articulo_marca == codigo_articulo_marca &&
-                                   a.codigo_articulo == codigo_articulo &&
-                                   a.fec_baja == null //ARTICULOS ACTIVOS
-                             select new
-                             {
+                            join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
+                            where a.codigo_articulo_marca == codigo_articulo_marca &&
+                                  a.codigo_articulo == codigo_articulo &&
+                                  a.fec_baja == null //ARTICULOS ACTIVOS
+                            select new
+                            {
 
-                                 descripcion_articulo = a.descripcion_articulo,
-                                 precio_lista = a.precio_lista,
-                                 id_tabla_familia = a.id_tabla_familia,
-                                 id_articulo = a.id_articulo,
+                                descripcion_articulo = a.descripcion_articulo,
+                                precio_lista = a.precio_lista,
+                                id_tabla_familia = a.id_tabla_familia,
+                                id_articulo = a.id_articulo,
 
-                                 algoritmo_1 = f.algoritmo_1,
-                                 algoritmo_2 = f.algoritmo_2,
-                                 algoritmo_3 = f.algoritmo_3,
-                                 algoritmo_4 = f.algoritmo_4,
-                                 algoritmo_5 = f.algoritmo_5,
-                                 algoritmo_6 = f.algoritmo_6,
-                                 algoritmo_7 = f.algoritmo_7,
-                                 algoritmo_8 = f.algoritmo_8,
-                                 algoritmo_9 = f.algoritmo_9,
-                             }).FirstOrDefault();
+                                algoritmo_1 = f.algoritmo_1,
+                                algoritmo_2 = f.algoritmo_2,
+                                algoritmo_3 = f.algoritmo_3,
+                                algoritmo_4 = f.algoritmo_4,
+                                algoritmo_5 = f.algoritmo_5,
+                                algoritmo_6 = f.algoritmo_6,
+                                algoritmo_7 = f.algoritmo_7,
+                                algoritmo_8 = f.algoritmo_8,
+                                algoritmo_9 = f.algoritmo_9,
+                            }).FirstOrDefault();
 
 
-            
+
             DataTable dt = new DataTable();
             dt.Columns.Add("descripcion_articulo");
             dt.Columns.Add("precio_lista");
@@ -281,7 +281,7 @@ namespace Modulo_Administracion.Logica
             //    }
             //}
         }
-        
+
         public static bool dar_de_baja_articulos(int id_tabla_familia, Modulo_AdministracionContext db) //doy de baja los articulos de una familia
         {
 
@@ -321,7 +321,7 @@ namespace Modulo_Administracion.Logica
         }
 
 
-       
+
 
         public static DataSet buscar_articulos_activos(int id_proveedor, int id_tabla_marca, int id_tabla_familia, string cod_articulo, string descripcion)
         {
@@ -373,30 +373,30 @@ namespace Modulo_Administracion.Logica
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
             var articulos = (from a in db.articulo
-                            join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
-                            where a.fec_baja == null //ARTICULOS ACTIVOS
-                            orderby a.id_orden ascending
-                            select new
-                            {
-                                codigo_articulo_marca = a.codigo_articulo_marca,
-                                codigo_articulo = a.codigo_articulo,
-                                descripcion_articulo = a.descripcion_articulo,
-                                precio_lista = a.precio_lista,
-                                id_tabla_familia = a.id_tabla_familia,
-                                sn_oferta = a.sn_oferta,
-                                path_img = a.path_img, //ESTE DATO SOLAMENTE EXISTE EN LA BD DE LA WEB
-                                id_articulo = a.id_articulo,
-                                id_orden = a.id_orden,
-                                algoritmo_1 = f.algoritmo_1,
-                                algoritmo_2 = f.algoritmo_2,
-                                algoritmo_3 = f.algoritmo_3,
-                                algoritmo_4 = f.algoritmo_4,
-                                algoritmo_5 = f.algoritmo_5,
-                                algoritmo_6 = f.algoritmo_6,
-                                algoritmo_7 = f.algoritmo_7,
-                                algoritmo_8 = f.algoritmo_8,
-                                algoritmo_9 = f.algoritmo_9,
-                            }).ToList();
+                             join f in db.familia on a.id_tabla_familia equals f.id_tabla_familia
+                             where a.fec_baja == null //ARTICULOS ACTIVOS
+                             orderby a.id_orden ascending
+                             select new
+                             {
+                                 codigo_articulo_marca = a.codigo_articulo_marca,
+                                 codigo_articulo = a.codigo_articulo,
+                                 descripcion_articulo = a.descripcion_articulo,
+                                 precio_lista = a.precio_lista,
+                                 id_tabla_familia = a.id_tabla_familia,
+                                 sn_oferta = a.sn_oferta,
+                                 path_img = a.path_img, //ESTE DATO SOLAMENTE EXISTE EN LA BD DE LA WEB
+                                 id_articulo = a.id_articulo,
+                                 id_orden = a.id_orden,
+                                 algoritmo_1 = f.algoritmo_1,
+                                 algoritmo_2 = f.algoritmo_2,
+                                 algoritmo_3 = f.algoritmo_3,
+                                 algoritmo_4 = f.algoritmo_4,
+                                 algoritmo_5 = f.algoritmo_5,
+                                 algoritmo_6 = f.algoritmo_6,
+                                 algoritmo_7 = f.algoritmo_7,
+                                 algoritmo_8 = f.algoritmo_8,
+                                 algoritmo_9 = f.algoritmo_9,
+                             }).ToList();
 
 
             DataTable dt = new DataTable();

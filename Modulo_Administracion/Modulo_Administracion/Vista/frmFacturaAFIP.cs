@@ -37,8 +37,8 @@ namespace Modulo_Administracion.Vista
         articulo articulo;
         familia familia;
 
-      
-        
+
+
 
         int Accion;
 
@@ -1176,7 +1176,7 @@ namespace Modulo_Administracion.Vista
         {
             frmEspere form = new frmEspere();
             bool cierro_el_modulo = false;
- 
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;

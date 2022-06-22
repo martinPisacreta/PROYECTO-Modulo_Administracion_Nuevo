@@ -1,12 +1,8 @@
 ﻿using Modulo_Administracion.Clases;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Modulo_Administracion.Logica
 {
@@ -16,15 +12,15 @@ namespace Modulo_Administracion.Logica
         {
             try
             {
-               
+
                 Modulo_AdministracionContext db = new Modulo_AdministracionContext();
                 string calle_busqueda = Calle[0].ToString();
                 var calles = (from tc in db.tcalle
                               where tc.txt_desc.Contains(calle_busqueda)
-                              select new 
+                              select new
                               {
-                                tc.cod_calle,
-                                tc.txt_desc
+                                  tc.cod_calle,
+                                  tc.txt_desc
                               }).ToList();
 
 
@@ -44,7 +40,7 @@ namespace Modulo_Administracion.Logica
                 ds.Tables.Add(dt);
                 return ds;
 
-               
+
             }
             catch (Exception ex)
             {
@@ -60,17 +56,17 @@ namespace Modulo_Administracion.Logica
             int cod_provincia = Convert.ToInt32(Municipio[1].ToString());
             string municipio_busqueda = Municipio[2].ToString();
 
-           
+
             var municipios = (from tm in db.tmunicipio
                               where tm.cod_pais == cod_pais &&
                                     tm.cod_provincia == cod_provincia &&
                                     tm.txt_desc.Contains(municipio_busqueda)
-                          select new
-                          {
-                              tm.cod_municipio,
-                              tm.txt_desc,
-                              tm.cod_divipola
-                          }).Distinct().ToList();
+                              select new
+                              {
+                                  tm.cod_municipio,
+                                  tm.txt_desc,
+                                  tm.cod_divipola
+                              }).Distinct().ToList();
 
 
             DataTable dt = new DataTable();
@@ -101,7 +97,7 @@ namespace Modulo_Administracion.Logica
 
 
             var provincias = (from tp in db.tprovincia
-                              where tp.cod_pais == cod_pais && 
+                              where tp.cod_pais == cod_pais &&
                                     tp.txt_desc.Contains(provincia_busqueda)
                               select new
                               {
@@ -124,14 +120,14 @@ namespace Modulo_Administracion.Logica
 
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
-            return ds;    
+            return ds;
         }
 
         public static DataSet buscar_pais_por_txtDesc(List<string> Pais)
         {
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
 
-          
+
             string pais_busqueda = Pais[0].ToString();
 
 
@@ -139,8 +135,8 @@ namespace Modulo_Administracion.Logica
                           where tp.txt_desc.Contains(pais_busqueda)
                           select new
                           {
-                            tp.cod_pais,
-                            tp.txt_desc
+                              tp.cod_pais,
+                              tp.txt_desc
                           }).ToList();
 
 

@@ -9,7 +9,6 @@ using Modulo_Administracion.Logica;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Windows.Forms;
 
 namespace Modulo_Administracion.Vista
@@ -40,7 +39,7 @@ namespace Modulo_Administracion.Vista
                 gridView1.Columns["Id_factura"].Visible = false;
 
                 gridView1.Columns["Fecha"].Width = 100;
-                gridView1.Columns["Tipo Factura"].Width = 120;
+                gridView1.Columns["Tipo Factura"].Width = 250;
                 gridView1.Columns["Pago 1"].Width = 100;
                 gridView1.Columns["Pago 2"].Width = 100;
                 gridView1.Columns["Pago 3"].Width = 100;
@@ -217,7 +216,7 @@ namespace Modulo_Administracion.Vista
 
                 return cod_tipo_factura;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -244,7 +243,7 @@ namespace Modulo_Administracion.Vista
                     {
                         cod_tipo_factura = convert_tipoFactura_de_STRING_a_INT(view.GetRowCellValue(e.RowHandle, "Tipo Factura").ToString());
 
-                        Int64 ultimo_nro_factura_vieja = Logica_Factura.ult_nro_factura_no_usado(cod_tipo_factura,false); //el FALSE indica que voy a buscar los datos a la tabla cliente_cuenta_corriente
+                        Int64 ultimo_nro_factura_vieja = Logica_Factura.ult_nro_factura_no_usado(cod_tipo_factura, false); //el FALSE indica que voy a buscar los datos a la tabla cliente_cuenta_corriente
                         view.SetRowCellValue(e.RowHandle, view.Columns["Nro Factura"], ultimo_nro_factura_vieja);
                     }
                 }
@@ -628,7 +627,7 @@ namespace Modulo_Administracion.Vista
                 gridControl1.RepositoryItems.Add(_riEditor);
                 gridView1.Columns[3].ColumnEdit = _riEditor;
 
-                
+
             }
             catch (Exception ex)
             {
@@ -713,7 +712,7 @@ namespace Modulo_Administracion.Vista
                 }
 
                 //SI ESTOY AGREANDO UN MOVIMIENTO , NO VOY A PODER EDITAR EL NRO FACTURA , PORQUE ESE VALOR LO TRAIGO DE LA BD
-                if(id == "" && gridView1.FocusedColumn.FieldName == "Nro Factura")
+                if (id == "" && gridView1.FocusedColumn.FieldName == "Nro Factura")
                 {
                     e.Cancel = true;
                 }

@@ -1,10 +1,8 @@
 ﻿using Modulo_Administracion.Clases;
 
 using System;
-using System.Configuration;
 using System.Data;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Modulo_Administracion.Logica
@@ -12,7 +10,7 @@ namespace Modulo_Administracion.Logica
     static class Logica_Cliente
     {
 
-       
+
 
         public static bool alta_cliente(cliente cliente)
         {
@@ -195,7 +193,7 @@ namespace Modulo_Administracion.Logica
                     {
                         if (cliente.cliente_datos.Count > 0)
                         {
-                            
+
                             if (Logica_Cliente_Datos.dar_de_baja_clienteDatos(cliente.id_cliente, db) == false)
                             {
                                 throw new Exception("Error al dar de baja dato/s del cliente");
@@ -208,7 +206,7 @@ namespace Modulo_Administracion.Logica
                     {
                         if (cliente.cliente_dir.Count > 0)
                         {
-                            
+
                             if (Logica_Cliente_Direccion.dar_de_baja_clienteDireccion(cliente.id_cliente, db) == false)
                             {
                                 throw new Exception("Error al dar de baja direccion/es del cliente");
@@ -273,8 +271,8 @@ namespace Modulo_Administracion.Logica
             try
             {
                 //si esto devuelve algo , quiere decir que aparte del id_cliente que se envio por parametro , existe otro con ese mismo nombre_fantasia 
-                cliente cliente = db.cliente.FirstOrDefault(p => p.nombre_fantasia == nombre_fantasia && 
-                                                                 p.sn_activo == -1 && 
+                cliente cliente = db.cliente.FirstOrDefault(p => p.nombre_fantasia == nombre_fantasia &&
+                                                                 p.sn_activo == -1 &&
                                                                  p.id_cliente != id_cliente);
 
                 return cliente;
@@ -297,8 +295,8 @@ namespace Modulo_Administracion.Logica
             try
             {
                 //si esto devuelve algo , quiere decir que aparte del id_cliente que se envio por parametro , existe otro con ese mismo razon_social 
-                cliente cliente = db.cliente.FirstOrDefault(p => p.razon_social == razon_social && 
-                                                                 p.sn_activo == -1 
+                cliente cliente = db.cliente.FirstOrDefault(p => p.razon_social == razon_social &&
+                                                                 p.sn_activo == -1
                                                                  && p.id_cliente != id_cliente);
 
                 return cliente;
@@ -322,7 +320,7 @@ namespace Modulo_Administracion.Logica
             try
             {
                 cliente cliente = null;
-                if(db == null)
+                if (db == null)
                 {
                     Modulo_AdministracionContext _db = new Modulo_AdministracionContext();
                     cliente = _db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
@@ -331,7 +329,7 @@ namespace Modulo_Administracion.Logica
                 {
                     cliente = db.cliente.FirstOrDefault(p => p.id_cliente == id_cliente);
                 }
-              
+
 
                 return cliente;
             }

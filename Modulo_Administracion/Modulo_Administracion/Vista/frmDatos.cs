@@ -21,7 +21,7 @@ namespace Modulo_Administracion
         public List<proveedor_datos> lista_aux_proveedor = new List<proveedor_datos>();
         public List<cliente_datos> lista_aux_cliente = new List<cliente_datos>();
 
-       
+
 
         int tipo; //1 es proveedor , 2 es cliente
 

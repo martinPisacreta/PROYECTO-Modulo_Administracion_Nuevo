@@ -10,7 +10,7 @@ namespace Modulo_Administracion
     {
 
         vendedor vendedor = null;
-        
+
         int Accion;
 
 
