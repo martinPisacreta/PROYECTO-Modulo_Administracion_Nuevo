@@ -67,7 +67,7 @@ namespace Modulo_Administracion.Logica
 
         //SI "busqueda" ES 1 -> BUSCO LOS ARTICULOS EXISTENTES EN LA BASE DE DATOS EN RELACION A LA TABLA #tmp_lista_precios_proveedor
         //SI "busqueda" ES 2 -> BUSCO LOS ARTICULOS INEEXISTENTES EN LA BASE DE DATOS EN RELACION A LA TABLA #tmp_lista_precios_proveedor
-        public static DataSet buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(DataTable dt, int busqueda, int id_proveedor)
+        public static DataSet buscar_articulos_en_relacion_a_tmpListaPreciosProveedor(DataTable dt,int id_proveedor)
         {
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Modulo_AdministracionContext"].ConnectionString))
             {
@@ -85,9 +85,10 @@ namespace Modulo_Administracion.Logica
                                                                                  "create table #tmp_lista_precios_proveedor" +
                                                                                  "(" +
 
-                                                                                    "codigo_articulo nvarchar(255) NULL," +
-                                                                                    "descripcion_articulo nvarchar(255) NULL," +
-                                                                                    "precio_lista float NULL" +
+                                                                                    "codigo_articulo nvarchar(100) NULL," +
+                                                                                    "descripcion_articulo nvarchar(400) NULL," +
+                                                                                    "precio_lista nvarchar(22) NULL," +
+                                                                                    "id_proveedor int NULL" +
                                                                                 ")", connection, sqlTransaction
                                                                                );
 
@@ -105,12 +106,6 @@ namespace Modulo_Administracion.Logica
 
                             SqlCommand command = new SqlCommand("articulo_buscar_en_relacion_a_tmpListaPreciosProveedor", connection, sqlTransaction);
                             SqlParameter param = new SqlParameter();
-                            param.ParameterName = "@busqueda";
-                            param.Value = busqueda;
-                            param.SqlDbType = SqlDbType.Int;
-                            command.Parameters.Add(param);
-
-                            param = new SqlParameter();
                             param.ParameterName = "@id_proveedor";
                             param.Value = id_proveedor;
                             param.SqlDbType = SqlDbType.Int;
@@ -124,8 +119,8 @@ namespace Modulo_Administracion.Logica
                             adapter.SelectCommand = command;
                             adapter.Fill(dataSet);
 
-                            sqlTransaction.Commit();
 
+                            sqlTransaction.Commit();
                             return dataSet;
 
                         }

@@ -370,7 +370,7 @@
             this.MinimizeBox = false;
             this.Name = "frmArticulo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Articulo";
+            this.Text = "Artículo";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvArticulo)).EndInit();
