@@ -122,7 +122,9 @@ namespace Modulo_Administracion.Vista
         private void btnImportarExcelProveedor_Click(object sender, EventArgs e)
         {
             frmImportarExcelProveedor form = new frmImportarExcelProveedor();
+            form.ParentForm = this;
             form.Show();
+            this.Hide();
         }
 
         private void btnFacturar_Click(object sender, EventArgs e)

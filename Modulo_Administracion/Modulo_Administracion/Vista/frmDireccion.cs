@@ -718,16 +718,15 @@ namespace Modulo_Administracion
             try // Este metodo me busca segun el textbox q lo llame
             {
 
-                frmBuscar frm = new frmBuscar();
-                frm.Text = "Buscar Dirección";
-                frm.btnNuevo.Enabled = false;
+                frmBuscar frm = null; 
                 string txtName = ((Button)sender).Name;
 
                 switch (txtName)
                 {
                     case "btnBuscarCalle":
                         {
-                            frm.Text = "Buscar Calle";
+
+                            frm = new frmBuscar("Buscar Calle", false);
                             if (tipo == 1)
                             {
                                 frm.IniciarForm(Logica_Geografia.buscar_calles_por_txtDesc(Valores).Tables[0], 2);
@@ -741,7 +740,7 @@ namespace Modulo_Administracion
 
                     case "btnBuscarProvincia":
                         {
-                            frm.Text = "Buscar Provincia";
+                            frm = new frmBuscar("Buscar Provincia", false);
                             if (tipo == 1)
                             {
                                 frm.IniciarForm(Logica_Geografia.buscar_provincia_por_codPais_y_txtDesc(Valores).Tables[0], 2);
@@ -755,7 +754,7 @@ namespace Modulo_Administracion
 
                     case "btnBuscarPais":
                         {
-                            frm.Text = "Buscar Pais";
+                            frm = new frmBuscar("Buscar Pais", false);
                             if (tipo == 1)
                             {
                                 frm.IniciarForm(Logica_Geografia.buscar_pais_por_txtDesc(Valores).Tables[0], 2);
@@ -769,7 +768,7 @@ namespace Modulo_Administracion
 
                     case "btnBuscarLoc":
                         {
-                            frm.Text = "Buscar Municipio";
+                            frm = new frmBuscar("Buscar Municipio", false);
                             if (tipo == 1)
                             {
                                 frm.IniciarForm(Logica_Geografia.buscar_municipio_por_codPais_codProvincia_y_txtDesc(Valores).Tables[0], 2);

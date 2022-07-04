@@ -469,11 +469,19 @@ namespace Modulo_Administracion.Logica
             {
 
                 bool bandera = false;
-                articulo articulo_db = db.articulo.FirstOrDefault(f => f.id_articulo == articulo.id_articulo); //listo
-                articulo_db.codigo_articulo = articulo.codigo_articulo;
-                articulo_db.descripcion_articulo = articulo.descripcion_articulo;
-                articulo_db.precio_lista = articulo.precio_lista;
+                articulo articulo_db = db.articulo.FirstOrDefault(f => f.id_articulo == articulo.id_articulo);
+
+                if (articulo.descripcion_articulo != null)
+                {
+                    articulo_db.descripcion_articulo = articulo.descripcion_articulo;
+                }
+                if(articulo.precio_lista != null)
+                {
+                    articulo_db.precio_lista = articulo.precio_lista;
+                }
+               
                 articulo_db.fecha_ult_modif = DateTime.Now;
+                articulo_db.accion = "MODIFICACION";
                 db.SaveChanges();
                 bandera = true;
 

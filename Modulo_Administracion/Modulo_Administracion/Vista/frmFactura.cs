@@ -431,7 +431,7 @@ namespace Modulo_Administracion.Vista
                 txtPorcentaje.Text = "";
                 txtAumento_Descuento.Text = "";
 
-                txtCliente.Focus();
+                dgvFactura.Focus();
 
             }
             catch (Exception ex)
@@ -1207,56 +1207,26 @@ namespace Modulo_Administracion.Vista
         {
             try
             {
-                frmBuscar frm = new frmBuscar();
-                frm.Text = "Buscar Cliente";
-                frm.btnNuevo.Enabled = false;
-
+                frmBuscar frm = new frmBuscar("Buscar Cliente",false,nombre_fantasia);
+               
 
                 DataSet ds = Logica_Cliente.buscar_clientes_activos(nombre_fantasia);
 
-                if (ds.Tables[0].Rows.Count > 0)
+                if (ds.Tables[0].Rows.Count > 0) //si hay mas de un cliente posible....
                 {
                     frm.IniciarForm(ds.Tables[0], 1);
                 }
-                else
+                else //si no hay ningun resultado , pregunto si hay que dar de alta el cliente
                 {
-                    DialogResult dialogResult = MessageBox.Show("El cliente no existe , ¿desea darlo de alta?", "Atención", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                    if(alta_cliente_forma_rapida(nombre_fantasia) == true)
                     {
-                        cliente cliente_a_insertar = new cliente();
-                        cliente_a_insertar.razon_social = nombre_fantasia;
-                        cliente_a_insertar.nombre_fantasia = nombre_fantasia;
-                        cliente_a_insertar.id_condicion_ante_iva = 13;
-                        cliente_a_insertar.id_condicion_pago = 1;
-                        cliente_a_insertar.sn_activo = -1;
-                        cliente_a_insertar.fec_ult_modif = DateTime.Now;
-                        cliente_a_insertar.accion = "ALTA";
-                        cliente_a_insertar.id_condicion_factura = 2;
-                        cliente_a_insertar.id_tipo_cliente = 2;
-
-                        if (Logica_Cliente.alta_cliente(cliente_a_insertar) == false)
-                        {
-                            MessageBox.Show("Error al grabar el cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        else
-                        {
-                            txtClienteId.Text = Logica_Cliente.buscar_cliente(txtCliente.Text).id_cliente.ToString();
-                            MessageBox.Show("Grabación exitosa del cliente", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
-                        }
-                    }
-                    else if (dialogResult == DialogResult.No)
-                    {
-                        return;
+                        MessageBox.Show("Grabación exitosa del cliente", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
+                
 
-
-
-
-
-                if (frm.DialogResult == DialogResult.OK)
+                //LLEGO ACA CUANDO SE CIERRA EL frmBuscar
+                if (frm.DialogResult == DialogResult.OK) //LLEGO ACA POR EL BOTON "ACEPTAR"
                 {
                     txtCliente.Text = Convert.ToString(frm.dgvResultados.SelectedRows[0].Cells[1].Value);
                     txtClienteId.Text = Convert.ToString(frm.dgvResultados.SelectedRows[0].Cells[0].Value);
@@ -1273,14 +1243,59 @@ namespace Modulo_Administracion.Vista
                         chkMostrarMenor30Dias.Checked = false;
                     }
                 }
-                else
+                else if (frm.DialogResult == DialogResult.Yes) //LLEGO ACA POR EL BOTON "NUEVO"
+                {
+                    if (alta_cliente_forma_rapida(nombre_fantasia) == true)
+                    {
+                        MessageBox.Show("Grabación exitosa del cliente", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else //LLEGO ACA POR EL BOTON "CANCELAR"
                 {
                     txtCliente.Text = "";
                     txtClienteId.Text = "";
                     txtCliente.Focus();
                 }
+              
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private bool alta_cliente_forma_rapida(string nombre_fantasia)
+        {
+            try
+            {
+                DialogResult dialogResult = MessageBox.Show("El cliente no existe , ¿desea darlo de alta?", "Atención", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    cliente cliente_a_insertar = new cliente();
+                    cliente_a_insertar.razon_social = nombre_fantasia;
+                    cliente_a_insertar.nombre_fantasia = nombre_fantasia;
+                    cliente_a_insertar.id_condicion_ante_iva = 13;
+                    cliente_a_insertar.id_condicion_pago = 1;
+                    cliente_a_insertar.sn_activo = -1;
+                    cliente_a_insertar.fec_ult_modif = DateTime.Now;
+                    cliente_a_insertar.accion = "ALTA";
+                    cliente_a_insertar.id_condicion_factura = 2;
+                    cliente_a_insertar.id_tipo_cliente = 2;
+
+                    if (Logica_Cliente.alta_cliente(cliente_a_insertar) == false)
+                    {
+                        throw new Exception("Error al grabar el cliente");
+                    }
+                    else
+                    {
+                        txtClienteId.Text = Logica_Cliente.buscar_cliente(txtCliente.Text).id_cliente.ToString();
+                        return true;
+                    }
+                }
+
+                return false; //ESTE FALSE NO INDICA UN ERROR , SINO QUE SIRVE PARA SALIR DE LA FUNCION SIN NINGUN PROBLEMA
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

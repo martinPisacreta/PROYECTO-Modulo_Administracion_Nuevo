@@ -1569,11 +1569,8 @@ namespace Modulo_Administracion.Vista
         {
             try
             {
-                frmBuscar frm = new frmBuscar();
-                frm.Text = "Buscar Cliente";
-                frm.btnNuevo.Enabled = false;
-
-
+                frmBuscar frm = new frmBuscar("Buscar Cliente",false, nombre_fantasia);
+               
                 DataSet ds = Logica_Cliente.buscar_clientes_activos(nombre_fantasia);
 
                 if (ds.Tables[0].Rows.Count > 0)

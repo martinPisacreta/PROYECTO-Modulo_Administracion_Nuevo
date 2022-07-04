@@ -7,8 +7,7 @@ namespace Modulo_Administracion
     public partial class frmPassword : Form
     {
 
-        public DataTable AuxDt; // Aca tengo q usarlo para filtrar cantidad de datos
-        public int row_select;
+      
         public frmPassword()
         {
 

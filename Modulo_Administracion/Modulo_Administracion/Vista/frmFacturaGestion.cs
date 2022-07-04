@@ -827,15 +827,8 @@ namespace Modulo_Administracion.Vista
         {
             try
             {
-                frmBuscar frm = new frmBuscar();
-                frm.Text = "Buscar Cliente";
-                frm.btnNuevo.Enabled = false;
-
-
-
+                frmBuscar frm = new frmBuscar("Buscar Cliente",false);
                 frm.IniciarForm(Logica_Cliente.buscar_clientes_activos(nombre_fantasia).Tables[0], 2);
-
-
 
                 if (frm.DialogResult == DialogResult.OK)
                 {

@@ -7,14 +7,38 @@ namespace Modulo_Administracion
     public partial class frmBuscar : Form
     {
 
-        public DataTable AuxDt; // Aca tengo q usarlo para filtrar cantidad de datos
-        public int row_select;
-        public frmBuscar()
+        DataTable AuxDt; // Aca tengo q usarlo para filtrar cantidad de datos
+        string header_form;
+        bool btnNuevo_enabled;
+        string nombre_fantasia; //ES UNA VARIABLE SOLAMENTE PARA frmFactura
+
+        public frmBuscar(string header_form,bool btnNuevo_enabled)
         {
 
             try
             {
                 InitializeComponent();
+                this.header_form = header_form;
+                this.btnNuevo_enabled = btnNuevo_enabled;
+
+
+            }
+            catch (Exception exception)
+            {
+
+                MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+        }
+
+        public frmBuscar(string header_form, bool btnNuevo_enabled, string nombre_fantasia)
+        {
+
+            try
+            {
+                InitializeComponent();
+                this.header_form = header_form;
+                this.btnNuevo_enabled = btnNuevo_enabled;
+                this.nombre_fantasia = nombre_fantasia;
 
 
             }
@@ -31,7 +55,8 @@ namespace Modulo_Administracion
 
             try
             {
-
+                this.Text = header_form;
+                bool existe_cliente_en_dt = false;
                 AuxDt = dt;
                 dgvResultados.DataSource = AuxDt;
                 dgvResultados.Columns[0].Visible = false;
@@ -50,17 +75,49 @@ namespace Modulo_Administracion
 
                 lblRegistros.Text = "Registros: " + dgvResultados.RowCount;
                 if (dgvResultados.RowCount < 1) // si no hay resultados , bloqueo el aceptar
-                    btnAceptar.Enabled = false;
-                if (dgvResultados.RowCount == 1)  // si hay un solo resultado , no muestro la grilla 
                 {
-                    dgvResultados.Rows[0].Selected = true;
-                    row_select = dgvResultados.SelectedRows[0].Index;
-                    this.DialogResult = DialogResult.OK;
-                    return;
+                    btnAceptar.Enabled = false;
                 }
-                AcceptButton = btnAceptar;
-                CancelButton = btnCancelar;
+                else //si hay resultados
+                {
+                    if(de_donde_vengo == 1) //y vengo aca desde frmFactura
+                    {
+                        //recorro el dgvResultados para ver si alguno de los registros es igual a nombre_fantasia
+                        //esto lo hago para no dar de alta un cliente con un nombre_fantasia existente
+                        foreach (DataGridViewRow row in dgvResultados.Rows)
+                        {
+                            if (row.Cells[1].Value.ToString() == nombre_fantasia)
+                            {
+                                existe_cliente_en_dt = true;
+                                
+                            }
+                        }
 
+                        
+                        if (existe_cliente_en_dt == true) //en caso de que si-> el boton NUEVO lo deshabilito
+                        {
+                            btnNuevo_enabled = false;
+                            btnNuevo.Enabled = btnNuevo_enabled;
+                        }
+                        else //en caso de que no-> el boton NUEVO lo habilito
+                        {
+                            btnNuevo_enabled = true;
+                            btnNuevo.Enabled = btnNuevo_enabled;
+                        }
+                       
+                    }
+                    else //y vengo aca desde otro form
+                    {
+                        if (dgvResultados.RowCount == 1)  // y si hay un solo resultado , no muestro la grilla 
+                        {
+                            dgvResultados.Rows[0].Selected = true;
+                            btnNuevo.Enabled = btnNuevo_enabled;
+                            this.DialogResult = DialogResult.OK;
+                            return;
+                        }   
+                    }
+                }
+             
 
                 this.ShowDialog();
             }
@@ -80,7 +137,6 @@ namespace Modulo_Administracion
             try
             {
 
-                row_select = dgvResultados.SelectedRows[0].Index;
                 this.DialogResult = DialogResult.OK;
 
             }
@@ -125,7 +181,6 @@ namespace Modulo_Administracion
 
             try
             {
-                row_select = dgvResultados.SelectedRows[0].Index;
                 this.DialogResult = DialogResult.OK;
 
             }
