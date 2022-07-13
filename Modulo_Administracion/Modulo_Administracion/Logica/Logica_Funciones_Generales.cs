@@ -158,7 +158,7 @@ namespace Modulo_Administracion.Logica
             try
             {
                 //genero 
-                reporte_factura reporte = new reporte_factura();
+                reporte_factura_1 reporte = new reporte_factura_1();
                 reporte.Parameters["id_factura"].Value = Convert.ToInt32(factura.id_factura);
                 reporte.Parameters["id_factura"].Visible = false;
 

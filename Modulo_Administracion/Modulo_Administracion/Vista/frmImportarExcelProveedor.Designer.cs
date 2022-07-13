@@ -38,14 +38,7 @@
             this.panelBody = new System.Windows.Forms.Panel();
             this.lblInfoBody = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.lblCaptionExcludeRows_1 = new System.Windows.Forms.Label();
-            this.dgvArticulosConCambios = new System.Windows.Forms.DataGridView();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dgvArticulosSinCambios = new System.Windows.Forms.DataGridView();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage0 = new System.Windows.Forms.TabPage();
             this.panelSeteoPMF = new System.Windows.Forms.Panel();
             this.lblCaptionExcludeRows_2 = new System.Windows.Forms.Label();
             this.btnEliminarFilas = new System.Windows.Forms.Button();
@@ -56,33 +49,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbMarca = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.dgvArticulosNuevos = new System.Windows.Forms.DataGridView();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.dgvDatosExcluidos = new System.Windows.Forms.DataGridView();
+            this.dgvNovedades = new System.Windows.Forms.DataGridView();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.btnImportar = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
             this.btnCancelarSeleccion = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblB = new System.Windows.Forms.Label();
-            this.lblA = new System.Windows.Forms.Label();
-            this.lblTotalArticulosProcesados = new System.Windows.Forms.Label();
-            this.lblTotalArticulosExcelProveedor = new System.Windows.Forms.Label();
             this.panelHeader.SuspendLayout();
             this.panelBody.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosConCambios)).BeginInit();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosSinCambios)).BeginInit();
-            this.tabPage3.SuspendLayout();
+            this.tabPage0.SuspendLayout();
             this.panelSeteoPMF.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosNuevos)).BeginInit();
-            this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDatosExcluidos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNovedades)).BeginInit();
             this.panelFooter.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -206,129 +185,23 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage0);
             this.tabControl1.Location = new System.Drawing.Point(13, 43);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(893, 410);
             this.tabControl1.TabIndex = 1;
-            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
-            // tabPage1
+            // tabPage0
             // 
-            this.tabPage1.Controls.Add(this.panel2);
-            this.tabPage1.Controls.Add(this.dgvArticulosConCambios);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(885, 381);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Artículos Con Cambios";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Controls.Add(this.lblCaptionExcludeRows_1);
-            this.panel2.Location = new System.Drawing.Point(6, 273);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(873, 102);
-            this.panel2.TabIndex = 45;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.BackColor = System.Drawing.Color.Firebrick;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.button1.FlatAppearance.CheckedBackColor = System.Drawing.Color.IndianRed;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.IndianRed;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.IndianRed;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(13, 46);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 42);
-            this.button1.TabIndex = 52;
-            this.button1.Text = "Eliminar Fila/s";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.btnEliminarFilas_Click);
-            // 
-            // lblCaptionExcludeRows_1
-            // 
-            this.lblCaptionExcludeRows_1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblCaptionExcludeRows_1.AutoSize = true;
-            this.lblCaptionExcludeRows_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCaptionExcludeRows_1.Location = new System.Drawing.Point(10, 16);
-            this.lblCaptionExcludeRows_1.Name = "lblCaptionExcludeRows_1";
-            this.lblCaptionExcludeRows_1.Size = new System.Drawing.Size(373, 17);
-            this.lblCaptionExcludeRows_1.TabIndex = 51;
-            this.lblCaptionExcludeRows_1.Text = "Seleccione fila/s para excluirla/s de la importación";
-            // 
-            // dgvArticulosConCambios
-            // 
-            this.dgvArticulosConCambios.AllowUserToAddRows = false;
-            this.dgvArticulosConCambios.AllowUserToDeleteRows = false;
-            this.dgvArticulosConCambios.AllowUserToOrderColumns = true;
-            this.dgvArticulosConCambios.AllowUserToResizeRows = false;
-            this.dgvArticulosConCambios.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvArticulosConCambios.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgvArticulosConCambios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArticulosConCambios.Location = new System.Drawing.Point(6, 6);
-            this.dgvArticulosConCambios.Name = "dgvArticulosConCambios";
-            this.dgvArticulosConCambios.RowHeadersWidth = 51;
-            this.dgvArticulosConCambios.RowTemplate.Height = 24;
-            this.dgvArticulosConCambios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvArticulosConCambios.Size = new System.Drawing.Size(873, 261);
-            this.dgvArticulosConCambios.TabIndex = 17;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.dgvArticulosSinCambios);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(885, 381);
-            this.tabPage2.TabIndex = 4;
-            this.tabPage2.Text = "Artículos Sin Cambios";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // dgvArticulosSinCambios
-            // 
-            this.dgvArticulosSinCambios.AllowUserToAddRows = false;
-            this.dgvArticulosSinCambios.AllowUserToDeleteRows = false;
-            this.dgvArticulosSinCambios.AllowUserToOrderColumns = true;
-            this.dgvArticulosSinCambios.AllowUserToResizeRows = false;
-            this.dgvArticulosSinCambios.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvArticulosSinCambios.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgvArticulosSinCambios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArticulosSinCambios.Location = new System.Drawing.Point(6, 4);
-            this.dgvArticulosSinCambios.Name = "dgvArticulosSinCambios";
-            this.dgvArticulosSinCambios.ReadOnly = true;
-            this.dgvArticulosSinCambios.RowHeadersWidth = 51;
-            this.dgvArticulosSinCambios.RowTemplate.Height = 24;
-            this.dgvArticulosSinCambios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvArticulosSinCambios.Size = new System.Drawing.Size(873, 372);
-            this.dgvArticulosSinCambios.TabIndex = 18;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.panelSeteoPMF);
-            this.tabPage3.Controls.Add(this.dgvArticulosNuevos);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(885, 381);
-            this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "Artículos Nuevos";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage0.Controls.Add(this.panelSeteoPMF);
+            this.tabPage0.Controls.Add(this.dgvNovedades);
+            this.tabPage0.Location = new System.Drawing.Point(4, 25);
+            this.tabPage0.Name = "tabPage0";
+            this.tabPage0.Size = new System.Drawing.Size(885, 381);
+            this.tabPage0.TabIndex = 1;
+            this.tabPage0.Text = "Novedades";
+            this.tabPage0.UseVisualStyleBackColor = true;
             // 
             // panelSeteoPMF
             // 
@@ -469,55 +342,25 @@
             this.label3.TabIndex = 45;
             this.label3.Text = "Marca";
             // 
-            // dgvArticulosNuevos
+            // dgvNovedades
             // 
-            this.dgvArticulosNuevos.AllowUserToAddRows = false;
-            this.dgvArticulosNuevos.AllowUserToDeleteRows = false;
-            this.dgvArticulosNuevos.AllowUserToOrderColumns = true;
-            this.dgvArticulosNuevos.AllowUserToResizeRows = false;
-            this.dgvArticulosNuevos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dgvNovedades.AllowUserToAddRows = false;
+            this.dgvNovedades.AllowUserToDeleteRows = false;
+            this.dgvNovedades.AllowUserToOrderColumns = true;
+            this.dgvNovedades.AllowUserToResizeRows = false;
+            this.dgvNovedades.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvArticulosNuevos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgvArticulosNuevos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArticulosNuevos.Location = new System.Drawing.Point(6, 6);
-            this.dgvArticulosNuevos.Name = "dgvArticulosNuevos";
-            this.dgvArticulosNuevos.ReadOnly = true;
-            this.dgvArticulosNuevos.RowHeadersWidth = 51;
-            this.dgvArticulosNuevos.RowTemplate.Height = 24;
-            this.dgvArticulosNuevos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvArticulosNuevos.Size = new System.Drawing.Size(873, 162);
-            this.dgvArticulosNuevos.TabIndex = 18;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.dgvDatosExcluidos);
-            this.tabPage5.Location = new System.Drawing.Point(4, 25);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(885, 381);
-            this.tabPage5.TabIndex = 3;
-            this.tabPage5.Text = "Datos Excluidos";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // dgvDatosExcluidos
-            // 
-            this.dgvDatosExcluidos.AllowUserToAddRows = false;
-            this.dgvDatosExcluidos.AllowUserToDeleteRows = false;
-            this.dgvDatosExcluidos.AllowUserToOrderColumns = true;
-            this.dgvDatosExcluidos.AllowUserToResizeRows = false;
-            this.dgvDatosExcluidos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvDatosExcluidos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgvDatosExcluidos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDatosExcluidos.Location = new System.Drawing.Point(6, 6);
-            this.dgvDatosExcluidos.Name = "dgvDatosExcluidos";
-            this.dgvDatosExcluidos.ReadOnly = true;
-            this.dgvDatosExcluidos.RowHeadersWidth = 51;
-            this.dgvDatosExcluidos.RowTemplate.Height = 24;
-            this.dgvDatosExcluidos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDatosExcluidos.Size = new System.Drawing.Size(873, 478);
-            this.dgvDatosExcluidos.TabIndex = 18;
+            this.dgvNovedades.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dgvNovedades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvNovedades.Location = new System.Drawing.Point(6, 6);
+            this.dgvNovedades.Name = "dgvNovedades";
+            this.dgvNovedades.ReadOnly = true;
+            this.dgvNovedades.RowHeadersWidth = 51;
+            this.dgvNovedades.RowTemplate.Height = 24;
+            this.dgvNovedades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvNovedades.Size = new System.Drawing.Size(873, 162);
+            this.dgvNovedades.TabIndex = 18;
             // 
             // panelFooter
             // 
@@ -591,52 +434,10 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.lblB);
-            this.panel1.Controls.Add(this.lblA);
-            this.panel1.Controls.Add(this.lblTotalArticulosProcesados);
-            this.panel1.Controls.Add(this.lblTotalArticulosExcelProveedor);
             this.panel1.Location = new System.Drawing.Point(16, 610);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(917, 92);
             this.panel1.TabIndex = 40;
-            // 
-            // lblB
-            // 
-            this.lblB.AutoSize = true;
-            this.lblB.Location = new System.Drawing.Point(234, 51);
-            this.lblB.Name = "lblB";
-            this.lblB.Size = new System.Drawing.Size(16, 17);
-            this.lblB.TabIndex = 4;
-            this.lblB.Text = "0";
-            // 
-            // lblA
-            // 
-            this.lblA.AutoSize = true;
-            this.lblA.Location = new System.Drawing.Point(267, 21);
-            this.lblA.Name = "lblA";
-            this.lblA.Size = new System.Drawing.Size(16, 17);
-            this.lblA.TabIndex = 3;
-            this.lblA.Text = "0";
-            // 
-            // lblTotalArticulosProcesados
-            // 
-            this.lblTotalArticulosProcesados.AutoSize = true;
-            this.lblTotalArticulosProcesados.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalArticulosProcesados.Location = new System.Drawing.Point(20, 51);
-            this.lblTotalArticulosProcesados.Name = "lblTotalArticulosProcesados";
-            this.lblTotalArticulosProcesados.Size = new System.Drawing.Size(208, 17);
-            this.lblTotalArticulosProcesados.TabIndex = 2;
-            this.lblTotalArticulosProcesados.Text = "Total Articulos Procesados:";
-            // 
-            // lblTotalArticulosExcelProveedor
-            // 
-            this.lblTotalArticulosExcelProveedor.AutoSize = true;
-            this.lblTotalArticulosExcelProveedor.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalArticulosExcelProveedor.Location = new System.Drawing.Point(20, 21);
-            this.lblTotalArticulosExcelProveedor.Name = "lblTotalArticulosExcelProveedor";
-            this.lblTotalArticulosExcelProveedor.Size = new System.Drawing.Size(241, 17);
-            this.lblTotalArticulosExcelProveedor.TabIndex = 0;
-            this.lblTotalArticulosExcelProveedor.Text = "Total Articulos Excel Proveedor:";
             // 
             // frmImportarExcelProveedor
             // 
@@ -659,21 +460,11 @@
             this.panelBody.ResumeLayout(false);
             this.panelBody.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosConCambios)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosSinCambios)).EndInit();
-            this.tabPage3.ResumeLayout(false);
+            this.tabPage0.ResumeLayout(false);
             this.panelSeteoPMF.ResumeLayout(false);
             this.panelSeteoPMF.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArticulosNuevos)).EndInit();
-            this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDatosExcluidos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNovedades)).EndInit();
             this.panelFooter.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -684,9 +475,7 @@
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Panel panelBody;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.DataGridView dgvArticulosConCambios;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage0;
         private System.Windows.Forms.Panel panelSeteoPMF;
         private System.Windows.Forms.Button btnEliminarFilas;
         private System.Windows.Forms.Label label4;
@@ -696,9 +485,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbMarca;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView dgvArticulosNuevos;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.DataGridView dgvDatosExcluidos;
+        private System.Windows.Forms.DataGridView dgvNovedades;
         private System.Windows.Forms.Button btnExcel;
         private System.Windows.Forms.ComboBox cbProveedor;
         private System.Windows.Forms.Label lblProveedor;
@@ -710,16 +497,7 @@
         private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Button btnCancelarSeleccion;
         private System.Windows.Forms.Label lblInfoBody;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dgvArticulosSinCambios;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lblB;
-        private System.Windows.Forms.Label lblA;
-        private System.Windows.Forms.Label lblTotalArticulosProcesados;
-        private System.Windows.Forms.Label lblTotalArticulosExcelProveedor;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label lblCaptionExcludeRows_1;
         private System.Windows.Forms.Label lblCaptionExcludeRows_2;
     }
 }

@@ -610,7 +610,7 @@ namespace Modulo_Administracion.Vista
                         Cursor.Current = Cursors.WaitCursor;
                         frm_Espere.Show();
 
-                        reporte_factura reporte = new reporte_factura();
+                        reporte_factura_1 reporte = new reporte_factura_1();
                         reporte.Parameters["id_factura"].Value = Convert.ToInt32(dgvFacturas.SelectedRows[0].Cells[0].Value);
                         reporte.Parameters["id_factura"].Visible = false;
 

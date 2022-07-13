@@ -376,7 +376,7 @@ namespace Modulo_Administracion
                 {
                     id_tabla_marca = Convert.ToInt32(txtCodigo.Text);
                 }
-                if (Logica_Marca.buscar_marcas_activas_con_txtDescMarca_repetido(txtMarca.Text, id_tabla_marca) != null)
+                if (Logica_Marca.buscar_marcas_activas_repetidas_de_un_proveedor(txtMarca.Text, id_tabla_marca,Convert.ToInt32(cbProveedor.SelectedValue)) != null)
                 {
                     txtMarca.Focus();
                     throw new Exception("Ya existe una marca con ese nombre");

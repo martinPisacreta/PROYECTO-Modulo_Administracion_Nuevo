@@ -266,7 +266,7 @@ namespace Modulo_Administracion.Logica
 
         }
 
-        public static marca buscar_marcas_activas_con_txtDescMarca_repetido(string txt_desc_marca, int id_tabla_marca)
+        public static marca buscar_marcas_activas_repetidas_de_un_proveedor(string txt_desc_marca, int id_tabla_marca , int id_proveedor)
         {
 
             Modulo_AdministracionContext db = new Modulo_AdministracionContext();
@@ -275,7 +275,8 @@ namespace Modulo_Administracion.Logica
 
                 marca marca = db.marca.FirstOrDefault(m => m.txt_desc_marca.Contains(txt_desc_marca) &&
                                                             m.sn_activo == -1 &&
-                                                            m.id_tabla_marca != id_tabla_marca);
+                                                            m.id_tabla_marca != id_tabla_marca 
+                                                            && m.id_proveedor == id_proveedor);
 
                 return marca;
             }

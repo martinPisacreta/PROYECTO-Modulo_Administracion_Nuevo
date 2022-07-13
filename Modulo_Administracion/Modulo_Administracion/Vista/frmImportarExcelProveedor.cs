@@ -18,53 +18,15 @@ namespace Modulo_Administracion
     {
 
         //LABEL DE CADA TABINDEX
-        string s_tabPageArticulosExistentesConCambios = "*Articulos existetes en el sistema pero que tienen algun cambio en DESCRIPCIÓN o PRECIO LISTA";
-        int i_tabPageArticulosExistentesConCambios = 0;
-        int tabIndex_selected = 0; //TAB INDEX SELECCIONADO
+        string s_tabPageNovedades = "*Articulos nuevos en el sistema";
+        int i_tabPageNovedades = 0;
 
-        string s_tabPageArticulosExistentesSinCambios = "*Articulos existetes en el sistema SIN cambios en DESCRIPCIÓN o PRECIO LISTA";
-        int i_tabPageArticulosExistentesSinCambios = 1;
-
-        string s_tabPageArticulosNuevos = "*Articulos nuevos en el sistema";
-        int i_tabPageArticulosNuevos = 2;
-
-        string s_tabPageArticulosExcluidos = "*El sistema excluye los siguientes articulos por errores y no se podran subir al sistema";
-        int i_tabPageArticulosExcluidos = 3;
-
+    
         //NOMBRE DE COLUMNAS QUE VIENEN DE LA BASE DE DATOS
-        string columnName_cambiosDescripcionArticulo_all_dataGridView = "cambios_descripcion_articulo";
-        string columnName_cambiosPrecioLista_all_dataGridView = "cambios_precio_lista";
-
-
-        string columnName_codigoArticuloProveedor_dgvArticulosConCambios = "codigo_articulo_proveedor";
-        string columnName_descripcionArticuloProveedor_dgvArticulosConCambios = "descripcion_articulo_proveedor";
-        string columnName_precioListaProveedor_dgvArticulosConCambios = "precio_lista_proveedor";
-        string columnName_idProveedor_dgvArticulosConCambios = "id_proveedor";
-        string columnName_idArticulo_dgvArticulosConCambios = "id_articulo";
-
-        string columnName_codigoArticuloProveedor_dgvArticulosNuevos = "codigo_articulo";
-        string columnName_descripcionArticuloProveedor_dgvArticulosNuevos = "descripcion_articulo";
-        string columnName_precioListaProveedor_dgvArticulosNuevos = "precio_lista";
-        string columnName_idProveedor_dgvArticulosNuevos = "id_proveedor";
-        string columnName_idTablaFamilia_dgvArticulosNuevos = "id_tabla_familia";
-        string columnName_idArticulo_dgvArticulosNuevos = "id_articulo";
-
-        //VALOR DE SI - NO
-        string valor_SI = "SI";
-        string valor_NO = "NO";
-
-        //VALORES EN COMBOS DE dgvArticulosConCambios
-        string s_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor = "modifico descripcion_articulo";
-        int i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor = 0;
-
-        string s_modifico_precioLista_del_sistema_en_base_al_proveedor = "modifico precio_lista";
-        int i_modifico_precioLista_del_sistema_en_base_al_proveedor = 1;
-
-        string s_modifico_ambos = "modifico ambos";
-        int i_modifico_ambos = 2;
-
-        string header_queModifico_dgvArticulosConCambios = "que modifico";
-        string columnName_queModifico_dgvArticulosConCambios = "qm";
+        string columnName_codigoArticuloProveedor_dgvNovedades = "codigo_articulo";
+        string columnName_descripcionArticuloProveedor_dgvNovedades = "descripcion_articulo";
+        string columnName_precioListaProveedor_dgvNovedades = "precio_lista";
+        string columnName_idTablaFamilia_dgvNovedades = "id_tabla_familia";
 
         string lblCaptionExcludeRows = "Seleccione fila/s para excluirla/s de la importación";
 
@@ -122,16 +84,10 @@ namespace Modulo_Administracion
                 cbProveedor.Enabled = true;
                 cbProveedor.SelectedItem = null;
 
-                dgvArticulosConCambios.DataSource = null;
-                dgvArticulosSinCambios.DataSource = null;
-                dgvArticulosNuevos.DataSource = null;
-                dgvDatosExcluidos.DataSource = null;
-
-
-                dgvArticulosConCambios.Columns.Clear();
-                dgvArticulosSinCambios.Columns.Clear();
-                dgvArticulosNuevos.Columns.Clear();
-                dgvDatosExcluidos.Columns.Clear();
+              
+                dgvNovedades.DataSource = null;
+                dgvNovedades.Columns.Clear();
+       
 
 
                 panelSeteoPMF.Enabled = false;
@@ -142,16 +98,14 @@ namespace Modulo_Administracion
                 cbMarca.DataSource = null;
                 cbFamilia.DataSource = null;
 
-                tabControl1.SelectedIndex = i_tabPageArticulosExistentesConCambios;
-                lblInfoBody.Text = s_tabPageArticulosExistentesConCambios;
-                lblA.Text = "0";
-                lblB.Text = "0";
+               
+              
 
                 btnExcel.Enabled = true;
                 btnBuscar.Enabled = true;
 
                 lblCaptionExcludeRows_2.Text = lblCaptionExcludeRows;
-                lblCaptionExcludeRows_1.Text = lblCaptionExcludeRows;
+                lblInfoBody.Text = s_tabPageNovedades;
 
             }
             catch (Exception ex)
@@ -187,10 +141,7 @@ namespace Modulo_Administracion
                     form.Show();
                     txtArchivoExcel.Enabled = false;
                     cbProveedor.Enabled = false;
-                    dgvArticulosConCambios.Enabled = true;
-                    dgvArticulosSinCambios.Enabled = true;
-                    dgvArticulosNuevos.Enabled = true;
-                    dgvDatosExcluidos.Enabled = true;
+                    dgvNovedades.Enabled = true;
 
                     //el nombre del archivo sera asignado al textbox
                     txtArchivoExcel.Text = dialog.FileName;
@@ -292,102 +243,20 @@ namespace Modulo_Administracion
                     //cargo los dataGridView
 
                     //0
-                    dgvArticulosConCambios.DataSource = ds.Tables[0];
-
-
-                    //AGREGO UNA COLUMNA DataGridViewComboBoxColumn
-                    DataTable dt = new DataTable();
-
-                    dt.Columns.Add("Key");
-                    dt.Columns.Add("Value");
-
-                    dt.Rows.Add(i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor, s_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor);
-                    dt.Rows.Add(i_modifico_precioLista_del_sistema_en_base_al_proveedor, s_modifico_precioLista_del_sistema_en_base_al_proveedor);
-                    dt.Rows.Add(i_modifico_ambos, s_modifico_ambos);
-
-                    DataGridViewComboBoxColumn newColumn = new DataGridViewComboBoxColumn();
-                    newColumn.Name = columnName_queModifico_dgvArticulosConCambios;
-                    newColumn.HeaderText = header_queModifico_dgvArticulosConCambios;
-                    newColumn.DataSource = dt;
-                    newColumn.DisplayMember = "Value";
-                    newColumn.ValueMember = "Key";
-                    dgvArticulosConCambios.Columns.Add(newColumn);
-                    dgvArticulosConCambios.Columns[columnName_queModifico_dgvArticulosConCambios].ReadOnly = false;
-
-
-                    //TODAS las columnas EXCEPTO (header_text_que_modifico)  SON READONLY
-                    foreach (DataGridViewColumn col in dgvArticulosConCambios.Columns)
-                    {
-                        if (col.HeaderText == header_queModifico_dgvArticulosConCambios)
-                        {
-                            col.ReadOnly = false;
-                            col.DisplayIndex = 0;
-                        }
-                        else
-                        {
-                            col.ReadOnly = true;
-                        }
-                    }
-
-
-                    foreach (DataGridViewRow row in dgvArticulosConCambios.Rows)
-                    {
-                        
-                        string valor_cambiosDescripcionArticulo = row.Cells[columnName_cambiosDescripcionArticulo_all_dataGridView].Value.ToString();
-                        string valor_cambiosPrecioLista = row.Cells[columnName_cambiosPrecioLista_all_dataGridView].Value.ToString();
-
-                        if (valor_cambiosDescripcionArticulo == valor_SI && valor_cambiosPrecioLista == valor_NO)
-                        {
-                            add_cell_DataGridViewComboBoxCell_in_row(row, i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor);
-                            row.Cells[columnName_cambiosDescripcionArticulo_all_dataGridView].Style.BackColor = Color.Red;
-                        }
-                        else if (valor_cambiosDescripcionArticulo == valor_NO && valor_cambiosPrecioLista == valor_SI)
-                        {
-                            add_cell_DataGridViewComboBoxCell_in_row(row, i_modifico_precioLista_del_sistema_en_base_al_proveedor);
-                            row.Cells[columnName_cambiosPrecioLista_all_dataGridView].Style.BackColor = Color.Red;
-                        }
-                        else if (valor_cambiosDescripcionArticulo == valor_SI && valor_cambiosPrecioLista == valor_SI)
-                        {
-                            add_cell_DataGridViewComboBoxCell_in_row(row, i_modifico_ambos);
-
-                            row.Cells[columnName_cambiosDescripcionArticulo_all_dataGridView].Style.BackColor = Color.Red;
-                            row.Cells[columnName_cambiosPrecioLista_all_dataGridView].Style.BackColor = Color.Red;
-                        }
-
-                    }
-
-
-
-                    //1
-                    dgvArticulosSinCambios.DataSource = ds.Tables[1];
-
-                    //2
-                    dgvArticulosNuevos.DataSource = ds.Tables[2];
-                    if (dgvArticulosNuevos.Rows.Count > 0)
+                    dgvNovedades.DataSource = ds.Tables[0];
+                    if (dgvNovedades.Rows.Count > 0)
                     {
                         panelSeteoPMF.Enabled = true;
                         cbMarca.Enabled = true;
                         cargarCombos(2);
                     }
 
-                    //3
-                    dgvDatosExcluidos.DataSource = ds.Tables[3];
-
+                  
                     //deshabilito esto
                     btnExcel.Enabled = false;
                     btnBuscar.Enabled = false;
 
-                    //numeros de registros
-                    lblA.Text = dt_excel_proveedor.Rows.Count.ToString(); //TOTAL ARTICULOS DEL EXCEL DEL PROVEEDOR
-                    lblB.Text = (dgvArticulosConCambios.Rows.Count + dgvArticulosSinCambios.Rows.Count + dgvArticulosNuevos.Rows.Count + dgvDatosExcluidos.Rows.Count).ToString(); //TOTAL ARTICULOS CON CAMBIOS - SIN CAMBIOS - NUEVOS - EXCLUIDOS
-                    if (lblB.Text != lblA.Text)
-                    {
-                        btnImportar.Enabled = false;
-                        throw new Exception("El Total Articulos Excel Proveedor y Total Articulos Procesados son distintos , no se podra continuar");
-                    }
-                    {
-                        btnImportar.Enabled = true;
-                    }
+                    btnImportar.Enabled = true;
 
 
                 }
@@ -411,54 +280,7 @@ namespace Modulo_Administracion
 
         }
 
-        private void add_cell_DataGridViewComboBoxCell_in_row(DataGridViewRow row, int tipo_add)
-        {
-
-            try
-            {
-
-
-                DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)(row.Cells[columnName_queModifico_dgvArticulosConCambios]);
-                string valorDefault = "";
-                DataTable dt = new DataTable();
-                dt = new DataTable();
-
-                dt.Columns.Add("Key");
-                dt.Columns.Add("Value");
-
-
-                if (tipo_add == i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor)
-                {
-                    dt.Rows.Add(i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor, s_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor);
-                    valorDefault = i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor.ToString();
-                }
-                else if (tipo_add == i_modifico_precioLista_del_sistema_en_base_al_proveedor)
-                {
-                    dt.Rows.Add(i_modifico_precioLista_del_sistema_en_base_al_proveedor, s_modifico_precioLista_del_sistema_en_base_al_proveedor);
-                    valorDefault = i_modifico_precioLista_del_sistema_en_base_al_proveedor.ToString();
-                }
-                else if (tipo_add == i_modifico_ambos)
-                {
-                    dt.Rows.Add(i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor, s_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor);
-                    dt.Rows.Add(i_modifico_precioLista_del_sistema_en_base_al_proveedor, s_modifico_precioLista_del_sistema_en_base_al_proveedor);
-                    dt.Rows.Add(i_modifico_ambos, s_modifico_ambos);
-                    valorDefault = i_modifico_ambos.ToString();
-                }
-
-                cell.DataSource = dt;
-                cell.DisplayMember = "Value";
-                cell.ValueMember = "Key";
-                cell.Value = valorDefault;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-
-
+     
 
         private void cargarCombos(int tipo)
         {
@@ -524,7 +346,7 @@ namespace Modulo_Administracion
                     }
 
                     //VALIDO DE QUE ESTAN COMPLETOS TODOS LOS ID_TABLA_FAMILIA
-                    if(Convert.ToInt32(rw.Cells[columnName_idTablaFamilia_dgvArticulosNuevos].Value.ToString()) == 0)
+                    if(Convert.ToInt32(rw.Cells[columnName_idTablaFamilia_dgvNovedades].Value.ToString()) == 0)
                     {
               
                         return "No puede haber celdas en donde el valor de id_tabla_familia sea 0 en ARTICULOS NUEVOS";
@@ -548,73 +370,33 @@ namespace Modulo_Administracion
 
                 try
                 {
-                    //SOLAMENTE VOY A IMPORTAR A LA BASE dgvArticulosConCambios Y dgvArticulosNuevos
+                    //SOLAMENTE VOY A IMPORTAR A LA BASE dgvNovedades
                     if (
-                            dgvArticulosConCambios.Rows.Count == 0 &&
-                            //dgvArticulosSinCambios.Rows.Count == 0 &&
-                            dgvArticulosNuevos.Rows.Count == 0
-                            //dgvDatosExcluidos.Rows.Count == 0
+                            dgvNovedades.Rows.Count == 0
                        )
                     {
                         throw new Exception("No hay registros para importar");
                     }
 
 
-
-
-
-                    if (dgvArticulosConCambios.Rows.Count != 0)
+                    if (dgvNovedades.Rows.Count != 0)
                     {
-                        lista_articulos = new List<articulo>() { };
-                        foreach (DataGridViewRow row in dgvArticulosConCambios.Rows)
-                        {
-                            articulo = new articulo();
-
-                            if (Convert.ToInt32(row.Cells[columnName_queModifico_dgvArticulosConCambios].Value.ToString()) == i_modifico_descripcionArticulo_del_sistema_en_base_al_proveedor)
-                            {
-                                articulo.descripcion_articulo = row.Cells[columnName_descripcionArticuloProveedor_dgvArticulosConCambios].Value.ToString();
-                            }
-                            else if (Convert.ToInt32(row.Cells[columnName_queModifico_dgvArticulosConCambios].Value.ToString()) == i_modifico_precioLista_del_sistema_en_base_al_proveedor)
-                            {
-                                articulo.precio_lista = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvArticulosConCambios].Value);
-                            }
-                            else if (Convert.ToInt32(row.Cells[columnName_queModifico_dgvArticulosConCambios].Value.ToString())  == i_modifico_ambos)
-                            {
-                                articulo.descripcion_articulo = row.Cells[columnName_descripcionArticuloProveedor_dgvArticulosConCambios].Value.ToString();
-                                articulo.precio_lista = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvArticulosConCambios].Value);
-                            }                       
-                            articulo.id_articulo = Convert.ToInt32(row.Cells[columnName_idArticulo_dgvArticulosConCambios].Value);
-                            lista_articulos.Add(articulo);
-                        }
-
-
-                        if (Logica_Articulo.modificar_articulos_existentes_en_relacion_a_ListaProveedor(lista_articulos, db) == false)
-                        {
-                            throw new Exception("Error al actualizar los ARTICULOS CON CAMBIOS");
-                        }
-
-                        lista_articulos = null;
-
-                    }
-
-                    if (dgvArticulosNuevos.Rows.Count != 0)
-                    {
-                        string mensaje_validacion = Validacion(dgvArticulosNuevos);
+                        string mensaje_validacion = Validacion(dgvNovedades);
                         if (mensaje_validacion != "")
                         {
-                            tabControl1.SelectedIndex = i_tabPageArticulosNuevos;
-                            dgvArticulosNuevos.Focus();
+                            tabControl1.SelectedIndex = i_tabPageNovedades;
+                            dgvNovedades.Focus();
                             throw new Exception(mensaje_validacion);
                         }
 
                         lista_articulos = new List<articulo>() { };
-                        foreach (DataGridViewRow row in dgvArticulosNuevos.Rows)
+                        foreach (DataGridViewRow row in dgvNovedades.Rows)
                         {
                             articulo = new articulo();
-                            articulo.codigo_articulo = row.Cells[columnName_codigoArticuloProveedor_dgvArticulosNuevos].Value.ToString();
-                            articulo.descripcion_articulo = row.Cells[columnName_descripcionArticuloProveedor_dgvArticulosNuevos].Value.ToString();
-                            articulo.precio_lista = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvArticulosNuevos].Value);
-                            articulo.id_tabla_familia = Convert.ToInt32(row.Cells[columnName_idTablaFamilia_dgvArticulosNuevos].Value);
+                            articulo.codigo_articulo = row.Cells[columnName_codigoArticuloProveedor_dgvNovedades].Value.ToString();
+                            articulo.descripcion_articulo = row.Cells[columnName_descripcionArticuloProveedor_dgvNovedades].Value.ToString();
+                            articulo.precio_lista = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvNovedades].Value);
+                            articulo.id_tabla_familia = Convert.ToInt32(row.Cells[columnName_idTablaFamilia_dgvNovedades].Value);
                             lista_articulos.Add(articulo);
                         }
 
@@ -682,7 +464,7 @@ namespace Modulo_Administracion
             try
             {
 
-                if (dgvArticulosNuevos.SelectedRows.Count > 0)
+                if (dgvNovedades.SelectedRows.Count > 0)
                 {
 
                     if (cbProveedor.SelectedItem == null)
@@ -703,7 +485,7 @@ namespace Modulo_Administracion
                         throw new Exception("Debe seleccionar una familia");
                     }
 
-                    foreach (DataGridViewRow row in dgvArticulosNuevos.SelectedRows)
+                    foreach (DataGridViewRow row in dgvNovedades.SelectedRows)
                     {
                         row.Cells["id_tabla_familia"].Value = Convert.ToInt32(cbFamilia.SelectedValue);
                     }
@@ -775,74 +557,37 @@ namespace Modulo_Administracion
         }
 
 
-        private void pasar_filas_de_un_dataGridView_a_otro(DataGridView origen,DataGridView destino)
-        {
-            try
-            {
-                if (origen.SelectedRows.Count > 0)
-                {
-
-                    foreach (DataGridViewRow row in origen.SelectedRows)
-                    {
-
-                        DataTable dt = (DataTable)destino.DataSource;
-
-                        DataRow dr = dt.NewRow();
-
-                        if (origen.Name == "dgvArticulosConCambios")
-                        {
-                            dr["codigo_articulo"] = row.Cells[columnName_codigoArticuloProveedor_dgvArticulosConCambios].Value.ToString();
-                            dr["descripcion_articulo"] = row.Cells[columnName_descripcionArticuloProveedor_dgvArticulosConCambios].Value.ToString();
-                            dr["precio_lista"] = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvArticulosConCambios].Value.ToString());
-                            dr["id_proveedor"] = Convert.ToInt32(row.Cells[columnName_idProveedor_dgvArticulosConCambios].Value.ToString());
-                        }
-                        else if (origen.Name == "dgvArticulosNuevos")
-                        {
-                            dr["codigo_articulo"] = row.Cells[columnName_codigoArticuloProveedor_dgvArticulosNuevos].Value.ToString();
-                            dr["descripcion_articulo"] = row.Cells[columnName_descripcionArticuloProveedor_dgvArticulosNuevos].Value.ToString();
-                            dr["precio_lista"] = Convert.ToDecimal(row.Cells[columnName_precioListaProveedor_dgvArticulosNuevos].Value.ToString());
-                            dr["id_proveedor"] = Convert.ToInt32(row.Cells[columnName_idProveedor_dgvArticulosNuevos].Value.ToString());
-                        }
-                        dt.Rows.Add(dr);
-                        destino.DataSource = dt;
-
-                        origen.Rows.RemoveAt(row.Index);
-                    }
-
-                    if (origen.SelectedRows.Count == 1)
-                    {
-                        MessageBox.Show("Fila enviada a la grilla Datos Excluidos", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else if (origen.SelectedRows.Count > 1)
-                    {
-                        MessageBox.Show("Filas enviadas a la grilla Datos Excluidos", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-
-                }
-                else
-                {
-                    throw new Exception("Debe seleccionar al menos una fila");
-                }
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
+       
 
         private void btnEliminarFilas_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.Default;
             try
             {
-                if(tabIndex_selected == i_tabPageArticulosExistentesConCambios)
+
+                if (dgvNovedades.SelectedRows.Count > 0)
                 {
-                    pasar_filas_de_un_dataGridView_a_otro(dgvArticulosConCambios, dgvDatosExcluidos);
+
+                    foreach (DataGridViewRow row in dgvNovedades.SelectedRows)
+                    {
+
+                        dgvNovedades.Rows.RemoveAt(row.Index);
+                    }
+
+                    if (dgvNovedades.SelectedRows.Count == 1)
+                    {
+                        MessageBox.Show("Fila eliminada", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if (dgvNovedades.SelectedRows.Count > 1)
+                    {
+                        MessageBox.Show("Filas eliminadas", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
                 }
-                else if(tabIndex_selected == i_tabPageArticulosNuevos)
+                else
                 {
-                    pasar_filas_de_un_dataGridView_a_otro(dgvArticulosNuevos, dgvDatosExcluidos);
-                }
+                    throw new Exception("Debe seleccionar al menos una fila");
+                }                
             }
             catch (Exception ex)
             {
@@ -855,27 +600,7 @@ namespace Modulo_Administracion
         }
 
       
-        private void tabControl1_Selected(object sender, TabControlEventArgs e)
-        {
-            if (e.TabPageIndex == i_tabPageArticulosExistentesConCambios)
-            {
-                lblInfoBody.Text = s_tabPageArticulosExistentesConCambios;
-            }
-            else if(e.TabPageIndex == i_tabPageArticulosExistentesSinCambios)
-            {
-                lblInfoBody.Text = s_tabPageArticulosExistentesSinCambios;
-            }
-            else if (e.TabPageIndex == i_tabPageArticulosNuevos)
-            {
-                lblInfoBody.Text = s_tabPageArticulosNuevos;
-            }
-            else if(e.TabPageIndex == i_tabPageArticulosExcluidos)
-            {
-                lblInfoBody.Text = s_tabPageArticulosExcluidos;
-            }
-
-            tabIndex_selected = e.TabPageIndex;
-        }
+     
 
         private void frmImportarExcelProveedor_FormClosing(object sender, FormClosingEventArgs e)
         {
