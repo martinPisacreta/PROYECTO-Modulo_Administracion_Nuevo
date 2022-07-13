@@ -108,13 +108,15 @@ namespace Modulo_Administracion
                     }
                     else //y vengo aca desde otro form
                     {
+                        btnNuevo.Enabled = btnNuevo_enabled;
                         if (dgvResultados.RowCount == 1)  // y si hay un solo resultado , no muestro la grilla 
                         {
                             dgvResultados.Rows[0].Selected = true;
-                            btnNuevo.Enabled = btnNuevo_enabled;
+                            
                             this.DialogResult = DialogResult.OK;
                             return;
-                        }   
+                        }
+                        
                     }
                 }
              

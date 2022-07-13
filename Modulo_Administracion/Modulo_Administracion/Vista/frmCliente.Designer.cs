@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.tabCliente = new System.Windows.Forms.TabControl();
             this.tabPageCliente = new System.Windows.Forms.TabPage();
@@ -63,6 +63,7 @@
             this.btnSalir = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnNuevo = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabCliente.SuspendLayout();
             this.tabPageCliente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCliente)).BeginInit();
@@ -350,8 +351,8 @@
             this.dgvCliente.AllowUserToDeleteRows = false;
             this.dgvCliente.AllowUserToOrderColumns = true;
             this.dgvCliente.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.IndianRed;
-            this.dgvCliente.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed;
+            this.dgvCliente.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvCliente.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvCliente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCliente.GridColor = System.Drawing.Color.White;
@@ -473,11 +474,23 @@
             this.btnNuevo.UseVisualStyleBackColor = false;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Red;
+            this.label5.Location = new System.Drawing.Point(184, 524);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(576, 17);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "*No se olvide de hacer click en \"Agregar\" o \"Modificar\" para finalizar la accion";
+            // 
             // frmCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1167, 563);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.tabCliente);
@@ -495,6 +508,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvCliente)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -533,6 +547,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton rdVendedor;
         private System.Windows.Forms.RadioButton rdCliente;
+        private System.Windows.Forms.Label label5;
     }
 }
 

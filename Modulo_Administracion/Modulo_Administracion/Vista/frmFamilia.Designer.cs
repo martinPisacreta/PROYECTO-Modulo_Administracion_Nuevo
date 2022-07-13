@@ -292,7 +292,7 @@
             // txtAlgoritmo_10
             // 
             this.txtAlgoritmo_10.Location = new System.Drawing.Point(369, 299);
-            this.txtAlgoritmo_10.MaxLength = 5;
+            this.txtAlgoritmo_10.MaxLength = 9;
             this.txtAlgoritmo_10.Name = "txtAlgoritmo_10";
             this.txtAlgoritmo_10.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_10.TabIndex = 40;
@@ -302,7 +302,7 @@
             // txtAlgoritmo_9
             // 
             this.txtAlgoritmo_9.Location = new System.Drawing.Point(56, 299);
-            this.txtAlgoritmo_9.MaxLength = 5;
+            this.txtAlgoritmo_9.MaxLength = 9;
             this.txtAlgoritmo_9.Name = "txtAlgoritmo_9";
             this.txtAlgoritmo_9.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_9.TabIndex = 39;
@@ -312,7 +312,7 @@
             // txtAlgoritmo_8
             // 
             this.txtAlgoritmo_8.Location = new System.Drawing.Point(260, 139);
-            this.txtAlgoritmo_8.MaxLength = 5;
+            this.txtAlgoritmo_8.MaxLength = 9;
             this.txtAlgoritmo_8.Name = "txtAlgoritmo_8";
             this.txtAlgoritmo_8.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_8.TabIndex = 38;
@@ -322,7 +322,7 @@
             // txtAlgoritmo_7
             // 
             this.txtAlgoritmo_7.Location = new System.Drawing.Point(139, 139);
-            this.txtAlgoritmo_7.MaxLength = 5;
+            this.txtAlgoritmo_7.MaxLength = 9;
             this.txtAlgoritmo_7.Name = "txtAlgoritmo_7";
             this.txtAlgoritmo_7.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_7.TabIndex = 37;
@@ -332,7 +332,7 @@
             // txtAlgoritmo_6
             // 
             this.txtAlgoritmo_6.Location = new System.Drawing.Point(260, 111);
-            this.txtAlgoritmo_6.MaxLength = 5;
+            this.txtAlgoritmo_6.MaxLength = 9;
             this.txtAlgoritmo_6.Name = "txtAlgoritmo_6";
             this.txtAlgoritmo_6.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_6.TabIndex = 36;
@@ -342,7 +342,7 @@
             // txtAlgoritmo_5
             // 
             this.txtAlgoritmo_5.Location = new System.Drawing.Point(139, 111);
-            this.txtAlgoritmo_5.MaxLength = 5;
+            this.txtAlgoritmo_5.MaxLength = 9;
             this.txtAlgoritmo_5.Name = "txtAlgoritmo_5";
             this.txtAlgoritmo_5.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_5.TabIndex = 35;
@@ -352,7 +352,7 @@
             // txtAlgoritmo_4
             // 
             this.txtAlgoritmo_4.Location = new System.Drawing.Point(260, 83);
-            this.txtAlgoritmo_4.MaxLength = 5;
+            this.txtAlgoritmo_4.MaxLength = 9;
             this.txtAlgoritmo_4.Name = "txtAlgoritmo_4";
             this.txtAlgoritmo_4.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_4.TabIndex = 34;
@@ -362,7 +362,7 @@
             // txtAlgoritmo_3
             // 
             this.txtAlgoritmo_3.Location = new System.Drawing.Point(139, 83);
-            this.txtAlgoritmo_3.MaxLength = 5;
+            this.txtAlgoritmo_3.MaxLength = 9;
             this.txtAlgoritmo_3.Name = "txtAlgoritmo_3";
             this.txtAlgoritmo_3.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_3.TabIndex = 33;
@@ -372,7 +372,7 @@
             // txtAlgoritmo_2
             // 
             this.txtAlgoritmo_2.Location = new System.Drawing.Point(260, 55);
-            this.txtAlgoritmo_2.MaxLength = 5;
+            this.txtAlgoritmo_2.MaxLength = 9;
             this.txtAlgoritmo_2.Name = "txtAlgoritmo_2";
             this.txtAlgoritmo_2.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_2.TabIndex = 32;
@@ -382,7 +382,7 @@
             // txtAlgoritmo_1
             // 
             this.txtAlgoritmo_1.Location = new System.Drawing.Point(139, 55);
-            this.txtAlgoritmo_1.MaxLength = 5;
+            this.txtAlgoritmo_1.MaxLength = 9;
             this.txtAlgoritmo_1.Name = "txtAlgoritmo_1";
             this.txtAlgoritmo_1.Size = new System.Drawing.Size(88, 22);
             this.txtAlgoritmo_1.TabIndex = 31;

@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.tabProveedor = new System.Windows.Forms.TabControl();
             this.tabPageProveedor = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtBusqueda = new System.Windows.Forms.TextBox();
             this.cbCondicionPago = new System.Windows.Forms.ComboBox();
             this.cbCondicionIVA = new System.Windows.Forms.ComboBox();
             this.lblCondicionPago = new System.Windows.Forms.Label();
@@ -50,8 +52,7 @@
             this.btnSalir = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnNuevo = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtBusqueda = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabProveedor.SuspendLayout();
             this.tabPageProveedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProveedor)).BeginInit();
@@ -101,6 +102,24 @@
             this.tabPageProveedor.TabIndex = 0;
             this.tabPageProveedor.Text = "Proveedor";
             this.tabPageProveedor.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(854, 7);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 17);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Filtro";
+            // 
+            // txtBusqueda
+            // 
+            this.txtBusqueda.Location = new System.Drawing.Point(689, 27);
+            this.txtBusqueda.Name = "txtBusqueda";
+            this.txtBusqueda.Size = new System.Drawing.Size(393, 22);
+            this.txtBusqueda.TabIndex = 27;
+            this.txtBusqueda.TextChanged += new System.EventHandler(this.txtBusqueda_TextChanged);
             // 
             // cbCondicionPago
             // 
@@ -198,8 +217,8 @@
             this.dgvProveedor.AllowUserToDeleteRows = false;
             this.dgvProveedor.AllowUserToOrderColumns = true;
             this.dgvProveedor.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.IndianRed;
-            this.dgvProveedor.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed;
+            this.dgvProveedor.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvProveedor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvProveedor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProveedor.GridColor = System.Drawing.Color.White;
@@ -322,29 +341,23 @@
             this.btnNuevo.UseVisualStyleBackColor = false;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
-            // label3
+            // label1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(854, 7);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 17);
-            this.label3.TabIndex = 28;
-            this.label3.Text = "Filtro";
-            // 
-            // txtBusqueda
-            // 
-            this.txtBusqueda.Location = new System.Drawing.Point(689, 27);
-            this.txtBusqueda.Name = "txtBusqueda";
-            this.txtBusqueda.Size = new System.Drawing.Size(393, 22);
-            this.txtBusqueda.TabIndex = 27;
-            this.txtBusqueda.TextChanged += new System.EventHandler(this.txtBusqueda_TextChanged);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(189, 524);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(576, 17);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "*No se olvide de hacer click en \"Agregar\" o \"Modificar\" para finalizar la accion";
             // 
             // frmProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1167, 563);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.tabProveedor);
@@ -362,6 +375,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvProveedor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -389,6 +403,7 @@
         private System.Windows.Forms.Label lblCondicionIVA;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtBusqueda;
+        private System.Windows.Forms.Label label1;
     }
 }
 
