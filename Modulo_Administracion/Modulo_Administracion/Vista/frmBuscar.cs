@@ -74,8 +74,9 @@ namespace Modulo_Administracion
 
 
                 lblRegistros.Text = "Registros: " + dgvResultados.RowCount;
-                if (dgvResultados.RowCount < 1) // si no hay resultados , bloqueo el aceptar
+                if (dgvResultados.RowCount < 1) // si no hay resultados , bloqueo el aceptar y el nuevo
                 {
+                    btnNuevo.Enabled = false;
                     btnAceptar.Enabled = false;
                 }
                 else //si hay resultados
