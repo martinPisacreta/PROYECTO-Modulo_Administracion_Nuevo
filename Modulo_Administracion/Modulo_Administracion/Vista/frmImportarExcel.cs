@@ -94,7 +94,7 @@ namespace Modulo_Administracion
 
                     //el nombre del archivo sera asignado al textbox
                     txtArchivoExcel.Text = dialog.FileName;
-                    hoja = "Artículo"; //la variable hoja tendra el valor del textbox donde colocamos el nombre de la hoja
+                    hoja = "Articulo"; //la variable hoja tendra el valor del textbox donde colocamos el nombre de la hoja
                     Llenar_DataGridView(txtArchivoExcel.Text, hoja); //se manda a llamar al metodo
 
 
